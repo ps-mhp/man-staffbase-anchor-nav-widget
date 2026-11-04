@@ -1,0 +1,165 @@
+/*!
+ * Copyright 2026, MHP Management und IT-Beratung GmbH and contributors.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use "@shared/stylings/man-tokens" as *;
+@use "@shared/stylings/man-craft" as *;
+
+/* Auf einer Instanz MIT man-theme beansprucht `man-theme/src/02-typography/
+ * _app.scss` dieselben Eigenschaften mit Gewicht: Absätze und Verweise im
+ * Inhaltsbereich tragen dort eigene Regeln mit `!important` und höherer
+ * Spezifität als eine einfache Klasse. Ohne Gegenwehr verlöre der Titel seine
+ * Stufe und jeder Eintrag seine Farbe und bekäme einen Unterstrich.
+ * `man-outshine-host` (fünffach wiederholter Klassenselektor, siehe
+ * `_man-tokens.scss`) härtet genau diese Stellen ab; alles andere bleibt
+ * unangetastet. */
+
+.man-anchor-nav {
+  position: relative;
+  box-sizing: border-box;
+  padding-left: man("space-4");
+  color: man("text");
+  @include man-type("body");
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+}
+
+/* Die durchgehende Haarlinie. Ein eigenes Element und kein `border-left` am
+   `nav`: das Segment liegt darüber und muss dieselbe Spur treffen. */
+.man-anchor-nav__rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: man("border-width-strong");
+  background: man("border-subtle");
+}
+
+/* Höhe und Versatz setzt die Komponente als Inline-Stil aus der gemessenen
+   Lage des aktiven Eintrags. */
+.man-anchor-nav__marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: man("border-width-strong");
+  background: man("red");
+  transition:
+    transform man("duration-slow") man("ease-move"),
+    height man("duration-slow") man("ease-move");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .man-anchor-nav__marker {
+    transition: none;
+  }
+}
+
+.man-anchor-nav__title {
+  @include man-outshine-host {
+    @include man-type("h4", $important: true);
+
+    margin: 0 !important;
+    color: man("red") !important;
+  }
+}
+
+/* Der Knopf der kompakten Darstellung trägt dieselbe Schrift wie der Titel;
+   `appearance: none` nimmt ihm das Betriebssystem-Aussehen. */
+.man-anchor-nav__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: man("space-2");
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: man("red");
+  text-align: left;
+  cursor: pointer;
+  @include man-type("h4");
+
+  &:focus-visible {
+    @include man-focus-ring;
+  }
+}
+
+/* Das Zeichen dreht sich beim Aufklappen; es ist reine Dekoration und trägt
+   im Markup `aria-hidden`. */
+.man-anchor-nav__chevron {
+  flex: 0 0 auto;
+  transition: transform man("duration-slow") man("ease-move");
+}
+
+.man-anchor-nav__toggle[aria-expanded="true"] .man-anchor-nav__chevron {
+  transform: rotate(180deg);
+}
+
+.man-anchor-nav__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Der Abstand steht am Eintrag und nicht als `gap` an der Liste: das Segment
+   misst `offsetHeight` des Eintrags, und mit Polsterung statt Abstand trifft
+   es genau den Block, zu dem der Eintrag gehört. */
+.man-anchor-nav__item {
+  padding: man("space-2") 0;
+}
+
+/* Der erste Eintrag unter dem Titel bekommt zusätzlich Luft nach oben. */
+.man-anchor-nav__title + .man-anchor-nav__list .man-anchor-nav__item:first-child,
+.man-anchor-nav__toggle + .man-anchor-nav__list .man-anchor-nav__item:first-child {
+  padding-top: man("space-4");
+}
+
+.man-anchor-nav__link {
+  display: block;
+  transition: color man("duration") man("ease");
+
+  @include man-outshine-host {
+    color: man("text") !important;
+    text-decoration: none !important;
+
+    &:hover,
+    &:focus,
+    &:active {
+      text-decoration: none !important;
+    }
+
+    &:focus-visible {
+      @include man-focus-ring($important: true);
+    }
+  }
+}
+
+.man-anchor-nav__link[aria-current="true"] {
+  @include man-outshine-host {
+    font-weight: man("weight-body-bold") !important;
+  }
+}
+
+/* Nur für Zeigegeräte mit echtem Hover. Das man-theme hängt solche Regeln an
+   `html.mouse`; diese Klasse setzt das Theme, und das Widget soll ohne es
+   auskommen. */
+@media (hover: hover) {
+  .man-anchor-nav__link:hover {
+    @include man-outshine-host {
+      color: man("red") !important;
+    }
+  }
+}
