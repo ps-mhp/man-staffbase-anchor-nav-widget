@@ -25,6 +25,17 @@ import { ScannedHeading, sameHeadings, scanHeadings } from "./heading-scan";
 export const RESCAN_DELAY_MS = 150;
 
 /**
+ * Obere Schranke für die Entprellung.
+ *
+ * Reines Trailing-Debounce verhungert dauerhaft, wenn nie eine Lücke von
+ * RESCAN_DELAY_MS entsteht — ein Fortschrittsbalken, eine Bildrotation, ein
+ * fremdes Widget mit laufender Animation reichen dafür. `rescan` läuft
+ * deshalb spätestens so lange nach der ersten unbearbeiteten Mutation, egal
+ * wie viele danach noch kommen.
+ */
+export const RESCAN_MAX_WAIT_MS = 1000;
+
+/**
  * Die Überschriften der Seite, aktuell gehalten.
  *
  * Der Observer hängt an `document.body` und nicht an einzelnen Shadow Roots:
@@ -37,9 +48,19 @@ export function usePageHeadings(level: HeadingLevel, self: HTMLElement | null): 
   const [headings, setHeadings] = useState<readonly ScannedHeading[]>([]);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | null = null;
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    let maxWaitTimer: ReturnType<typeof setTimeout> | null = null;
 
     const rescan = (): void => {
+      if (debounceTimer !== null) {
+        clearTimeout(debounceTimer);
+        debounceTimer = null;
+      }
+      if (maxWaitTimer !== null) {
+        clearTimeout(maxWaitTimer);
+        maxWaitTimer = null;
+      }
+
       const next = scanHeadings(level, self);
       // Dieselbe Liste weitergeben, wenn sich nichts geändert hat: sonst löst
       // jede fremde DOM-Änderung ein Neurendern aus und das Segment springt
@@ -50,13 +71,18 @@ export function usePageHeadings(level: HeadingLevel, self: HTMLElement | null): 
     rescan();
 
     const observer = new MutationObserver(() => {
-      if (timer !== null) clearTimeout(timer);
-      timer = setTimeout(rescan, RESCAN_DELAY_MS);
+      if (debounceTimer !== null) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(rescan, RESCAN_DELAY_MS);
+      // Nur bei der ersten unbearbeiteten Mutation gesetzt: jede weitere vor
+      // dem nächsten `rescan` darf die Schranke nicht wieder hinausschieben,
+      // sonst wäre sie keine Schranke mehr.
+      if (maxWaitTimer === null) maxWaitTimer = setTimeout(rescan, RESCAN_MAX_WAIT_MS);
     });
     observer.observe(document.body, { childList: true, subtree: true, characterData: true });
 
     return () => {
-      if (timer !== null) clearTimeout(timer);
+      if (debounceTimer !== null) clearTimeout(debounceTimer);
+      if (maxWaitTimer !== null) clearTimeout(maxWaitTimer);
       observer.disconnect();
     };
   }, [level, self]);

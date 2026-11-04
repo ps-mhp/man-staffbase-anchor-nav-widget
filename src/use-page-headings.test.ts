@@ -97,6 +97,30 @@ describe("usePageHeadings", () => {
     expect(result.current.map((h) => h.text)).toEqual(["Drei"]);
   });
 
+  it("scannt trotz andauernder Mutationen spätestens nach der oberen Schranke", async () => {
+    // Reines Trailing-Debounce verhungert, wenn nie eine Lücke von
+    // RESCAN_DELAY_MS entsteht: jede neue Mutation setzt den Timer zurück,
+    // bevor er feuert. Hier kommt alle 100ms (< RESCAN_DELAY_MS) eine neue
+    // Mutation — ohne obere Schranke bliebe das Verzeichnis für immer auf
+    // "Eins" stehen, obwohl der Text längst ein anderer ist.
+    document.body.innerHTML = "<h2 id='h'>Eins</h2>";
+    const { result } = renderHook(() => usePageHeadings("h2", null));
+    expect(result.current.map((h) => h.text)).toEqual(["Eins"]);
+
+    const schritte = Math.ceil(1000 / 100) + 1; // überschreitet die 1-Sekunden-Schranke
+    for (let index = 1; index <= schritte; index += 1) {
+      act(() => {
+        (document.getElementById("h") as HTMLElement).textContent = `Text ${index}`;
+      });
+      await act(async () => {}); // die MutationObserver-Benachrichtigung verarbeiten
+      await act(async () => {
+        jest.advanceTimersByTime(100);
+      });
+    }
+
+    expect(result.current.map((h) => h.text)).not.toEqual(["Eins"]);
+  });
+
   it("meldet den Observer beim Unmount ab", async () => {
     document.body.innerHTML = "<h2>Eins</h2>";
     const { result, unmount } = renderHook(() => usePageHeadings("h2", null));
