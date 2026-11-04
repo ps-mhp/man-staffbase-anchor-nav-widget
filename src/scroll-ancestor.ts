@@ -25,8 +25,31 @@
  * laufen.
  */
 
-/** Rollt `element` wirklich — `overflow` allein reicht nicht ohne Überlauf. */
+/**
+ * `true`, wenn `element` der Wurzel-Scroller des Dokuments ist —
+ * `documentElement`, `body` oder das, was `document.scrollingElement`
+ * tatsächlich liefert (je nach Rendermodus eines der beiden anderen, aber
+ * nicht notwendigerweise per Identität gleich einem fest benannten Knoten).
+ */
+function isRootScroller(element: HTMLElement): boolean {
+  return (
+    element === document.documentElement || element === document.body || element === document.scrollingElement
+  );
+}
+
+/**
+ * Rollt `element` wirklich — `overflow` allein reicht nicht ohne Überlauf.
+ *
+ * `body`/`documentElement` sind hier bewusst ausgeschlossen: die Wirtsseite
+ * setzt `.desktop > body { overflow-y: scroll }` (resources/css/app.css), und
+ * `getComputedStyle(body).overflowY` meldet dann `"scroll"`, obwohl `body` im
+ * Standards-Modus keine eigene Scrolling-Box hat — `body.scrollTo(...)` wäre
+ * wirkungslos. Das Dokument rollt in diesem Fall über `window`, nicht über
+ * ein Element; `findScrollParent` muss deshalb `null` liefern, damit die
+ * Aufrufer auf ihren Dokument-Rückfall (`window.scrollTo`) ausweichen.
+ */
 function isScrollableElement(element: HTMLElement): boolean {
+  if (isRootScroller(element)) return false;
   const { overflowY } = getComputedStyle(element);
   if (overflowY !== "auto" && overflowY !== "scroll") return false;
   return element.scrollHeight > element.clientHeight;

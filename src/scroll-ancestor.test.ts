@@ -23,6 +23,14 @@ function makeScrollable(element: HTMLElement): void {
 describe("findScrollParent", () => {
   afterEach(() => {
     document.body.innerHTML = "";
+    // `makeScrollable` greift in manchen Fällen auf body/documentElement
+    // selbst durch (B1) statt nur auf ein wegwerfbares Kind-Element — ohne
+    // Rückbau bliebe die Umstellung über Testgrenzen hinweg bestehen.
+    for (const node of [document.body, document.documentElement]) {
+      node.style.overflowY = "";
+      delete (node as unknown as { scrollHeight?: number }).scrollHeight;
+      delete (node as unknown as { clientHeight?: number }).clientHeight;
+    }
   });
 
   it("liefert null ohne rollfähigen Vorfahren", () => {
@@ -96,6 +104,69 @@ describe("findScrollParent", () => {
     document.body.appendChild(grandparent);
 
     expect(findScrollParent(element)).toBe(grandparent);
+  });
+
+  // B1: die Wirtsseite setzt `.desktop > body { overflow-y: scroll }`
+  // (resources/css/app.css). Rollt der body selbst über — absolut
+  // positionierte Brotkrumen oder Chrome im Bezugssystem des body sind
+  // plausible Auslöser —, liefert jsdoms `getComputedStyle` hier (anders
+  // als im Standardfall, wo es immer `"visible"` meldet) tatsächlich
+  // `overflowY: "scroll"`. Ohne Ausschluss hielte `isScrollableElement` das
+  // für einen echten Treffer; `body.scrollTo(...)` ist im Standards-Modus
+  // aber wirkungslos, weil `body` keine eigene Scrolling-Box hat — das
+  // Dokument rollt über `window`, nicht über `body`.
+  it("schließt body als Treffer aus, auch wenn es selbst überläuft", () => {
+    makeScrollable(document.body);
+    const element = document.createElement("h2");
+    document.body.appendChild(element);
+
+    expect(findScrollParent(element)).toBeNull();
+  });
+
+  it("schließt documentElement als Treffer aus, auch wenn es selbst überläuft", () => {
+    makeScrollable(document.documentElement);
+    const element = document.createElement("h2");
+    document.body.appendChild(element);
+
+    expect(findScrollParent(element)).toBeNull();
+  });
+
+  it("schließt document.scrollingElement als Treffer aus", () => {
+    // jsdom implementiert `document.scrollingElement` nicht (liefert
+    // `undefined`) — ohne eigenen Stellvertreter bliebe dieser Fall unsichtbar,
+    // genau wie die anderen jsdom-Lücken in diesem Widget. Ein frei
+    // erfundenes Element steht hier stellvertretend für das, was der
+    // Standard sonst selbst als `documentElement`/`body` zurückgäbe: der
+    // Ausschluss muss über den tatsächlichen Rückgabewert laufen, nicht über
+    // eine fest verdrahtete Identitätsprüfung auf `documentElement`.
+    const scrollingElement = document.createElement("div");
+    makeScrollable(scrollingElement);
+    const restore = Object.getOwnPropertyDescriptor(document, "scrollingElement");
+    Object.defineProperty(document, "scrollingElement", { configurable: true, value: scrollingElement });
+    const element = document.createElement("h2");
+    scrollingElement.appendChild(element);
+    document.body.appendChild(scrollingElement);
+
+    try {
+      expect(findScrollParent(element)).toBeNull();
+    } finally {
+      if (restore) Object.defineProperty(document, "scrollingElement", restore);
+      else delete (document as unknown as { scrollingElement?: unknown }).scrollingElement;
+    }
+  });
+
+  it("findet weiterhin einen echten Container, der zwischen Überschrift und body liegt", () => {
+    // Der Ausschluss von body/documentElement darf nicht dazu führen, dass
+    // die Suche insgesamt aufgibt — ein echter Container weiter innen muss
+    // trotzdem gefunden werden.
+    makeScrollable(document.body);
+    const container = document.createElement("div");
+    makeScrollable(container);
+    const element = document.createElement("h2");
+    container.appendChild(element);
+    document.body.appendChild(container);
+
+    expect(findScrollParent(element)).toBe(container);
   });
 });
 
