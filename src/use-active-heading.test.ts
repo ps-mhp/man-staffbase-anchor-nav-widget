@@ -113,6 +113,31 @@ describe("useActiveHeading", () => {
     remove.mockRestore();
   });
 
+  it("bricht eine ausstehende rAF-Anforderung beim Unmount ab", () => {
+    // Der globale Mock ruft seinen Callback synchron auf, sodass `frame` nie
+    // gesetzt bliebe — hier muss er aufschiebend sein, damit beim Unmount
+    // tatsächlich noch eine Anforderung aussteht, die abgebrochen werden kann.
+    const PENDING_HANDLE = 42;
+    Object.defineProperty(window, "requestAnimationFrame", {
+      configurable: true,
+      writable: true,
+      value: () => PENDING_HANDLE,
+    });
+    const cancel = jest.spyOn(window, "cancelAnimationFrame");
+
+    const { unmount } = renderHook(() => useActiveHeading(headingsAt([0])));
+    // Der erste Messvorgang läuft beim Mount direkt, nicht über rAF; erst das
+    // Scroll-Ereignis plant einen Frame über `schedule()` ein.
+    act(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
+
+    unmount();
+
+    expect(cancel).toHaveBeenCalledWith(PENDING_HANDLE);
+    cancel.mockRestore();
+  });
+
   it("legt das Band auf ein Viertel der Fensterhöhe", () => {
     expect(BAND_FRACTION).toBe(0.25);
   });
