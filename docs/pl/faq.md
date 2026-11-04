@@ -17,17 +17,17 @@ Nie powinno tak być. Jeśli jednak tak się dzieje, nagłówek znajduje się po
 kontenerem widżetu — na przykład jako osobny blok tekstu nad nim. W takim przypadku należy albo użyć
 tytułu widżetu, albo wybrać poziom, którego blok tekstu nie posiada.
 
-## Czerwona kropka nie przesuwa się wraz z przewijaniem.
+## Czerwony znacznik nie przesuwa się wraz z treścią.
 
-Podąża za przewijaniem i pozostaje przy nagłówku, który jako ostatni
-osiągnął górną ćwiartkę okna. Na samym szczycie strony znajduje się przy pierwszym
-wpisie. Kto ustawił opcję „Ogranicz ruch”, widzi, jak znacznik podskakuje zamiast
-ślizgać się — jest to zamierzone.
+Podąża on za przewijaniem i pozostaje przy nagłówku, który jako ostatni
+dotarł do górnej ćwiartki okna. Na samym szczycie strony znajduje się przy tytule
+— lub, jeśli nie wprowadzono tytułu, przy pierwszym wpisie. Kto ma włączoną opcję „Ogranicz
+ruch”, widzi, że znacznik podskakuje zamiast płynnie się przesuwać — jest to zamierzone zachowanie.
 
 ## Czy można zmienić kolejność?
 
-Nie. Lista podąża za kolejnością w tekście. Jeśli chcesz zmienić kolejność odnośników,
-zmień kolejność sekcji.
+Nie. Lista podąża za kolejnością w tekście. Kto chce zmienić kolejność odnośników,
+musi zmienić kolejność sekcji.
 
 ## Dwa nagłówki mają tę samą nazwę — czy odnośnik działa poprawnie?
 

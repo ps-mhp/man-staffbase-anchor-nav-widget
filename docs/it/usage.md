@@ -10,7 +10,7 @@
 4. **Inserire il titolo** — oppure lasciarlo vuoto. Vuoto significa: solo l’elenco, nessun
    titolo sopra.
 5. **Controllare nell’anteprima.** L’elenco appare immediatamente e correttamente; ciò che è
-   nell’editor è anche sulla pagina.
+   nell’editor appare anche sulla pagina.
 
 ## Durante la modifica della pagina
 
@@ -20,5 +20,5 @@ aggiornare la pagina.
 
 ## Sul cellulare
 
-Qui l’elenco è compresso e mostra solo il titolo con una freccia. Un tocco
-lo espande. Su schermi con larghezza pari o superiore a 700 pixel rimane sempre aperto.
+Qui l’elenco è compresso e mostra solo il titolo con una freccia. Basta un tocco
+per espanderlo. Su schermi con larghezza pari o superiore a 768 pixel, rimane sempre aperto.

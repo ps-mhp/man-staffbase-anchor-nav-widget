@@ -21,4 +21,4 @@ refresh the page.
 ## On a phone
 
 On a phone, the list is collapsed and shows only the title with an arrow. A tap
-expands it. On screens 700 pixels wide or wider, it is always open.
+expands it. On screens 768 pixels wide or wider, it is always open.

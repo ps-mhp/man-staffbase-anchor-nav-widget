@@ -1,6 +1,6 @@
 # Étape par étape
 
-1. **Structurer la page.** Insérer des titres au début de chaque section,
+1. **Structurer la page.** Placer des titres au début de chaque section,
    et utiliser le même niveau pour les sections de même importance. Le widget ne peut
    afficher que ce qui existe déjà.
 2. **Insérer le bloc.** Dans l’éditeur, sélectionnez « Navigation par ancres » — de préférence dans une
@@ -21,4 +21,4 @@ actualiser.
 ## Sur mobile
 
 La liste est alors repliée et n’affiche que le titre accompagné d’une flèche. Un simple tapotement
-la déplie. Sur les écrans d’une largeur minimale de 700 pixels, elle reste toujours déployée.
+la déplie. Sur les écrans d’une largeur minimale de 768 pixels, elle reste toujours déployée.

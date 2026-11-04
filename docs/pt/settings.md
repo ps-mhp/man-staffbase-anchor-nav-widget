@@ -5,7 +5,7 @@
 O nível que a lista apresenta: **H1** a **H6**. O valor predefinido é **H2**.
 
 Trata-se de exatamente um nível, não «a partir deste nível». Quem selecionar H2 obterá o H2
-da página — os H3 abaixo deste não serão incluídos.
+da página — os H3 abaixo deste ficam de fora.
 
 Se o widget não apresentar nada, significa que a página não utiliza esse nível. Nesse caso, verifique no texto
 qual é, de facto, o nível das secções.

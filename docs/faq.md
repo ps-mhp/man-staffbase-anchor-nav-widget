@@ -2,7 +2,7 @@
 
 ## Das Widget zeigt nichts an.
 
-Die Seite hat keine Überschrift der eingestellten Ebene. Ein anderes Ebene
+Die Seite hat keine Überschrift der eingestellten Ebene. Eine andere Ebene
 wählen oder im Text eine Überschrift setzen. Ein leeres Widget gibt nichts aus —
 auch keinen leeren Kasten und keinen Titel.
 
@@ -20,9 +20,9 @@ Titel des Widgets verwenden oder eine Ebene wählen, die der Textblock nicht hat
 ## Die rote Marke springt nicht mit.
 
 Sie folgt dem Scrollen und bleibt bei der Überschrift, die zuletzt das obere
-Viertel des Fensters erreicht hat. Ganz oben auf der Seite steht sie beim ersten
-Eintrag. Wer „Bewegung reduzieren" eingestellt hat, sieht sie springen statt
-gleiten — das ist Absicht.
+Viertel des Fensters erreicht hat. Ganz oben auf der Seite steht sie beim Titel
+— oder, wenn kein Titel eingetragen ist, beim ersten Eintrag. Wer „Bewegung
+reduzieren" eingestellt hat, sieht sie springen statt gleiten — das ist Absicht.
 
 ## Lässt sich die Reihenfolge ändern?
 

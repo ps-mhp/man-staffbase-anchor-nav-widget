@@ -15,10 +15,10 @@
 ## Bij het bewerken van de pagina
 
 De lijst volgt de tekst terwijl er aan wordt gewerkt: een nieuwe kop
-verschijnt, een verwijderde kop verdwijnt. Je hoeft nergens op te klikken, niets te
+verschijnt, een verwijderde kop verdwijnt. Niets aanklikken, niets
 vernieuwen.
 
 ## Op de telefoon
 
 Daar is de lijst ingeklapt en toont alleen de titel met een pijltje. Eén tik
-klapt hem open. Op schermen vanaf 700 pixels breedte staat hij altijd open.
+klapt hem open. Op schermen vanaf 768 pixels breedte staat hij altijd open.

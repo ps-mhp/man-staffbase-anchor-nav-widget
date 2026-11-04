@@ -9,16 +9,16 @@
    tytuł strony to H1, a sekcje to H2, wybierz **H2**.
 4. **Wpisz tytuł** — lub pozostaw pole puste. Puste pole oznacza: tylko lista, bez
    nagłówka nad nią.
-5. **Sprawdź w podglądzie.** Lista pojawia się natychmiast i prawidłowo; to, co jest w
+5. **Sprawdź w podglądzie.** Lista pojawia się natychmiast i poprawnie; to, co jest w
    edytorze, pojawia się również na stronie.
 
 ## Podczas edycji strony
 
-Lista dostosowuje się do tekstu w trakcie pracy: pojawia się nowy nagłówek,
+Lista podąża za tekstem podczas pracy nad nim: pojawia się nowy nagłówek,
 a usunięty znika. Nie trzeba niczego klikać ani
 odświeżać.
 
 ## Na telefonie
 
 Lista jest tam zwinięta i wyświetla tylko tytuł z strzałką. Jedno dotknięcie
-rozwija ją. Na ekranach o szerokości co najmniej 700 pikseli jest zawsze rozwinięta.
+rozwija ją. Na ekranach o szerokości co najmniej 768 pikseli jest zawsze rozwinięta.

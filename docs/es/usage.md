@@ -10,7 +10,7 @@
 4. **Introduce el título** — o déjalo en blanco. En blanco significa: solo la lista, sin
    título encima.
 5. **Compruébalo en la vista previa.** La lista aparece al instante y correctamente; lo que
-   aparece en el editor es lo mismo que se ve en la página.
+   aparece en el editor es lo mismo que aparece en la página.
 
 ## Al modificar la página
 
@@ -21,4 +21,4 @@ actualizar nada.
 ## En el móvil
 
 Allí, la lista está plegada y solo muestra el título con una flecha. Al pulsar una vez
-se despliega. En pantallas de 700 píxeles de ancho o más, siempre aparece abierta.
+se despliega. En pantallas de 768 píxeles de ancho o más, siempre aparece abierta.

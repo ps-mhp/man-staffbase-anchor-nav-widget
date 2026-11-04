@@ -21,4 +21,4 @@ aktualisieren.
 ## Auf dem Telefon
 
 Dort ist die Liste eingeklappt und zeigt nur den Titel mit einem Pfeil. Ein Tipp
-klappt sie auf. Auf dem Bildschirm ab 700 Pixel Breite steht sie immer offen.
+klappt sie auf. Auf dem Bildschirm ab 768 Pixel Breite steht sie immer offen.
