@@ -14,6 +14,7 @@
 import { act, renderHook } from "@testing-library/react";
 
 import { RESCAN_DELAY_MS, usePageHeadings } from "./use-page-headings";
+import type { ScannedHeading } from "./heading-scan";
 
 /**
  * Lässt die Entprellung ablaufen und die Zustandsänderung durch React laufen.
@@ -84,12 +85,15 @@ describe("usePageHeadings", () => {
 
   it("scannt nach einem Wechsel der Ebene neu", () => {
     document.body.innerHTML = "<h2>Zwei</h2><h3>Drei</h3>";
-    const { result, rerender } = renderHook(({ level }: { level: "h2" | "h3" }) => usePageHeadings(level, null), {
-      initialProps: { level: "h2" as const },
+    // Ohne die Hilfe des Typparameters leitet TypeScript aus `initialProps` die enge Variante "h2"
+    // ab und weist dann das spaetere "h3" zurueck.
+    type Props = { level: "h2" | "h3" };
+    const { result, rerender } = renderHook<readonly ScannedHeading[], Props>(({ level }) => usePageHeadings(level, null), {
+      initialProps: { level: "h2" },
     });
     expect(result.current.map((h) => h.text)).toEqual(["Zwei"]);
 
-    rerender({ level: "h3" as const });
+    rerender({ level: "h3" });
     expect(result.current.map((h) => h.text)).toEqual(["Drei"]);
   });
 
