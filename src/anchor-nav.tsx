@@ -64,7 +64,7 @@ const Chevron = (): React.ReactElement => (
  * weiterzieht; eine Überschrift, die dauerhaft fokussierbar bleibt, ist für
  * die Wirtsseite eine Veränderung, die wir nicht hinterlassen wollen.
  */
-function focusHeading(element: HTMLElement): void {
+function focusHeading(element: HTMLElement, signal: AbortSignal): void {
   const hadTabindex = element.hasAttribute("tabindex");
   if (!hadTabindex) element.setAttribute("tabindex", "-1");
 
@@ -85,7 +85,11 @@ function focusHeading(element: HTMLElement): void {
     return;
   }
 
-  element.addEventListener("blur", () => element.removeAttribute("tabindex"), { once: true });
+  // `signal` statt eines unbefristeten Lauschers: unmountet das Widget,
+  // während die Überschrift noch den Fokus hat, darf der Lauscher nicht
+  // bestehen bleiben — er entfernte sonst später ein `tabindex`, das
+  // inzwischen die Wirtsseite selbst gesetzt haben kann.
+  element.addEventListener("blur", () => element.removeAttribute("tabindex"), { once: true, signal });
 }
 
 /**
@@ -107,6 +111,18 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const navRef = useRef<HTMLElement | null>(null);
   const jumped = useRef(false);
+  // Einmal je Komponenteninstanz, nicht je Klick: ein Abbruch soll jeden
+  // bisher registrierten Blur-Lauscher treffen, nicht nur den letzten.
+  const focusAbort = useRef<AbortController>(new AbortController());
+
+  // Unmountet das Widget, während eine angesprungene Überschrift noch den
+  // Fokus hat (N6), muss der Blur-Lauscher aus `focusHeading` mit abgemeldet
+  // werden — sonst entfernt er später ein `tabindex`, das inzwischen die
+  // Wirtsseite selbst gesetzt haben kann.
+  useEffect(() => {
+    const controller = focusAbort.current;
+    return () => controller.abort();
+  }, []);
 
   const listVisible = !compact || open;
 
@@ -230,7 +246,7 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
 
     event.preventDefault();
     scrollTo(target.element, !reducedMotion);
-    focusHeading(target.element);
+    focusHeading(target.element, focusAbort.current.signal);
     // `replaceState` und nicht `pushState`: sonst sammelt der Zurück-Knopf
     // jeden Klick im Verzeichnis und der Nutzer muss sich rückwärts
     // hindurchklicken, um die Seite zu verlassen.

@@ -340,6 +340,25 @@ describe("AnchorNav", () => {
     expect(liste[0].element).not.toHaveAttribute("tabindex");
   });
 
+  it("meldet den Blur-Lauscher beim Unmount ab", () => {
+    // Unmountet das Widget, während eine angesprungene Überschrift noch den
+    // Fokus hat, bleibt der Lauscher sonst bestehen. Setzt die Wirtsseite in
+    // der Zwischenzeit ihr eigenes tabindex auf demselben Element, entfernte
+    // ein später feuerndes blur genau das — ein fremder Zustand, den das
+    // Widget nach seinem Ende nicht mehr anfassen darf.
+    const liste = headings("Eins");
+    const { unmount } = render(<AnchorNav headings={liste} heading={null} />);
+
+    fireEvent.click(screen.getByRole("link", { name: "Eins" }));
+    expect(liste[0].element).toHaveAttribute("tabindex", "-1");
+
+    unmount();
+    liste[0].element.setAttribute("tabindex", "0"); // von der Wirtsseite gesetzt.
+    fireEvent.blur(liste[0].element);
+
+    expect(liste[0].element).toHaveAttribute("tabindex", "0");
+  });
+
   it("räumt das Hilfsattribut sofort weg, wenn die Überschrift den Fokus nicht annimmt", () => {
     // Ein nicht ans Dokument gehängtes Element ist in jsdom nicht fokussierbar:
     // `focus()` ist dort ein No-Op, genau wie bei einer Überschrift in einem
