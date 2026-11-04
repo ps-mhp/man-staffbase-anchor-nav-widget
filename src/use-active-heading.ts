@@ -29,6 +29,15 @@ export const BAND_FRACTION = 0.25;
  *
  * Reine Funktion über die Oberkanten — ohne DOM, ohne Fenster, ohne React.
  * Die ganze Aussage des Scroll-Spy steht hier und ist allein prüfbar.
+ *
+ * Setzt aufsteigende Oberkanten voraus: die letzte Überschrift oberhalb des
+ * Bandes gilt als aktiv, weil `tops` in Dokumentreihenfolge steht und jede
+ * spätere Überschrift tiefer liegt als die davor. Bei einem mehrspaltigen
+ * Layout — zwei Überschriften nebeneinander statt untereinander — stimmt das
+ * nicht mehr, und das Ergebnis wäre die falsche von beiden. Auf einer
+ * Staffbase-Inhaltsseite (eine Spalte, von oben nach unten gelesen) ist das
+ * ein Rand- statt ein praktischer Fall, deshalb bleibt die Annahme hier
+ * unverändert, aber benannt.
  */
 export function pickActive(tops: readonly number[], band: number): number | null {
   let active: number | null = null;
