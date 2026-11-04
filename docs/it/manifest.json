@@ -1,0 +1,43 @@
+{
+  "title": "Navigazione tramite ancore",
+  "summary": "Visualizza i titoli di un livello selezionato come collegamenti che rimandano alla corrispondente posizione nella pagina.",
+  "icon": "🧭",
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Panoramica",
+      "file": "overview.md"
+    },
+    {
+      "id": "usage",
+      "title": "Passo dopo passo",
+      "file": "usage.md"
+    },
+    {
+      "id": "settings",
+      "title": "Impostazioni",
+      "file": "settings.md"
+    },
+    {
+      "id": "faq",
+      "title": "Domande frequenti",
+      "file": "faq.md"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Titoli di livello 2",
+      "attributes": {
+        "level": "h2",
+        "heading": "Auf einen Blick"
+      }
+    },
+    {
+      "title": "Senza titolo, livello 3",
+      "attributes": {
+        "level": "h3",
+        "heading": ""
+      }
+    }
+  ]
+}

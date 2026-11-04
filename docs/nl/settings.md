@@ -1,0 +1,20 @@
+# Instellingen
+
+## Koptekstniveau
+
+Welk niveau de lijst weergeeft: **H1** tot **H6**. De standaardinstelling is **H2**.
+
+Het gaat om precies één niveau, niet „vanaf dit niveau”. Wie H2 kiest, krijgt de H2
+van de pagina te zien — de H3 daaronder worden buiten beschouwing gelaten.
+
+Als de widget niets weergeeft, gebruikt de pagina dit niveau niet. Kijk dan in de tekst
+welk niveau de paragrafen daadwerkelijk hebben.
+
+## Titel
+
+De kop boven de lijst, bijvoorbeeld „In één oogopslag“. Als je dit veld leeg laat,
+wordt de kop verborgen; de lijst blijft staan.
+
+De titel wordt samen met de pagina vertaald. De items in de lijst hoeven dat
+niet — het zijn de koppen van de pagina en die hebben
+die vertaling sowieso al.

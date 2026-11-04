@@ -1,0 +1,43 @@
+{
+  "title": "Navegação por âncora",
+  "summary": "Apresenta os títulos de um nível selecionado como ligações que levam diretamente à respetiva secção da página.",
+  "icon": "🧭",
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Visão geral",
+      "file": "overview.md"
+    },
+    {
+      "id": "usage",
+      "title": "Passo a passo",
+      "file": "usage.md"
+    },
+    {
+      "id": "settings",
+      "title": "Definições",
+      "file": "settings.md"
+    },
+    {
+      "id": "faq",
+      "title": "Perguntas frequentes",
+      "file": "faq.md"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Títulos de nível 2",
+      "attributes": {
+        "level": "h2",
+        "heading": "Auf einen Blick"
+      }
+    },
+    {
+      "title": "Sem título, nível 3",
+      "attributes": {
+        "level": "h3",
+        "heading": ""
+      }
+    }
+  ]
+}

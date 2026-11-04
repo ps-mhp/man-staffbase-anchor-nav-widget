@@ -1,0 +1,43 @@
+{
+  "title": "Navigation à l'ancre",
+  "summary": "Affiche les titres d'un niveau sélectionné sous forme de liens permettant d'accéder directement à l'emplacement correspondant sur la page.",
+  "icon": "🧭",
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Aperçu",
+      "file": "overview.md"
+    },
+    {
+      "id": "usage",
+      "title": "Étape par étape",
+      "file": "usage.md"
+    },
+    {
+      "id": "settings",
+      "title": "Paramètres",
+      "file": "settings.md"
+    },
+    {
+      "id": "faq",
+      "title": "FAQ",
+      "file": "faq.md"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Titres de niveau 2",
+      "attributes": {
+        "level": "h2",
+        "heading": "Auf einen Blick"
+      }
+    },
+    {
+      "title": "Sans titre, niveau 3",
+      "attributes": {
+        "level": "h3",
+        "heading": ""
+      }
+    }
+  ]
+}

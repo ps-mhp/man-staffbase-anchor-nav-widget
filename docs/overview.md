@@ -1,13 +1,20 @@
-# anchor-nav-widget
+# Ankernavigation
 
-TODO: Beschreibe in 2-3 Absätzen, wofür Redakteur:innen dieses Widget
-einsetzen und welches Ergebnis es auf der Seite erzeugt.
+Das Widget liest die Überschriften der Seite und zeigt die einer Ebene — H1 bis
+H6 — als Liste von Verweisen. Ein Klick springt zur Stelle; während des Lesens
+wandert eine rote Marke zur Überschrift, bei der man gerade ist.
 
-## Was Leser:innen sehen
+Die Liste entsteht beim Anzeigen der Seite. Es gibt nichts zu pflegen: wer eine
+Überschrift umbenennt, verschiebt oder löscht, ändert damit die Navigation.
 
-TODO: Was erscheint auf der veröffentlichten Seite?
+## Wofür es gedacht ist
 
-## Was Sie im CMS-Editor sehen
+Lange Seiten mit klarer Gliederung — ein Fahrzeugmodell mit seinen Ausstattungen,
+eine Richtlinie mit ihren Abschnitten. Auf kurzen Seiten lohnt es nicht.
 
-TODO: Weicht die Bearbeitungsansicht davon ab? Wo muss zum Prüfen die Vorschau
-benutzt werden?
+## Was es nicht tut
+
+- **Nicht auf andere Seiten verweisen.** Alle Verweise bleiben auf dieser Seite.
+  Für Verweise über Seiten hinweg gibt es das Navigations-Widget.
+- **Nicht verschachteln.** Es zeigt genau eine Ebene, keinen Baum.
+- **Keine Überschriften anlegen.** Es findet nur, was im Text schon steht.

@@ -1,12 +1,20 @@
 # Einstellungen
 
-TODO: Liste jede Einstellung im Konfigurationsdialog auf, mit dem exakten
-Namen aus dem Dialog, was sie bewirkt, welcher Wert voreingestellt ist und —
-falls relevant — welche Werte erlaubt sind.
+## Überschriftenebene
 
-| Einstellung | Beschreibung |
-| --- | --- |
-| _(Name)_ | _(Beschreibung)_ |
+Welche Ebene die Liste zeigt: **H1** bis **H6**. Vorgabe ist **H2**.
 
-TODO: Falls Einstellungen voneinander abhängen (z. B. Feld wirkt nur in einem
-bestimmten Modus), das hier ausdrücklich sagen.
+Es ist genau eine Ebene, nicht „ab dieser Ebene". Wer H2 wählt, bekommt die H2
+der Seite — die H3 darunter bleiben außen vor.
+
+Zeigt das Widget nichts, verwendet die Seite diese Ebene nicht. Dann im Text
+nachsehen, welche Ebene die Abschnitte tatsächlich tragen.
+
+## Titel
+
+Die Überschrift über der Liste, zum Beispiel „Auf einen Blick". Leer lassen
+blendet sie aus; die Liste bleibt.
+
+Der Titel wird mit der Seite übersetzt. Die Einträge der Liste brauchen das
+nicht — sie sind die Überschriften der Seite und tragen deren Übersetzung
+ohnehin.

@@ -1,11 +1,21 @@
 {
-  "title": "anchor-nav-widget",
-  "summary": "TODO: Ein Satz, was dieses Widget für Redakteure tut.",
-  "icon": "🧩",
+  "title": "Ankernavigation",
+  "summary": "Zeigt die Überschriften einer gewählten Ebene als Verweise, die zur Stelle auf der Seite springen.",
+  "icon": "🧭",
   "pages": [
     { "id": "overview", "title": "Übersicht", "file": "overview.md" },
     { "id": "usage", "title": "Schritt für Schritt", "file": "usage.md" },
     { "id": "settings", "title": "Einstellungen", "file": "settings.md" },
     { "id": "faq", "title": "FAQ", "file": "faq.md" }
+  ],
+  "examples": [
+    {
+      "title": "Überschriften der Ebene 2",
+      "attributes": { "level": "h2", "heading": "Auf einen Blick" }
+    },
+    {
+      "title": "Ohne Titel, Ebene 3",
+      "attributes": { "level": "h3", "heading": "" }
+    }
   ]
 }

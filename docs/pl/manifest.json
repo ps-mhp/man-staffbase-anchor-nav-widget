@@ -1,0 +1,43 @@
+{
+  "title": "Nawigacja za pomocą kotwicy",
+  "summary": "Wyświetla nagłówki wybranego poziomu jako linki, które przenoszą do odpowiedniego miejsca na stronie.",
+  "icon": "🧭",
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Przegląd",
+      "file": "overview.md"
+    },
+    {
+      "id": "usage",
+      "title": "Krok po kroku",
+      "file": "usage.md"
+    },
+    {
+      "id": "settings",
+      "title": "Ustawienia",
+      "file": "settings.md"
+    },
+    {
+      "id": "faq",
+      "title": "Najczęściej zadawane pytania",
+      "file": "faq.md"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Nagłówki poziomu 2",
+      "attributes": {
+        "level": "h2",
+        "heading": "Auf einen Blick"
+      }
+    },
+    {
+      "title": "Bez tytułu, poziom 3",
+      "attributes": {
+        "level": "h3",
+        "heading": ""
+      }
+    }
+  ]
+}

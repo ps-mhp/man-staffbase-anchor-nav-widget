@@ -1,0 +1,43 @@
+{
+  "title": "Navigatie via ankers",
+  "summary": "Geeft de kopteksten van een geselecteerd niveau weer als links die naar de betreffende plek op de pagina leiden.",
+  "icon": "🧭",
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Overzicht",
+      "file": "overview.md"
+    },
+    {
+      "id": "usage",
+      "title": "Stap voor stap",
+      "file": "usage.md"
+    },
+    {
+      "id": "settings",
+      "title": "Instellingen",
+      "file": "settings.md"
+    },
+    {
+      "id": "faq",
+      "title": "Veelgestelde vragen",
+      "file": "faq.md"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Koppen van niveau 2",
+      "attributes": {
+        "level": "h2",
+        "heading": "Auf einen Blick"
+      }
+    },
+    {
+      "title": "Zonder titel, niveau 3",
+      "attributes": {
+        "level": "h3",
+        "heading": ""
+      }
+    }
+  ]
+}
