@@ -17,6 +17,7 @@ import { useHotStyle } from "@shared/hot-style";
 import { ScannedHeading } from "./heading-scan";
 import { COMPACT_QUERY, REDUCED_MOTION_QUERY, useMediaQuery } from "./media-query";
 import { measureChromeHeight } from "@shared/staffbase-chrome";
+import { findScrollParent } from "./scroll-ancestor";
 import { jumpTarget } from "./scroll-target";
 import { useActiveHeading } from "./use-active-heading";
 import anchorNavCss from "./styles/anchor-nav.scss";
@@ -112,19 +113,40 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
   const scrollTo = useCallback(
     (element: HTMLElement, smooth: boolean): void => {
       const behavior = smooth ? "smooth" : "auto";
+      const chromeHeight = measureChromeHeight();
+      // Der rollfähige Vorfahre entscheidet, wer rollt: im Content Designer
+      // rollt die Leinwand in einem eigenen Container statt am Dokument (siehe
+      // use-active-heading.ts), und `window.scrollTo` bewegt ausschließlich
+      // das Hauptdokument — der Klick bewegte dort sichtbar nichts.
       // `scrollIntoView({ block: "start" })` legt die Oberkante der Überschrift
       // auf die Oberkante des Sichtbereichs — genau dort, wo Staffbases feste
       // Kopf- und Menüleisten stehen, und es rollt dabei jeden Vorfahren mit,
       // der selbst rollen kann (auch `overflow: hidden`), im Content Designer
-      // also die Editor-Umgebung gleich mit. Ein eigener Rollvorgang mit
-      // Versatz vermeidet beides; `scrollIntoView` bleibt der Rückfall, wo
-      // `window.scrollTo` fehlt.
-      if (typeof window.scrollTo !== "function") {
-        element.scrollIntoView?.({ behavior, block: "start" });
+      // also die Editor-Umgebung gleich mit; es bleibt deshalb nur der
+      // Rückfall, wo `window.scrollTo` fehlt.
+      const scrollParent = findScrollParent(element);
+
+      if (scrollParent === null) {
+        if (typeof window.scrollTo !== "function") {
+          element.scrollIntoView?.({ behavior, block: "start" });
+          return;
+        }
+        const top = jumpTarget(element.getBoundingClientRect().top, window.scrollY, chromeHeight);
+        window.scrollTo({ top, behavior });
         return;
       }
-      const top = jumpTarget(element.getBoundingClientRect().top, window.scrollY, measureChromeHeight());
-      window.scrollTo({ top, behavior });
+
+      // Dieselbe Rechnung wie beim Dokument, nur relativ zum Container statt
+      // zum Fenster: die Oberkante der Überschrift abzüglich der Oberkante
+      // des Containers ist ihre Lage innerhalb des sichtbaren Ausschnitts,
+      // zuzüglich dessen, was schon gerollt ist.
+      const relativeTop = element.getBoundingClientRect().top - scrollParent.getBoundingClientRect().top;
+      const top = jumpTarget(relativeTop, scrollParent.scrollTop, chromeHeight);
+      if (typeof scrollParent.scrollTo === "function") {
+        scrollParent.scrollTo({ top, behavior });
+      } else {
+        scrollParent.scrollTop = top;
+      }
     },
     [],
   );

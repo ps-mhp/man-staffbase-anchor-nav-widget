@@ -120,6 +120,36 @@ describe("AnchorNav", () => {
     expect(scrollToSpy).toHaveBeenCalledWith({ top: 536, behavior: "smooth" });
   });
 
+  it("rollt den eigenen Container, statt wirkungslos das Fenster zu rollen", () => {
+    // Im Content Designer rollt die Leinwand in einem eigenen Container statt
+    // am Dokument (siehe use-active-heading.ts). window.scrollTo trifft dort
+    // ausschließlich das Hauptdokument — der Klick bewegt dann sichtbar gar
+    // nichts.
+    document.body.innerHTML = "";
+    const container = document.createElement("div");
+    container.style.overflowY = "auto";
+    Object.defineProperty(container, "scrollHeight", { configurable: true, value: 2000 });
+    Object.defineProperty(container, "clientHeight", { configurable: true, value: 400 });
+    container.getBoundingClientRect = () => ({ top: 50 }) as DOMRect;
+    container.scrollTop = 20;
+    document.body.appendChild(container);
+
+    const element = document.createElement("h2");
+    element.textContent = "Eins";
+    element.getBoundingClientRect = () => ({ top: 300 }) as DOMRect;
+    container.appendChild(element);
+    const liste = [{ element, text: "Eins", slug: "abschnitt-1" }];
+
+    render(<AnchorNav headings={liste} heading={null} />);
+    fireEvent.click(screen.getByRole("link", { name: "Eins" }));
+
+    // window.scrollTo bliebe wirkungslos und darf deshalb nicht laufen.
+    expect(scrollToSpy).not.toHaveBeenCalled();
+    // (300 - 50) Oberkante relativ zum Container + 20 (schon gerollt) - 0
+    // (keine Chrome) = 270.
+    expect(container.scrollTop).toBe(270);
+  });
+
   it("fällt auf scrollIntoView zurück, wenn window.scrollTo fehlt", () => {
     scrollToSpy.mockRestore();
     delete (window as { scrollTo?: unknown }).scrollTo;
