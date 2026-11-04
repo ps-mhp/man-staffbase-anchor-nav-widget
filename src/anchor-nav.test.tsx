@@ -119,11 +119,17 @@ describe("AnchorNav", () => {
     expect(scrollToSpy).toHaveBeenCalledWith({ top: 536, behavior: "smooth" });
   });
 
-  it("rollt den eigenen Container, statt wirkungslos das Fenster zu rollen", () => {
-    // Im Content Designer rollt die Leinwand in einem eigenen Container statt
-    // am Dokument (siehe use-active-heading.ts). window.scrollTo trifft dort
-    // ausschließlich das Hauptdokument — der Klick bewegt dann sichtbar gar
-    // nichts.
+  /**
+   * Baut einen rollfähigen Container mit einer Überschrift darin.
+   *
+   * `container.scrollTo` wird hier bewusst gestellt: jsdom kennt
+   * `Element.prototype.scrollTo` nicht (anders als `window.scrollTo`, das
+   * `beforeEach` bereits mockt), ohne eigenen Mock läuft der Test unweigerlich
+   * in den `scrollTop`-Rückfall statt in den Produktivzweig
+   * `scrollParent.scrollTo({ top, behavior })` — genau der Fehler, an dem die
+   * vorigen beiden Review-Runden schon gescheitert sind.
+   */
+  function containerWithHeading(): { container: HTMLElement; containerScrollTo: jest.Mock; liste: ScannedHeading[] } {
     document.body.innerHTML = "";
     const container = document.createElement("div");
     container.style.overflowY = "auto";
@@ -131,6 +137,8 @@ describe("AnchorNav", () => {
     Object.defineProperty(container, "clientHeight", { configurable: true, value: 400 });
     container.getBoundingClientRect = () => ({ top: 50 }) as DOMRect;
     container.scrollTop = 20;
+    const containerScrollTo = jest.fn();
+    container.scrollTo = containerScrollTo;
     document.body.appendChild(container);
 
     const element = document.createElement("h2");
@@ -139,6 +147,16 @@ describe("AnchorNav", () => {
     container.appendChild(element);
     const liste = [{ element, text: "Eins", slug: "abschnitt-1" }];
 
+    return { container, containerScrollTo, liste };
+  }
+
+  it("rollt den eigenen Container, statt wirkungslos das Fenster zu rollen", () => {
+    // Im Content Designer rollt die Leinwand in einem eigenen Container statt
+    // am Dokument (siehe use-active-heading.ts). window.scrollTo trifft dort
+    // ausschließlich das Hauptdokument — der Klick bewegt dann sichtbar gar
+    // nichts.
+    const { containerScrollTo, liste } = containerWithHeading();
+
     render(<AnchorNav headings={liste} heading={null} />);
     fireEvent.click(screen.getByRole("link", { name: "Eins" }));
 
@@ -146,7 +164,20 @@ describe("AnchorNav", () => {
     expect(scrollToSpy).not.toHaveBeenCalled();
     // (300 - 50) Oberkante relativ zum Container + 20 (schon gerollt) - 0
     // (keine Chrome) = 270.
-    expect(container.scrollTop).toBe(270);
+    expect(containerScrollTo).toHaveBeenCalledWith({ top: 270, behavior: "smooth" });
+  });
+
+  it("rollt den eigenen Container hart, wenn weniger Bewegung gewünscht ist", () => {
+    // Derselbe Produktivzweig wie oben, aber mit `prefers-reduced-motion`:
+    // `behavior` muss auch im Container-Fall durchgereicht werden, nicht nur
+    // beim Rollen des Fensters.
+    setMedia(REDUCED_MOTION_QUERY);
+    const { containerScrollTo, liste } = containerWithHeading();
+
+    render(<AnchorNav headings={liste} heading={null} />);
+    fireEvent.click(screen.getByRole("link", { name: "Eins" }));
+
+    expect(containerScrollTo).toHaveBeenCalledWith({ top: 270, behavior: "auto" });
   });
 
   it("setzt den Hash der Seite, ohne die Chronik zu füllen", () => {
