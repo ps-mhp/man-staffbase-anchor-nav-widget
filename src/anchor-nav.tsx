@@ -16,6 +16,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { useHotStyle } from "@shared/hot-style";
 import { ScannedHeading } from "./heading-scan";
 import { COMPACT_QUERY, REDUCED_MOTION_QUERY, useMediaQuery } from "./media-query";
+import { jumpTarget, measureChromeHeight } from "./scroll-target";
 import { useActiveHeading } from "./use-active-heading";
 import anchorNavCss from "./styles/anchor-nav.scss";
 
@@ -109,7 +110,20 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
 
   const scrollTo = useCallback(
     (element: HTMLElement, smooth: boolean): void => {
-      element.scrollIntoView?.({ behavior: smooth ? "smooth" : "auto", block: "start" });
+      const behavior = smooth ? "smooth" : "auto";
+      // `scrollIntoView({ block: "start" })` legt die Oberkante der Überschrift
+      // auf die Oberkante des Sichtbereichs — genau dort, wo Staffbases feste
+      // Kopf- und Menüleisten stehen, und es rollt dabei jeden Vorfahren mit,
+      // der selbst rollen kann (auch `overflow: hidden`), im Content Designer
+      // also die Editor-Umgebung gleich mit. Ein eigener Rollvorgang mit
+      // Versatz vermeidet beides; `scrollIntoView` bleibt der Rückfall, wo
+      // `window.scrollTo` fehlt.
+      if (typeof window.scrollTo !== "function") {
+        element.scrollIntoView?.({ behavior, block: "start" });
+        return;
+      }
+      const top = jumpTarget(element.getBoundingClientRect().top, window.scrollY, measureChromeHeight());
+      window.scrollTo({ top, behavior });
     },
     [],
   );

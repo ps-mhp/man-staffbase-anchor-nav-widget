@@ -46,13 +46,20 @@ function setMedia(...wahr: string[]): void {
 }
 
 describe("AnchorNav", () => {
+  let scrollToSpy: jest.SpyInstance;
+
   beforeEach(() => {
     setMedia();
     window.history.replaceState(null, "", "/seite");
+    // Reiner No-Op-Ersatz: jsdom implementiert `scrollTo` nicht wirklich und
+    // meldet sonst bei jedem Aufruf einen „not implemented“-Fehler.
+    scrollToSpy = jest.spyOn(window, "scrollTo").mockImplementation(() => {});
   });
 
   afterEach(() => {
     delete (window as { matchMedia?: unknown }).matchMedia;
+    scrollToSpy.mockRestore();
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 0 });
   });
 
   it("zeigt jede Überschrift als Verweis", () => {
@@ -83,10 +90,42 @@ describe("AnchorNav", () => {
     const klick = fireEvent.click(screen.getByRole("link", { name: "Zwei" }));
 
     expect(klick).toBe(false); // preventDefault wurde gerufen
-    expect(liste[1].element.scrollIntoView).toHaveBeenCalledWith(
-      expect.objectContaining({ behavior: "smooth" }),
+    expect(scrollToSpy).toHaveBeenCalledWith(expect.objectContaining({ behavior: "smooth" }));
+  });
+
+  it("rollt unter eine feste Kopfleiste, statt dahinter zu landen", () => {
+    // scrollIntoView({ block: "start" }) legt die Oberkante der Überschrift auf
+    // die Oberkante des Sichtbereichs — genau dort, wo Staffbases feste
+    // Kopfzeile steht. Der eigene Rollvorgang zieht ihre Höhe ab.
+    const liste = headings("Eins"); // leert document.body — die Leiste erst danach anhängen.
+    liste[0].element.getBoundingClientRect = () => ({ top: 100 }) as DOMRect;
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 500 });
+
+    const header = document.createElement("div");
+    header.id = "header";
+    header.style.position = "fixed";
+    header.getBoundingClientRect = () => ({ bottom: 64, height: 64 }) as DOMRect;
+    document.body.appendChild(header);
+
+    render(<AnchorNav headings={liste} heading={null} />);
+    fireEvent.click(screen.getByRole("link", { name: "Eins" }));
+
+    // 100 (Oberkante) + 500 (schon gerollt) - 64 (feste Leiste) = 536.
+    expect(scrollToSpy).toHaveBeenCalledWith({ top: 536, behavior: "smooth" });
+  });
+
+  it("fällt auf scrollIntoView zurück, wenn window.scrollTo fehlt", () => {
+    scrollToSpy.mockRestore();
+    delete (window as { scrollTo?: unknown }).scrollTo;
+
+    const liste = headings("Eins");
+    render(<AnchorNav headings={liste} heading={null} />);
+
+    fireEvent.click(screen.getByRole("link", { name: "Eins" }));
+
+    expect(liste[0].element.scrollIntoView).toHaveBeenCalledWith(
+      expect.objectContaining({ behavior: "smooth", block: "start" }),
     );
-    expect(liste[0].element.scrollIntoView).not.toHaveBeenCalled();
   });
 
   it("setzt den Hash der Seite, ohne die Chronik zu füllen", () => {
@@ -106,9 +145,7 @@ describe("AnchorNav", () => {
 
     fireEvent.click(screen.getByRole("link", { name: "Eins" }));
 
-    expect(liste[0].element.scrollIntoView).toHaveBeenCalledWith(
-      expect.objectContaining({ behavior: "auto" }),
-    );
+    expect(scrollToSpy).toHaveBeenCalledWith(expect.objectContaining({ behavior: "auto" }));
   });
 
   it("misst die Marke nach einer Größenänderung neu", () => {
@@ -166,7 +203,7 @@ describe("AnchorNav", () => {
 
     render(<AnchorNav headings={liste} heading={null} />);
 
-    expect(liste[1].element.scrollIntoView).toHaveBeenCalled();
+    expect(scrollToSpy).toHaveBeenCalled();
   });
 
   it("springt beim Start nicht, wenn der Hash zu nichts passt", () => {
@@ -175,7 +212,7 @@ describe("AnchorNav", () => {
 
     render(<AnchorNav headings={liste} heading={null} />);
 
-    expect(liste[0].element.scrollIntoView).not.toHaveBeenCalled();
+    expect(scrollToSpy).not.toHaveBeenCalled();
   });
 
   it("übersteht einen Hash, den decodeURIComponent nicht lesen kann", () => {
@@ -186,7 +223,7 @@ describe("AnchorNav", () => {
 
     expect(() => render(<AnchorNav headings={liste} heading={null} />)).not.toThrow();
 
-    expect(liste[0].element.scrollIntoView).not.toHaveBeenCalled();
+    expect(scrollToSpy).not.toHaveBeenCalled();
   });
 
   it("zeigt auf schmalen Schirmen einen Knopf statt der Liste", () => {
@@ -249,6 +286,6 @@ describe("AnchorNav", () => {
 
     fireEvent.click(screen.getByRole("link", { name: "Eins" }), { metaKey: true });
 
-    expect(liste[0].element.scrollIntoView).not.toHaveBeenCalled();
+    expect(scrollToSpy).not.toHaveBeenCalled();
   });
 });
