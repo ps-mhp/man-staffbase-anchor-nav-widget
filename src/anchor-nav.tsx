@@ -104,7 +104,16 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
     if (jumped.current || headings.length === 0) return;
     jumped.current = true;
 
-    const slug = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+    const rawHash = window.location.hash.replace(/^#/, "");
+    // Ein Slug besteht nur aus `[a-z0-9-]`; ein Hash, der sich nicht dekodieren
+    // lässt (z. B. „%“ ohne zwei folgende Hex-Ziffern), trifft damit ohnehin
+    // keinen Eintrag — der rohe Hash ist hier ein sicherer Rückfall, kein Risiko.
+    let slug: string;
+    try {
+      slug = decodeURIComponent(rawHash);
+    } catch {
+      slug = rawHash;
+    }
     if (slug === "") return;
 
     const target = headings.find((candidate) => candidate.slug === slug);

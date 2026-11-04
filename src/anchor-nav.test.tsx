@@ -138,6 +138,17 @@ describe("AnchorNav", () => {
     expect(liste[0].element.scrollIntoView).not.toHaveBeenCalled();
   });
 
+  it("übersteht einen Hash, den decodeURIComponent nicht lesen kann", () => {
+    // "%" ohne zwei folgende Hex-Ziffern lässt decodeURIComponent mit einem
+    // URIError scheitern — unabgesichert reißt das die React-Wurzel ab.
+    window.history.replaceState(null, "", "/seite#100%");
+    const liste = headings("Eins");
+
+    expect(() => render(<AnchorNav headings={liste} heading={null} />)).not.toThrow();
+
+    expect(liste[0].element.scrollIntoView).not.toHaveBeenCalled();
+  });
+
   it("zeigt auf schmalen Schirmen einen Knopf statt der Liste", () => {
     setMedia(COMPACT_QUERY);
     render(<AnchorNav headings={headings("Eins")} heading="Auf einen Blick" />);
