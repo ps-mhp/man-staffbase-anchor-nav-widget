@@ -65,12 +65,18 @@ export function useActiveHeading(headings: readonly ScannedHeading[]): number | 
     };
 
     measure();
-    window.addEventListener("scroll", schedule, { passive: true });
+    // `scroll` steigt nicht auf (siehe `project-timeline-widget/editors/
+    // anchored-popover.tsx`). Rollt der Seiteninhalt in einem eigenen
+    // Container statt am Dokument — im Content Designer ist die Leinwand genau
+    // so ein Container —, erreicht ein an `window` oder in der Bubble-Phase
+    // angemeldeter Lauscher das Ereignis nie. In der Einfangphase am
+    // `document` sieht er jeden Bildlauf auf dem Weg zu seinem Ziel.
+    document.addEventListener("scroll", schedule, { passive: true, capture: true });
     window.addEventListener("resize", schedule, { passive: true });
 
     return () => {
       if (frame !== null) window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", schedule);
+      document.removeEventListener("scroll", schedule, { capture: true });
       window.removeEventListener("resize", schedule);
     };
   }, [headings]);

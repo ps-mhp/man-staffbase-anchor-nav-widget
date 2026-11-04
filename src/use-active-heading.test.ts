@@ -78,7 +78,9 @@ describe("useActiveHeading", () => {
 
     headings[2].element.getBoundingClientRect = () => ({ top: 10 }) as DOMRect;
     act(() => {
-      window.dispatchEvent(new Event("scroll"));
+      // Ein echter Bildlauf des Hauptdokuments feuert mit `document` als Ziel,
+      // nicht mit `window` (das nur in der Einfangphase davor liegt).
+      document.dispatchEvent(new Event("scroll"));
     });
 
     expect(result.current).toBe(2);
@@ -102,15 +104,37 @@ describe("useActiveHeading", () => {
     expect(result.current).toBe(0);
   });
 
+  it("folgt dem Scrollen in einem eigenen Container", () => {
+    // `scroll` steigt nicht auf: rollt der Seiteninhalt in einem eigenen
+    // Container (im Content Designer die Leinwand) statt am Dokument, erreicht
+    // ein an `window` angemeldeter Bubble-Phase-Lauscher dieses Ereignis nie.
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+
+    const headings = headingsAt([-100, 150, 500]);
+    const { result } = renderHook(() => useActiveHeading(headings));
+
+    headings[2].element.getBoundingClientRect = () => ({ top: 10 }) as DOMRect;
+    act(() => {
+      container.dispatchEvent(new Event("scroll"));
+    });
+
+    expect(result.current).toBe(2);
+  });
+
   it("meldet die Lauscher beim Unmount ab", () => {
-    const remove = jest.spyOn(window, "removeEventListener");
+    // Der Scroll-Lauscher hängt jetzt am `document` in der Einfangphase (siehe
+    // oben); das Abmelden muss dieselbe Phase angeben, sonst greift sie nicht.
+    const removeWindow = jest.spyOn(window, "removeEventListener");
+    const removeDocument = jest.spyOn(document, "removeEventListener");
     const { unmount } = renderHook(() => useActiveHeading(headingsAt([0])));
 
     unmount();
 
-    expect(remove).toHaveBeenCalledWith("scroll", expect.any(Function));
-    expect(remove).toHaveBeenCalledWith("resize", expect.any(Function));
-    remove.mockRestore();
+    expect(removeDocument).toHaveBeenCalledWith("scroll", expect.any(Function), { capture: true });
+    expect(removeWindow).toHaveBeenCalledWith("resize", expect.any(Function));
+    removeWindow.mockRestore();
+    removeDocument.mockRestore();
   });
 
   it("bricht eine ausstehende rAF-Anforderung beim Unmount ab", () => {
@@ -127,9 +151,10 @@ describe("useActiveHeading", () => {
 
     const { unmount } = renderHook(() => useActiveHeading(headingsAt([0])));
     // Der erste Messvorgang läuft beim Mount direkt, nicht über rAF; erst das
-    // Scroll-Ereignis plant einen Frame über `schedule()` ein.
+    // Scroll-Ereignis plant einen Frame über `schedule()` ein. Das Ziel ist
+    // `document`, weil dort die Einfangphase angemeldet ist.
     act(() => {
-      window.dispatchEvent(new Event("scroll"));
+      document.dispatchEvent(new Event("scroll"));
     });
 
     unmount();
