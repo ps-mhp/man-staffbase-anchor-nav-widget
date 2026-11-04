@@ -173,6 +173,39 @@ describe("useActiveHeading", () => {
     removeDocument.mockRestore();
   });
 
+  it("meldet den Lauscher eines rollenden Containers beim Unmount ab", () => {
+    // B7: `headingsAt(...)` baut Überschriften ohne Scroll-Vorfahren (keines
+    // der obigen `document`/`window`-Beispiele deckt findScrollParents ab).
+    // Ein echter Container mit Überlauf belegt den eigenen Pfad: anmelden
+    // beim Mount, abmelden beim Unmount, in derselben Phase (kein `capture`
+    // auf beiden Seiten).
+    const container = document.createElement("div");
+    container.style.overflowY = "auto";
+    Object.defineProperty(container, "scrollHeight", { configurable: true, value: 2000 });
+    Object.defineProperty(container, "clientHeight", { configurable: true, value: 400 });
+    document.body.appendChild(container);
+
+    const element = document.createElement("h2");
+    element.textContent = "Abschnitt 1";
+    element.getBoundingClientRect = () => ({ top: 500 }) as DOMRect;
+    container.appendChild(element);
+    const headings: ScannedHeading[] = [{ element, text: "Abschnitt 1", slug: "abschnitt-1" }];
+
+    const addContainer = jest.spyOn(container, "addEventListener");
+    const removeContainer = jest.spyOn(container, "removeEventListener");
+
+    const { unmount } = renderHook(() => useActiveHeading(headings));
+
+    expect(addContainer).toHaveBeenCalledWith("scroll", expect.any(Function), { passive: true });
+    const [, registeredListener] = addContainer.mock.calls[0];
+
+    unmount();
+
+    expect(removeContainer).toHaveBeenCalledWith("scroll", registeredListener);
+    addContainer.mockRestore();
+    removeContainer.mockRestore();
+  });
+
   it("bricht eine ausstehende rAF-Anforderung beim Unmount ab", () => {
     // Der globale Mock ruft seinen Callback synchron auf, sodass `frame` nie
     // gesetzt bliebe — hier muss er aufschiebend sein, damit beim Unmount
