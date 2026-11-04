@@ -16,7 +16,8 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { useHotStyle } from "@shared/hot-style";
 import { ScannedHeading } from "./heading-scan";
 import { COMPACT_QUERY, REDUCED_MOTION_QUERY, useMediaQuery } from "./media-query";
-import { jumpTarget, measureChromeHeight } from "./scroll-target";
+import { measureChromeHeight } from "@shared/staffbase-chrome";
+import { jumpTarget } from "./scroll-target";
 import { useActiveHeading } from "./use-active-heading";
 import anchorNavCss from "./styles/anchor-nav.scss";
 
