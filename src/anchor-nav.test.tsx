@@ -85,12 +85,18 @@ describe("AnchorNav", () => {
 
   it("scrollt beim Klick zur Überschrift statt dem Anker zu folgen", () => {
     const liste = headings("Eins", "Zwei");
+    // Unterschiedliche Oberkanten: ohne sie belegt der Test nur, dass
+    // irgendein `scrollTo` lief, nicht, dass die zweite Überschrift (und
+    // nicht die erste) das Ziel war.
+    liste[0].element.getBoundingClientRect = () => ({ top: 2000 }) as DOMRect;
+    liste[1].element.getBoundingClientRect = () => ({ top: 100 }) as DOMRect;
     render(<AnchorNav headings={liste} heading={null} />);
 
     const klick = fireEvent.click(screen.getByRole("link", { name: "Zwei" }));
 
     expect(klick).toBe(false); // preventDefault wurde gerufen
-    expect(scrollToSpy).toHaveBeenCalledWith(expect.objectContaining({ behavior: "smooth" }));
+    // 100 (Oberkante von "Zwei") + 0 (scrollY) - 0 (keine Chrome) = 100.
+    expect(scrollToSpy).toHaveBeenCalledWith({ top: 100, behavior: "smooth" });
   });
 
   it("rollt unter eine feste Kopfleiste, statt dahinter zu landen", () => {
@@ -200,10 +206,15 @@ describe("AnchorNav", () => {
   it("springt beim Start zum Abschnitt aus dem Hash", () => {
     window.history.replaceState(null, "", "/seite#abschnitt-2");
     const liste = headings("Eins", "Zwei");
+    // Unterschiedliche Oberkanten: sonst ist unbewiesen, dass die zweite
+    // Überschrift (und nicht die erste) das Sprungziel war.
+    liste[0].element.getBoundingClientRect = () => ({ top: 2000 }) as DOMRect;
+    liste[1].element.getBoundingClientRect = () => ({ top: 300 }) as DOMRect;
 
     render(<AnchorNav headings={liste} heading={null} />);
 
-    expect(scrollToSpy).toHaveBeenCalled();
+    // 300 (Oberkante von "Zwei") + 0 (scrollY) - 0 (keine Chrome) = 300.
+    expect(scrollToSpy).toHaveBeenCalledWith({ top: 300, behavior: "auto" });
   });
 
   it("springt beim Start nicht, wenn der Hash zu nichts passt", () => {
