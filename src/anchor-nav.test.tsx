@@ -180,6 +180,48 @@ describe("AnchorNav", () => {
     expect(containerScrollTo).toHaveBeenCalledWith({ top: 270, behavior: "auto" });
   });
 
+  it("zieht im Container nur die wirkliche Überlappung ab, nicht die volle Chrome-Höhe", () => {
+    // B4: die feste Leiste reicht bis 64, der Container beginnt aber erst bei
+    // 200 -- die Leiste steht im Content-Designer-Normalfall über der
+    // Leinwand, nicht über dem Container selbst. Ein voller Abzug verschöbe
+    // das Ziel um die ganze Leistenhöhe zu weit nach unten.
+    const { container, containerScrollTo, liste } = containerWithHeading();
+    container.getBoundingClientRect = () => ({ top: 200 }) as DOMRect;
+
+    const header = document.createElement("div");
+    header.id = "header";
+    header.style.position = "fixed";
+    header.getBoundingClientRect = () => ({ bottom: 64, height: 64 }) as DOMRect;
+    document.body.appendChild(header);
+
+    render(<AnchorNav headings={liste} heading={null} />);
+    fireEvent.click(screen.getByRole("link", { name: "Eins" }));
+
+    // (300 - 200) Oberkante relativ zum Container + 20 (schon gerollt) - 0
+    // (keine Überlappung, Container beginnt unterhalb der Leiste) = 120.
+    expect(containerScrollTo).toHaveBeenCalledWith({ top: 120, behavior: "smooth" });
+  });
+
+  it("zieht im Container nur den überlappenden Teil der Chrome ab", () => {
+    // Die Leiste reicht bis 64, der Container beginnt bei 40 -- nur die
+    // 24 Pixel Überlappung zählen, nicht die volle Leistenhöhe.
+    const { container, containerScrollTo, liste } = containerWithHeading();
+    container.getBoundingClientRect = () => ({ top: 40 }) as DOMRect;
+
+    const header = document.createElement("div");
+    header.id = "header";
+    header.style.position = "fixed";
+    header.getBoundingClientRect = () => ({ bottom: 64, height: 64 }) as DOMRect;
+    document.body.appendChild(header);
+
+    render(<AnchorNav headings={liste} heading={null} />);
+    fireEvent.click(screen.getByRole("link", { name: "Eins" }));
+
+    // (300 - 40) Oberkante relativ zum Container + 20 (schon gerollt) - 24
+    // (Überlappung) = 256.
+    expect(containerScrollTo).toHaveBeenCalledWith({ top: 256, behavior: "smooth" });
+  });
+
   it("setzt den Hash der Seite, ohne die Chronik zu füllen", () => {
     const vorher = window.history.length;
     render(<AnchorNav headings={headings("Eins", "Zwei")} heading={null} />);

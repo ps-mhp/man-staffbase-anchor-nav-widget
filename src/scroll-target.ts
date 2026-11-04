@@ -26,3 +26,24 @@
 export function jumpTarget(rectTop: number, scrollY: number, chromeHeight: number): number {
   return rectTop + scrollY - chromeHeight;
 }
+
+/**
+ * Wie viel von der festen Chrome einen rollenden Container wirklich verdeckt.
+ *
+ * `measureChromeHeight` misst eine Unterkante in Fensterkoordinaten (fest
+ * positionierte Elemente stehen relativ zum Darstellungsbereich, nicht zu
+ * irgendeinem Container). Rollt die Überschrift in einem eigenen Container —
+ * im Content Designer der Normalfall —, liegt dessen Oberkante selbst
+ * irgendwo im Fenster; steht sie unterhalb der Chrome, überdeckt diese den
+ * Container gar nicht, und ein voller Abzug verschöbe das Ziel um die ganze
+ * Leistenhöhe zu weit nach unten. `Math.max(0, …)` statt eines bedingungslosen
+ * Abzugs: negative "Überlappung" (Container beginnt unterhalb der Chrome)
+ * gibt es nicht, sie ist schlicht keine. `Math.max(containerTop, 0)` als
+ * zweite Klammer: beginnt der Container oberhalb des Sichtbereichs (negative
+ * Oberkante, etwa weil er selbst schon teilweise aus dem Fenster gescrollt
+ * ist), überdeckt die Chrome ihn trotzdem in voller Höhe — die Obergrenze des
+ * sichtbaren Containerausschnitts ist dann 0, nicht die negative Oberkante.
+ */
+export function containerChromeOverlap(chromeHeight: number, containerTop: number): number {
+  return Math.max(0, chromeHeight - Math.max(containerTop, 0));
+}

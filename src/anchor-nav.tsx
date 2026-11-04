@@ -18,7 +18,7 @@ import { ScannedHeading } from "./heading-scan";
 import { COMPACT_QUERY, REDUCED_MOTION_QUERY, useMediaQuery } from "./media-query";
 import { measureChromeHeight } from "@shared/staffbase-chrome";
 import { findScrollParent } from "./scroll-ancestor";
-import { jumpTarget } from "./scroll-target";
+import { containerChromeOverlap, jumpTarget } from "./scroll-target";
 import { useActiveHeading } from "./use-active-heading";
 import anchorNavCss from "./styles/anchor-nav.scss";
 
@@ -151,8 +151,14 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
       // zum Fenster: die Oberkante der Überschrift abzüglich der Oberkante
       // des Containers ist ihre Lage innerhalb des sichtbaren Ausschnitts,
       // zuzüglich dessen, was schon gerollt ist.
-      const relativeTop = element.getBoundingClientRect().top - scrollParent.getBoundingClientRect().top;
-      const top = jumpTarget(relativeTop, scrollParent.scrollTop, chromeHeight);
+      const containerTop = scrollParent.getBoundingClientRect().top;
+      const relativeTop = element.getBoundingClientRect().top - containerTop;
+      // Nur die wirkliche Überlappung abziehen, nicht die volle Chrome-Höhe:
+      // `chromeHeight` ist eine Unterkante in Fensterkoordinaten, steht der
+      // Container (der Normalfall im Content Designer) unterhalb davon,
+      // verdeckt die Chrome ihn gar nicht.
+      const overlap = containerChromeOverlap(chromeHeight, containerTop);
+      const top = jumpTarget(relativeTop, scrollParent.scrollTop, overlap);
       if (typeof scrollParent.scrollTo === "function") {
         scrollParent.scrollTo({ top, behavior });
       } else {
