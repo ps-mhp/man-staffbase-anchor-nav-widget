@@ -174,6 +174,17 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
   // auf —, bliebe die gemessene Lage stehen. `ResizeObserver` meldet genau das;
   // ist er nicht vorhanden, ist ein Resize-Listener am Fenster der Rückfall
   // (schwächer: er sieht nur Fensteränderungen, keine reinen Inhaltsumbrüche).
+  //
+  // `headings` steht zusätzlich in den Abhängigkeiten: ohne Überschriften
+  // gibt die Komponente `null` zurück, `navRef.current` ist dann `null`, und
+  // mit nur `measureMarker` in den Abhängigkeiten liefe dieser Effekt nie
+  // erneut, bis `active`/`compact`/`open` wechseln — steht die Seite oben,
+  // passiert das nie, und es wird nie ein Beobachter angelegt. Reicht
+  // `usePageHeadings` die Liste nach, ändert sich die Referenz und der Effekt
+  // läuft erneut, jetzt mit gesetztem `navRef.current`. Fallen alle
+  // Überschriften wieder weg, läuft er aus demselben Grund noch einmal und
+  // die vorherige Aufräumfunktion hängt den Beobachter nicht mehr am
+  // abgehängten `nav` fest.
   useEffect(() => {
     const navElement = navRef.current;
     if (navElement === null) return undefined;
@@ -186,7 +197,7 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
 
     window.addEventListener("resize", measureMarker);
     return () => window.removeEventListener("resize", measureMarker);
-  }, [measureMarker]);
+  }, [measureMarker, headings]);
 
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, target: ScannedHeading): void => {
     // Zusatztasten und Mittelklick gehören dem Browser: „in neuem Tab öffnen"

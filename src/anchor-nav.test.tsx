@@ -194,6 +194,41 @@ describe("AnchorNav", () => {
     delete (window as unknown as { ResizeObserver?: unknown }).ResizeObserver;
   });
 
+  it("legt den ResizeObserver auch an, wenn das nav erst nach dem ersten Rendern entsteht", () => {
+    // Der echte Pfad: `usePageHeadings` liefert beim ersten Rendern eine
+    // leere Liste (die Komponente gibt dann `null` zurueck, `nav` existiert
+    // nicht), die Ueberschriften kommen erst mit einem spaeteren Rendern
+    // nach. Ein Test, der direkt mit gefuellter Liste rendert, nimmt genau
+    // den einen Pfad, der schon funktioniert, und uebersieht diesen Fehler.
+    const observe = jest.fn();
+    const disconnect = jest.fn();
+    class FakeResizeObserver {
+      observe = observe;
+      disconnect = disconnect;
+    }
+    (window as unknown as { ResizeObserver: unknown }).ResizeObserver = FakeResizeObserver;
+
+    // `headings(...)` leert `document.body` zuerst — deshalb vor dem ersten
+    // Rendern aufgebaut, sonst risse ein späterer Aufruf den Container von
+    // Testing Library mit weg.
+    const liste = headings("Eins");
+
+    const { rerender } = render(<AnchorNav headings={[]} heading={null} />);
+    expect(observe).not.toHaveBeenCalled();
+
+    rerender(<AnchorNav headings={liste} heading={null} />);
+
+    expect(observe).toHaveBeenCalledTimes(1);
+    expect(observe).toHaveBeenCalledWith(document.querySelector(".man-anchor-nav"));
+
+    // Fallen alle Ueberschriften wieder weg, haengt der Beobachter sonst am
+    // abgehaengten nav weiter.
+    rerender(<AnchorNav headings={[]} heading={null} />);
+    expect(disconnect).toHaveBeenCalledTimes(1);
+
+    delete (window as unknown as { ResizeObserver?: unknown }).ResizeObserver;
+  });
+
   it("zeichnet den aktiven Eintrag aus", () => {
     const liste = headings("Eins", "Zwei");
     liste[0].element.getBoundingClientRect = () => ({ top: -10 }) as DOMRect;
