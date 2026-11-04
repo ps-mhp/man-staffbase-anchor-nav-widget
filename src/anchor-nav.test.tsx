@@ -417,6 +417,31 @@ describe("AnchorNav", () => {
     expect(liste[0].element).toHaveAttribute("tabindex", "0");
   });
 
+  it("springt auch unter React.StrictMode noch an, obwohl Effekte doppelt laufen", () => {
+    // B5: `useRef(new AbortController())` legt den Controller im Render an,
+    // nicht im Effekt. `useRef` behält zwar nur den allerersten Wert, aber
+    // unter StrictMode (React montiert zu Entwicklungszeiten synthetisch ab
+    // und wieder an, um genau solche Effektfehler aufzudecken) bricht der
+    // Aufräumeffekt denselben, über alle Zyklen hinweg geteilten Controller
+    // beim ersten synthetischen Abmontieren ab. Jeder Klick danach registriert
+    // seinen Blur-Lauscher mit einem bereits abgebrochenen Signal —
+    // `addEventListener` mit abgebrochenem Signal ist ein No-Op, das
+    // `tabindex="-1"` bliebe für immer auf der fremden Überschrift kleben.
+    const liste = headings("Eins");
+    render(
+      <React.StrictMode>
+        <AnchorNav headings={liste} heading={null} />
+      </React.StrictMode>,
+    );
+
+    fireEvent.click(screen.getByRole("link", { name: "Eins" }));
+    expect(liste[0].element).toHaveAttribute("tabindex", "-1");
+
+    fireEvent.blur(liste[0].element);
+
+    expect(liste[0].element).not.toHaveAttribute("tabindex");
+  });
+
   it("räumt das Hilfsattribut sofort weg, wenn die Überschrift den Fokus nicht annimmt", () => {
     // Ein nicht ans Dokument gehängtes Element ist in jsdom nicht fokussierbar:
     // `focus()` ist dort ein No-Op, genau wie bei einer Überschrift in einem

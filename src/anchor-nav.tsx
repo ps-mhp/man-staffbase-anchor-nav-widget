@@ -111,17 +111,32 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const navRef = useRef<HTMLElement | null>(null);
   const jumped = useRef(false);
-  // Einmal je Komponenteninstanz, nicht je Klick: ein Abbruch soll jeden
-  // bisher registrierten Blur-Lauscher treffen, nicht nur den letzten.
-  const focusAbort = useRef<AbortController>(new AbortController());
+  // `null` bis der Mount-Effekt unten läuft, nicht `new AbortController()`
+  // hier im Render: der Ausdruck würde sonst bei jedem Rendern neu
+  // ausgewertet (verworfener Abfall, weil `useRef` nur den ersten Wert
+  // behält) -- und unter `React.StrictMode`, das Effekte zu
+  // Entwicklungszeiten synthetisch ab- und wieder anmontiert, um genau
+  // solche Fehler aufzudecken, wäre der einzige, über beide Zyklen geteilte
+  // Controller nach dem ersten synthetischen Abmontieren dauerhaft
+  // abgebrochen: jeder spätere Klick registrierte seinen Blur-Lauscher mit
+  // einem bereits abgebrochenen Signal (No-Op), `tabindex="-1"` bliebe für
+  // immer auf fremdem DOM kleben.
+  const focusAbort = useRef<AbortController | null>(null);
 
   // Unmountet das Widget, während eine angesprungene Überschrift noch den
   // Fokus hat (N6), muss der Blur-Lauscher aus `focusHeading` mit abgemeldet
   // werden — sonst entfernt er später ein `tabindex`, das inzwischen die
-  // Wirtsseite selbst gesetzt haben kann.
+  // Wirtsseite selbst gesetzt haben kann. Der Controller entsteht hier, im
+  // Effekt: ein erneuter Mount (echter Wechsel oder StrictModes
+  // synthetischer Zyklus) legt einen frischen an statt den abgebrochenen
+  // weiterzuverwenden.
   useEffect(() => {
-    const controller = focusAbort.current;
-    return () => controller.abort();
+    const controller = new AbortController();
+    focusAbort.current = controller;
+    return () => {
+      controller.abort();
+      focusAbort.current = null;
+    };
   }, []);
 
   const listVisible = !compact || open;
@@ -247,7 +262,11 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
 
     event.preventDefault();
     scrollTo(target.element, !reducedMotion);
-    focusHeading(target.element, focusAbort.current.signal);
+    // `focusAbort.current` ist spätestens nach dem Mount-Effekt gesetzt — ein
+    // Klick ist erst möglich, nachdem die Navigation gerendert und damit
+    // bedienbar ist. Der Rückfall ist rein defensiv (ungebundenes Signal:
+    // kein Abbruch registriert sich nie wirklich auf etwas Fremdes).
+    focusHeading(target.element, (focusAbort.current ?? new AbortController()).signal);
     // `replaceState` und nicht `pushState`: sonst sammelt der Zurück-Knopf
     // jeden Klick im Verzeichnis und der Nutzer muss sich rückwärts
     // hindurchklicken, um die Seite zu verlassen.
