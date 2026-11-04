@@ -18,13 +18,12 @@ import { AnchorNav, COMPACT_TOGGLE_LABEL, FALLBACK_NAV_LABEL } from "./anchor-na
 import { ScannedHeading } from "./heading-scan";
 import { COMPACT_QUERY, REDUCED_MOTION_QUERY } from "./media-query";
 
-/** Überschriften im Dokument, damit `scrollIntoView` ein echtes Ziel hat. */
+/** Überschriften im Dokument. */
 function headings(...texte: string[]): ScannedHeading[] {
   document.body.innerHTML = "";
   return texte.map((text, index) => {
     const element = document.createElement("h2");
     element.textContent = text;
-    element.scrollIntoView = jest.fn();
     element.getBoundingClientRect = () => ({ top: 1000 }) as DOMRect;
     document.body.appendChild(element);
     return { element, text, slug: `abschnitt-${index + 1}` };
@@ -148,20 +147,6 @@ describe("AnchorNav", () => {
     // (300 - 50) Oberkante relativ zum Container + 20 (schon gerollt) - 0
     // (keine Chrome) = 270.
     expect(container.scrollTop).toBe(270);
-  });
-
-  it("fällt auf scrollIntoView zurück, wenn window.scrollTo fehlt", () => {
-    scrollToSpy.mockRestore();
-    delete (window as { scrollTo?: unknown }).scrollTo;
-
-    const liste = headings("Eins");
-    render(<AnchorNav headings={liste} heading={null} />);
-
-    fireEvent.click(screen.getByRole("link", { name: "Eins" }));
-
-    expect(liste[0].element.scrollIntoView).toHaveBeenCalledWith(
-      expect.objectContaining({ behavior: "smooth", block: "start" }),
-    );
   });
 
   it("setzt den Hash der Seite, ohne die Chronik zu füllen", () => {
@@ -366,7 +351,6 @@ describe("AnchorNav", () => {
     // auf diesem fremden Element kleben, weil nie ein `blur` folgt.
     const element = document.createElement("h2");
     element.textContent = "Versteckt";
-    element.scrollIntoView = jest.fn();
     const liste: ScannedHeading[] = [{ element, text: "Versteckt", slug: "versteckt" }];
 
     render(<AnchorNav headings={liste} heading={null} />);

@@ -134,19 +134,14 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
       // rollt die Leinwand in einem eigenen Container statt am Dokument (siehe
       // use-active-heading.ts), und `window.scrollTo` bewegt ausschließlich
       // das Hauptdokument — der Klick bewegte dort sichtbar nichts.
-      // `scrollIntoView({ block: "start" })` legt die Oberkante der Überschrift
-      // auf die Oberkante des Sichtbereichs — genau dort, wo Staffbases feste
-      // Kopf- und Menüleisten stehen, und es rollt dabei jeden Vorfahren mit,
-      // der selbst rollen kann (auch `overflow: hidden`), im Content Designer
-      // also die Editor-Umgebung gleich mit; es bleibt deshalb nur der
-      // Rückfall, wo `window.scrollTo` fehlt.
       const scrollParent = findScrollParent(element);
 
       if (scrollParent === null) {
-        if (typeof window.scrollTo !== "function") {
-          element.scrollIntoView?.({ behavior, block: "start" });
-          return;
-        }
+        // Kein `typeof window.scrollTo`-Wächter mehr (anders als bei
+        // `ResizeObserver`/`matchMedia`): `window.scrollTo` gehört seit
+        // Langem zu jedem Browser, den Staffbase unterstützt — der
+        // einzige Fall, in dem die Prüfung je zuschlug, war ein Test, der
+        // die Methode künstlich gelöscht hatte.
         const top = jumpTarget(element.getBoundingClientRect().top, window.scrollY, chromeHeight);
         window.scrollTo({ top, behavior });
         return;
