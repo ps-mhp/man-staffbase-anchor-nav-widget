@@ -36,14 +36,17 @@ export function jumpTarget(rectTop: number, scrollY: number, chromeHeight: numbe
  * im Content Designer der Normalfall —, liegt dessen Oberkante selbst
  * irgendwo im Fenster; steht sie unterhalb der Chrome, überdeckt diese den
  * Container gar nicht, und ein voller Abzug verschöbe das Ziel um die ganze
- * Leistenhöhe zu weit nach unten. `Math.max(0, …)` statt eines bedingungslosen
- * Abzugs: negative "Überlappung" (Container beginnt unterhalb der Chrome)
- * gibt es nicht, sie ist schlicht keine. `Math.max(containerTop, 0)` als
- * zweite Klammer: beginnt der Container oberhalb des Sichtbereichs (negative
- * Oberkante, etwa weil er selbst schon teilweise aus dem Fenster gescrollt
- * ist), überdeckt die Chrome ihn trotzdem in voller Höhe — die Obergrenze des
- * sichtbaren Containerausschnitts ist dann 0, nicht die negative Oberkante.
+ * Leistenhöhe zu weit nach unten. `Math.max(0, …)`: negative „Überlappung"
+ * (Container beginnt unterhalb der Chrome) gibt es nicht, sie ist schlicht
+ * keine.
+ *
+ * Die Überschrift soll am Ende bei `max(chromeHeight, containerTop)` stehen —
+ * an der Unterkante der Chrome, oder an der Oberkante des Containers, falls
+ * die tiefer liegt. Der gesuchte Abstand zur Containeroberkante ist die
+ * Differenz der beiden, und die wächst, wenn der Container selbst schon aus
+ * dem Fenster gerollt ist: bei einer Oberkante von -100 und 64 Pixeln Chrome
+ * sind es 164, nicht 64.
  */
 export function containerChromeOverlap(chromeHeight: number, containerTop: number): number {
-  return Math.max(0, chromeHeight - Math.max(containerTop, 0));
+  return Math.max(0, chromeHeight - containerTop);
 }

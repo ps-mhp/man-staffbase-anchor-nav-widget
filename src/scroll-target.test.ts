@@ -51,7 +51,20 @@ describe("containerChromeOverlap", () => {
     expect(containerChromeOverlap(64, 40)).toBe(24);
   });
 
-  it("liefert 0 ohne Chrome", () => {
-    expect(containerChromeOverlap(0, -50)).toBe(0);
+  it("liefert 0 ohne Chrome, solange der Container im Fenster steht", () => {
+    expect(containerChromeOverlap(0, 120)).toBe(0);
+  });
+
+  it("waechst, wenn der Container selbst schon aus dem Fenster gerollt ist", () => {
+    // Oberkante bei -100, Chrome reicht bis 64: die Ueberschrift muss 164 Pixel
+    // unterhalb der Containeroberkante stehen, sonst landet sie bei -36 und
+    // damit ueber dem oberen Fensterrand.
+    expect(containerChromeOverlap(64, -100)).toBe(164);
+  });
+
+  it("holt den Container auch ohne Chrome an den Fensterrand zurueck", () => {
+    // Ohne feste Leiste ist das Ziel der obere Fensterrand. Steht die
+    // Containeroberkante bei -50, liegt der 50 Pixel tief im Container.
+    expect(containerChromeOverlap(0, -50)).toBe(50);
   });
 });
