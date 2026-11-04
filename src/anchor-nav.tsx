@@ -62,11 +62,27 @@ const Chevron = (): React.ReactElement => (
  * die Wirtsseite eine Veränderung, die wir nicht hinterlassen wollen.
  */
 function focusHeading(element: HTMLElement): void {
-  if (!element.hasAttribute("tabindex")) {
-    element.setAttribute("tabindex", "-1");
-    element.addEventListener("blur", () => element.removeAttribute("tabindex"), { once: true });
-  }
+  const hadTabindex = element.hasAttribute("tabindex");
+  if (!hadTabindex) element.setAttribute("tabindex", "-1");
+
   element.focus({ preventScroll: true });
+
+  if (hadTabindex) return;
+
+  // `getRootNode()` statt `document`: liegt die Überschrift in einem Shadow
+  // Root, endet `document.activeElement` an dessen Grenze, aber `getRootNode()`
+  // liefert genau den Shadow Root, dessen eigenes `activeElement` führt.
+  const root = element.getRootNode() as Document | ShadowRoot;
+  if (root.activeElement !== element) {
+    // Eine unsichtbare Überschrift (zugeklappt, `display: none`) nimmt den
+    // Fokus nicht an: `focus()` war ein No-Op, und ohne echten Fokus kommt nie
+    // ein `blur`, der das Attribut wieder entfernt. Ohne diese Gegenprobe
+    // bliebe es für die Lebensdauer der Seite auf fremdem DOM kleben.
+    element.removeAttribute("tabindex");
+    return;
+  }
+
+  element.addEventListener("blur", () => element.removeAttribute("tabindex"), { once: true });
 }
 
 /**

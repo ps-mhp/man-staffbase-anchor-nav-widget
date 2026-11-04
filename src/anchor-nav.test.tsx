@@ -187,6 +187,22 @@ describe("AnchorNav", () => {
     expect(liste[0].element).not.toHaveAttribute("tabindex");
   });
 
+  it("räumt das Hilfsattribut sofort weg, wenn die Überschrift den Fokus nicht annimmt", () => {
+    // Ein nicht ans Dokument gehängtes Element ist in jsdom nicht fokussierbar:
+    // `focus()` ist dort ein No-Op, genau wie bei einer Überschrift in einem
+    // `display: none`-Bereich. Ohne Gegenprobe bliebe `tabindex="-1"` für immer
+    // auf diesem fremden Element kleben, weil nie ein `blur` folgt.
+    const element = document.createElement("h2");
+    element.textContent = "Versteckt";
+    element.scrollIntoView = jest.fn();
+    const liste: ScannedHeading[] = [{ element, text: "Versteckt", slug: "versteckt" }];
+
+    render(<AnchorNav headings={liste} heading={null} />);
+    fireEvent.click(screen.getByRole("link", { name: "Versteckt" }));
+
+    expect(element).not.toHaveAttribute("tabindex");
+  });
+
   it("überlässt einen Klick mit Zusatztaste dem Browser", () => {
     const liste = headings("Eins");
     render(<AnchorNav headings={liste} heading={null} />);
