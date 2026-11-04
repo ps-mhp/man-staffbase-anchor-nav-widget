@@ -122,6 +122,42 @@ describe("useActiveHeading", () => {
     expect(result.current).toBe(2);
   });
 
+  it("folgt dem Scrollen eines Containers innerhalb eines Shadow Root", () => {
+    // `scroll` ist nicht `composed`: ein Scroller innerhalb eines Shadow Root
+    // lässt das Ereignis nie bis zum `document` durch, auch nicht in der
+    // Einfangphase — Shadow Roots sind die Geschäftsgrundlage dieses Widgets
+    // (Content Designer), die vorherige Behebung (I1, document-Capture-Phase)
+    // deckt diesen Fall deshalb nicht ab. Der Scroller selbst muss im Shadow
+    // Root liegen, nicht nur die Überschrift — der Host ist ein gewöhnlicher
+    // Knoten im Hauptdokument und sein eigenes `scroll`-Ereignis würde die
+    // document-Einfangphase ohnehin erreichen.
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const shadow = host.attachShadow({ mode: "open" });
+
+    const scroller = document.createElement("div");
+    scroller.style.overflowY = "auto";
+    Object.defineProperty(scroller, "scrollHeight", { configurable: true, value: 2000 });
+    Object.defineProperty(scroller, "clientHeight", { configurable: true, value: 400 });
+    shadow.appendChild(scroller);
+
+    const element = document.createElement("h2");
+    element.textContent = "Abschnitt 1";
+    element.getBoundingClientRect = () => ({ top: 500 }) as DOMRect;
+    scroller.appendChild(element);
+    const headings: ScannedHeading[] = [{ element, text: "Abschnitt 1", slug: "abschnitt-1" }];
+
+    const { result } = renderHook(() => useActiveHeading(headings));
+    expect(result.current).toBeNull(); // Band = 200, Oberkante 500 liegt darunter.
+
+    element.getBoundingClientRect = () => ({ top: 10 }) as DOMRect;
+    act(() => {
+      scroller.dispatchEvent(new Event("scroll"));
+    });
+
+    expect(result.current).toBe(0);
+  });
+
   it("meldet die Lauscher beim Unmount ab", () => {
     // Der Scroll-Lauscher hängt jetzt am `document` in der Einfangphase (siehe
     // oben); das Abmelden muss dieselbe Phase angeben, sonst greift sie nicht.

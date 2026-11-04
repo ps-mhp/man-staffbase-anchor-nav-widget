@@ -14,6 +14,7 @@
 import { useEffect, useState } from "react";
 
 import { ScannedHeading } from "./heading-scan";
+import { findScrollParents } from "./scroll-ancestor";
 
 /**
  * Wo das Erfassungsband liegt, als Anteil der Fensterhöhe.
@@ -79,14 +80,27 @@ export function useActiveHeading(headings: readonly ScannedHeading[]): number | 
     // Container statt am Dokument — im Content Designer ist die Leinwand genau
     // so ein Container —, erreicht ein an `window` oder in der Bubble-Phase
     // angemeldeter Lauscher das Ereignis nie. In der Einfangphase am
-    // `document` sieht er jeden Bildlauf auf dem Weg zu seinem Ziel.
+    // `document` sieht er jeden Bildlauf auf dem Weg zu seinem Ziel — es sei
+    // denn, der Weg führt durch eine Shadow-Root-Grenze: `scroll` ist nicht
+    // `composed` und überquert sie nie, auch nicht in der Einfangphase. Weil
+    // Shadow Roots die Geschäftsgrundlage dieses Widgets sind (der Content
+    // Designer rendert Blöcke darin), hört der Scroll-Spy deshalb zusätzlich
+    // direkt auf jedem rollfähigen Vorfahren der Überschriften selbst.
     document.addEventListener("scroll", schedule, { passive: true, capture: true });
     window.addEventListener("resize", schedule, { passive: true });
+
+    const scrollParents = findScrollParents(headings.map((entry) => entry.element));
+    for (const parent of scrollParents) {
+      parent.addEventListener("scroll", schedule, { passive: true });
+    }
 
     return () => {
       if (frame !== null) window.cancelAnimationFrame(frame);
       document.removeEventListener("scroll", schedule, { capture: true });
       window.removeEventListener("resize", schedule);
+      for (const parent of scrollParents) {
+        parent.removeEventListener("scroll", schedule);
+      }
     };
   }, [headings]);
 
