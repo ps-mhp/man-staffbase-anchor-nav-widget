@@ -60,6 +60,14 @@ function isScrollableElement(element: HTMLElement): boolean {
  * Shadow-Root-Grenze, über den Host weiter. `getRootNode()` statt
  * `parentNode`: ein Shadow Root hat kein `parentElement`, sein `host` liegt
  * im Dokument des äußeren Baums.
+ *
+ * Steigt über `parentElement`, nicht über den Flat Tree (`assignedSlot`):
+ * ein per `<slot>` umverteiltes Element hätte im gerenderten Baum einen
+ * anderen rollfähigen Vorfahren als seinen eigentlichen `parentElement` im
+ * Lichtbaum. Bewusst nicht behoben — der Content Designer verteilt Blöcke
+ * nicht über benannte Slots um, nur in eigene Shadow Roots, und ein Wechsel
+ * auf den Flat Tree ohne einen beobachteten Fall, der ihn verlangt, wäre
+ * eine spekulative Annahme über eine Struktur, die so (noch) nicht vorkommt.
  */
 function parentOrHost(node: Node): Node | null {
   if (node instanceof Element && node.parentElement !== null) return node.parentElement;
@@ -78,11 +86,25 @@ export function findScrollParent(element: HTMLElement): HTMLElement | null {
 }
 
 /**
- * Alle rollfähigen Vorfahren mehrerer Elemente, ohne Duplikate.
+ * Je Element der nächste rollfähige Vorfahre, ohne Duplikate — nicht die
+ * ganze Kette: liegt ein Element in einem geschachtelten Container (ein
+ * Roller innerhalb eines weiteren Rollers), liefert diese Funktion nur den
+ * inneren.
  *
- * Für den Scroll-Spy: mehrere Überschriften können denselben Container
- * teilen (nur einmal anmelden) oder in getrennten Containern liegen (auf
- * jeden einzeln zuhören).
+ * Für den Scroll-Spy heißt das: ein äußerer Roller, der selbst scrollt,
+ * ohne dass der innere mitläuft, bleibt unbeobachtet — eine Überschrift
+ * könnte dadurch ins Erfassungsband wandern, ohne dass `useActiveHeading`
+ * davon erfährt. Bewusst nicht behoben: geschachtelte Scroll-Container
+ * innerhalb eines Shadow-Root-Blocks sind im Content Designer kein
+ * dokumentierter oder beobachteter Fall (ein Block bekommt einen Roller,
+ * keine mehreren ineinander), und die ganze Kette zu liefern verdoppelt die
+ * Zahl der Lauscher für einen Fall, der bislang spekulativ ist. Träfe er doch
+ * ein, ist hier die Stelle, die `parentOrHost`-Schleife nicht beim ersten
+ * Treffer abbrechen zu lassen.
+ *
+ * Mehrere Überschriften können denselben Container teilen (nur einmal
+ * anmelden) oder in getrennten Containern liegen (auf jeden einzeln
+ * zuhören) — das deckt diese Funktion ab.
  */
 export function findScrollParents(elements: readonly HTMLElement[]): HTMLElement[] {
   const seen = new Set<HTMLElement>();
