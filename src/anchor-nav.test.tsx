@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 
 import { AnchorNav, COMPACT_TOGGLE_LABEL, FALLBACK_NAV_LABEL } from "./anchor-nav";
 import { ScannedHeading } from "./heading-scan";
@@ -109,6 +109,46 @@ describe("AnchorNav", () => {
     expect(liste[0].element.scrollIntoView).toHaveBeenCalledWith(
       expect.objectContaining({ behavior: "auto" }),
     );
+  });
+
+  it("misst die Marke nach einer Größenänderung neu", () => {
+    // jsdom kennt keinen ResizeObserver; ein eigener Mock erfasst die
+    // registrierte Rückruffunktion, damit der Test eine Größenänderung
+    // auslösen kann, ohne dass sich eine der fünf Abhängigkeiten der
+    // bestehenden Messung ändert (active, headings, compact, open, heading).
+    let onResize: (() => void) | null = null;
+    const observe = jest.fn();
+    const disconnect = jest.fn();
+    class FakeResizeObserver {
+      constructor(callback: () => void) {
+        onResize = callback;
+      }
+      observe = observe;
+      disconnect = disconnect;
+    }
+    (window as unknown as { ResizeObserver: unknown }).ResizeObserver = FakeResizeObserver;
+
+    const liste = headings("Eins", "Zwei");
+    render(<AnchorNav headings={liste} heading={null} />);
+
+    const marke = document.querySelector(".man-anchor-nav__marker") as HTMLElement;
+    expect(marke.style.transform).toBe("translateY(0px)");
+
+    // Layoutänderung ohne eine der fünf Abhängigkeiten: nur die gemessene
+    // Lage selbst ändert sich (z. B. ein nachladender Web-Font). Gemessen wird
+    // am `<li>`, nicht an `liste[0].element` — Letzteres ist die fremde
+    // Überschrift auf der Seite, das Segment zeigt auf den Eintrag im
+    // Verzeichnis selbst.
+    const erstesItem = document.querySelector(".man-anchor-nav__item") as HTMLElement;
+    Object.defineProperty(erstesItem, "offsetTop", { configurable: true, value: 42 });
+    expect(onResize).not.toBeNull();
+    act(() => {
+      (onResize as () => void)();
+    });
+
+    expect(marke.style.transform).toBe("translateY(42px)");
+
+    delete (window as unknown as { ResizeObserver?: unknown }).ResizeObserver;
   });
 
   it("zeichnet den aktiven Eintrag aus", () => {

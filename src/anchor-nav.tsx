@@ -102,6 +102,7 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
 
   const titleRef = useRef<HTMLElement | null>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const navRef = useRef<HTMLElement | null>(null);
   const jumped = useRef(false);
 
   const listVisible = !compact || open;
@@ -138,7 +139,7 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
 
   // Die Lage des Segments. `useLayoutEffect`, damit es nach einem Wechsel
   // nicht erst eine Bildfolge lang an der alten Stelle steht.
-  useLayoutEffect(() => {
+  const measureMarker = useCallback((): void => {
     const anchor =
       compact && !open
         ? titleRef.current
@@ -147,7 +148,31 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
           : (titleRef.current ?? itemRefs.current[0]);
 
     setMarker(anchor ? { top: anchor.offsetTop, height: anchor.offsetHeight } : null);
-  }, [active, headings, compact, open, heading]);
+  }, [active, compact, open]);
+
+  useLayoutEffect(() => {
+    measureMarker();
+  }, [measureMarker, headings, heading]);
+
+  // Ändert sich das Layout, ohne dass eine der obigen Abhängigkeiten wechselt —
+  // die Fensterbreite ändert sich ohne `COMPACT_QUERY` zu kreuzen, ein langer
+  // Eintrag bricht um, ein Web-Font lädt nach, eine fremde Seitenspalte klappt
+  // auf —, bliebe die gemessene Lage stehen. `ResizeObserver` meldet genau das;
+  // ist er nicht vorhanden, ist ein Resize-Listener am Fenster der Rückfall
+  // (schwächer: er sieht nur Fensteränderungen, keine reinen Inhaltsumbrüche).
+  useEffect(() => {
+    const navElement = navRef.current;
+    if (navElement === null) return undefined;
+
+    if (typeof ResizeObserver === "function") {
+      const observer = new ResizeObserver(() => measureMarker());
+      observer.observe(navElement);
+      return () => observer.disconnect();
+    }
+
+    window.addEventListener("resize", measureMarker);
+    return () => window.removeEventListener("resize", measureMarker);
+  }, [measureMarker]);
 
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, target: ScannedHeading): void => {
     // Zusatztasten und Mittelklick gehören dem Browser: „in neuem Tab öffnen"
@@ -170,7 +195,13 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
   const toggleLabel = heading ?? COMPACT_TOGGLE_LABEL;
 
   return (
-    <nav className="man-anchor-nav" aria-label={heading ?? FALLBACK_NAV_LABEL}>
+    <nav
+      className="man-anchor-nav"
+      aria-label={heading ?? FALLBACK_NAV_LABEL}
+      ref={(element) => {
+        navRef.current = element;
+      }}
+    >
       <style>{liveCss}</style>
       <span className="man-anchor-nav__rail" aria-hidden="true" />
       {marker && (
