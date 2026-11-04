@@ -1,0 +1,11 @@
+{
+  "name": "@man/anchor-nav-widget",
+  "version": "0.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "staffbase": {
+    "element": "anchor-nav-widget",
+    "bundle": "dist/anchor-nav-widget.js"
+  }
+}
