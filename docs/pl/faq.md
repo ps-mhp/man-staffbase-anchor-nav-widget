@@ -29,14 +29,14 @@ lista nadal wyświetla teksty linków w języku, w którym zostały one wprowadz
 
 ## Czerwony znacznik nie podąża za przewijaniem.
 
-Jest to zamierzone. Znajduje się on przy wpisie, który został kliknięty jako ostatni. Przed
+Jest to zamierzone działanie. Znacznik pozostaje przy wpisie, który został kliknięty jako ostatni. Przed
 pierwszym kliknięciem znajduje się przy tytule — lub, jeśli nie wprowadzono tytułu, przy
 pierwszym wpisie. Jeśli ktoś otworzy stronę poprzez odnośnik z znacznikiem,
 na przykład `…#wyposażenie`, znacznik znajduje się przy tym wpisie.
 
 ## Czy można zmienić kolejność?
 
-Tak. W edytorze należy przeciągnąć uchwyt po lewej stronie lub zaznaczyć uchwyt i przesuwać go za pomocą
+Tak. W edytorze przeciągnij uchwyt po lewej stronie lub zaznacz uchwyt i przesuń go za pomocą
 klawiszy strzałek. Lista nie musi odpowiadać kolejności na stronie.
 
 ## Dwa nagłówki mają tę samą nazwę — dokąd prowadzi odnośnik?

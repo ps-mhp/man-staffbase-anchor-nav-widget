@@ -11,9 +11,9 @@ widget doesn't display anything—not even an empty box or a title.
 It is missing the link text. In the Editor, the line “Without link text,
 this entry will not be displayed” will appear.
 
-## Clicking does not take me anywhere.
+## Clicking does not take you anywhere.
 
-There is no heading on the page with exactly this text. The system compares
+There is no heading on the page with exactly that text. The system compares
 the text to the target, or—if the target is empty—to the link text. A typo,
 a difference in capitalization, or a heading that has since been renamed
 is enough to cause this. Copy the text from the heading and paste it into the target
@@ -22,7 +22,7 @@ field.
 Headings in anchor navigation never count as targets—not even the
 title of a second widget on the same page.
 
-## A click does not navigate to the target on translated pages.
+## A click doesn’t work on translated pages.
 
 The page’s headings are translated, but the link text and target are not. In the
 other language, the entry can no longer find its heading, and the

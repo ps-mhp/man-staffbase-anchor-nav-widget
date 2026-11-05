@@ -4,14 +4,14 @@ The widget displays a list of links that you maintain yourself. Clicking
 a link takes you to the corresponding heading on the page; a red marker indicates which
 entry was clicked most recently.
 
-The list doesn't generate automatically. In the settings dialog, you specify which
+The list does not generate automatically. In the settings dialog, you specify which
 entries are included, what they’re called, and the order in which they appear. The
 widget only scans the page when someone clicks an entry—it doesn’t
 do anything in the background while the page is loading.
 
 ## What it’s for
 
-Long pages with a clear structure—a car model with its trim levels,
+Long pages with a clear structure—a vehicle model with its trim levels,
 a guideline with its sections. It’s not worth it on short pages.
 
 ## What it doesn’t do

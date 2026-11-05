@@ -30,7 +30,7 @@ liste continue d’afficher les textes des liens dans la langue dans laquelle il
 
 ## Le marqueur rouge ne suit pas le défilement.
 
-C’est voulu. Il se trouve sur l’entrée sur laquelle on a cliqué en dernier. Avant le
+C’est intentionnel. Il se trouve sur l’entrée qui a été cliquée en dernier. Avant le
 premier clic, elle se trouve au niveau du titre — ou, si aucun titre n’est renseigné, au niveau de la
 première entrée. Si quelqu’un ouvre la page via un lien avec un repère de saut,
 par exemple `…#équipement`, elle se trouve alors au niveau de cette entrée.

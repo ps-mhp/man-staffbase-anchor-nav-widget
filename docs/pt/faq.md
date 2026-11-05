@@ -1,4 +1,4 @@
-# Perguntas Frequentes
+# Perguntas frequentes
 
 ## O widget não mostra nada.
 
@@ -16,7 +16,7 @@ esta entrada não é apresentada.»
 Não existe na página nenhum título com exatamente este texto. A comparação
 é feita com o destino ou — se o destino estiver vazio — com o texto do link. Basta um erro ortográfico,
 uma diferença nas maiúsculas e minúsculas ou um título que tenha sido renomeado
-entretanto. Copie o texto do título e cole-o no destino
+entretanto. Copie o texto do título e insira-o no destino
 .
 
 Os títulos numa navegação por âncoras nunca contam como destino — nem mesmo o

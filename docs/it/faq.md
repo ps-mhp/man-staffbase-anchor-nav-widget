@@ -32,7 +32,7 @@ elenco continua a mostrare i testi dei link nella lingua in cui sono stati inser
 
 È intenzionale. Rimane sulla voce su cui è stato cliccato per ultima. Prima del
 primo clic si trova sul titolo — oppure, se non è stato inserito alcun titolo, sulla
-prima voce. Se qualcuno apre la pagina tramite un collegamento con un'ancora,
+prima voce. Se qualcuno apre la pagina tramite un collegamento con un'etichetta di salto,
 ad esempio `…#attrezzatura`, si trova su quella voce.
 
 ## È possibile modificare l'ordine?
@@ -40,9 +40,9 @@ ad esempio `…#attrezzatura`, si trova su quella voce.
 Sì. Nell’editor, trascinare la maniglia a sinistra oppure selezionarla e spostarla con i
 tasti freccia. L’elenco non deve necessariamente seguire l’ordine della pagina.
 
-## Due titoli hanno lo stesso nome: dove porta il collegamento?
+## Due titoli hanno lo stesso nome — a quale si collega il collegamento?
 
-Al primo presente nella pagina. Se si desidera che porti al secondo, l’unica soluzione è
+Al primo presente nella pagina. Se si desidera che si colleghi al secondo, l’unica soluzione è
 dare nomi diversi ai titoli.
 
 ## Una voce può rimandare a un’altra pagina?

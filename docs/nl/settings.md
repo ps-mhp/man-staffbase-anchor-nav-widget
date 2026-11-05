@@ -11,16 +11,16 @@ De titel wordt samen met de pagina vertaald.
 
 De items in de lijst. In Studio staat hier een editor met één
 regel per link. Via **Links bewerken** wordt deze geopend, via **Link
-toevoegen** wordt een regel toegevoegd, de prullenbak verwijdert deze. De
-volgorde kun je wijzigen met het handvat aan de linkerkant: verslepen, of het handvat selecteren en met
+toevoegen** wordt er een regel toegevoegd, de prullenbak verwijdert ze. De
+volgorde kun je wijzigen met het handvat aan de linkerkant: slepen, of het handvat selecteren en met
 de pijltjestoetsen omhoog en omlaag verplaatsen. Met **Toepassen** wordt de
-lijst naar het dialoogvenster gekopieerd; daarna opslaan zoals gewoonlijk.
+lijst in het dialoogvenster geschreven; daarna opslaan zoals gewoonlijk.
 
-Het snelst gaat het via **Element van de pagina toevoegen** boven in de editor:
-de selectie toont de kopteksten en widgets van de opgeslagen pagina
-(▣ = widget). Eén klik maakt een link aan met hun naam; de bestemming is de
-blok-ID (`#…`). De linktekst kun je daarna wijzigen. Nieuwe paragrafen
-verschijnen pas in de selectie als de pagina is opgeslagen.
+Het snelst gaat het via **Element aan de pagina toevoegen** bovenaan in de editor:
+De selectie toont de kopteksten en widgets van de opgeslagen pagina
+(▣ = widget). Met één klik maak je een link aan met de naam van het element; de bestemming is de
+blok-ID (`#…`). Je kunt de linktekst daarna wijzigen. Nieuwe secties
+verschijnen pas in de lijst als de pagina is opgeslagen.
 
 Elke regel heeft twee velden:
 
@@ -31,17 +31,17 @@ Elke regel heeft twee velden:
   - **Tekst van een kop:** naar deze kop. Zo kan het item een kortere
     naam hebben dan de paragraaf, bijvoorbeeld „Uitrusting” voor „Uitrusting in detail”.
   - **Een blok-ID** zoals `#a447d858-1bba-4a49-b620-b49c60dd67a7`: naar dit
-    blok op de pagina. Zo stelt de selectie hierboven het in. De link blijft ook
-    geldig nadat de kop is hernoemd.
+    blok van de pagina. Zo wordt de selectie bovenaan geplaatst. De link blijft ook geldig nadat
+    de koptekst is hernoemd.
   - **Een adres** dat begint met `/`, `http://`, `https://` of `mailto:`
     : een gewone link die de browser volgt.
 
 Bij de vergelijking met de kop telt de tekst, niet het niveau — H1 tot en met H6
 zijn allemaal even geldig als doel. Meerdere spaties spelen geen rol,
-hoofdletters en kleine letters wel. Als er meerdere identieke kopteksten zijn,
-gaat de vermelding naar de eerste.
+hoofdletters en kleine letters wel. Als er meerdere koppen zijn met dezelfde tekst,
+gaat de invoer naar de eerste.
 
-Mocht de editor eenmaal niet verschijnen, dan staat daar een tekstveld met de lijst als
+Als de editor eenmaal niet verschijnt, staat daar een tekstveld met de lijst als
 JSON, bijvoorbeeld:
 
 ```json

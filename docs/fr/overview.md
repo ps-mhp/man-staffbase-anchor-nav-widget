@@ -11,12 +11,12 @@ chargement de la page, il n’effectue aucune opération en arrière-plan.
 
 ## À quoi cela sert-il ?
 
-Les pages longues avec une structure claire — un modèle de véhicule et ses équipements,
-une directive et ses sections. Cela ne vaut pas la peine sur les pages courtes.
+Les pages longues avec une structure claire — un modèle de voiture et ses équipements,
+une directive et ses sections. Sur les pages courtes, cela ne vaut pas la peine.
 
 ## Ce qu’il ne fait pas
 
-- **Il ne détecte pas les titres de lui-même.** Chaque entrée est créée manuellement.
+- **Il ne trouve pas les titres de lui-même.** Chaque entrée est créée manuellement.
   Si une section est ajoutée à la page, elle doit également figurer dans la liste.
 - **Ne suit pas le défilement.** Le curseur ne suit pas le défilement, mais reste sur la
   dernière entrée cliquée.

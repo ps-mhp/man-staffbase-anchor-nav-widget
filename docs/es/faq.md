@@ -19,12 +19,12 @@ una diferencia en mayúsculas y minúsculas o un título que haya cambiado de no
 entretanto. Copia el texto del título y pégalo en el destino
 .
 
-Los encabezados de una navegación por anclajes nunca cuentan como destino, ni siquiera el
+Los títulos en una navegación por anclajes nunca cuentan como destino, ni siquiera el
 título de un segundo widget en la misma página.
 
 ## En las páginas traducidas, al hacer clic no se produce el salto.
 
-Los encabezados de la página se traducen, pero el texto del enlace y el destino no. En el
+Los títulos de la página se traducen, pero el texto del enlace y el destino no. En el
 otro idioma, la entrada ya no encuentra su título, y la
 lista sigue mostrando los textos de los enlaces en el idioma en el que se crearon.
 
