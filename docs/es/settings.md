@@ -9,20 +9,23 @@ El título se traduce junto con la página.
 
 ## Enlaces
 
-Las entradas de la lista. En Studio, en este lugar hay un editor con una
-línea por cada enlace. Se abre mediante **Editar enlaces**; con **Añadir enlace**
-se añade una línea, y con la papelera se elimina. Para
-cambiar el orden, utiliza el controlador de la izquierda: arrastra o selecciona el controlador y
-muévelo con las teclas de flecha arriba y abajo. **Aplicar** guarda la
-lista en el cuadro de diálogo; a continuación, guarda como de costumbre.
+Las entradas de la lista. En Studio, hay un editor que se abre mediante
+**Editar enlaces**. Los enlaces aparecen a la izquierda y los campos de la
+entrada seleccionada a la derecha; haz clic en la lista para seleccionar otra.
+**Añadir enlace** crea y selecciona uno nuevo, y la papelera lo elimina. Para
+cambiar el orden, utiliza el controlador de la izquierda: arrástralo o
+selecciónalo, pulsa Intro para tomarlo, muévelo con las teclas de flecha hasta
+la nueva posición y pulsa Intro para soltarlo. **Aplicar** guarda la lista en
+el cuadro de diálogo; a continuación, guarda como de costumbre.
 
 La forma más rápida es mediante **Añadir elemento a la página**, en la parte superior del editor:
 la selección muestra los encabezados y los widgets de la página guardada
-(▣ = widget). Al hacer clic se crea un enlace con su nombre; el destino es el
+(▣ = widget) y se puede filtrar escribiendo. Al hacer clic se crea un enlace
+con su nombre; el destino es el
 ID del bloque (`#…`). Después puedes modificar el texto del enlace. Las nuevas secciones
 solo aparecerán en la selección una vez que se haya guardado la página.
 
-Cada línea tiene dos campos:
+Cada enlace tiene dos campos:
 
 - **Texto del enlace**: lo que aparece en la lista. Obligatorio: una entrada sin texto de enlace
   no se muestra.

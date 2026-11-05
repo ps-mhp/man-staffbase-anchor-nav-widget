@@ -37,8 +37,10 @@ bijvoorbeeld `…#uitrusting`, staat het bij dit item.
 
 ## Kan de volgorde worden gewijzigd?
 
-Ja. Sleep in de editor aan het handvat aan de linkerkant, of selecteer het handvat en verplaats het met de
-pijltjestoetsen. De lijst hoeft niet de volgorde van de pagina te volgen.
+Ja. Sleep in de editor aan het handvat aan de linkerkant, of selecteer het,
+druk op Enter om het op te pakken, verplaats het met de pijltjestoetsen naar de
+nieuwe positie en druk op Enter om het neer te zetten. De lijst hoeft niet de
+volgorde van de pagina te volgen.
 
 ## Twee kopteksten hebben dezelfde naam — waar springt de link naartoe?
 

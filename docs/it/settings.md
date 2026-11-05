@@ -9,20 +9,23 @@ Il titolo viene tradotto insieme alla pagina.
 
 ## Link
 
-Le voci dell'elenco. In Studio, in questa posizione è presente un editor con una
-riga per ogni link. Cliccando su **Modifica link** si apre l’editor, con **Aggiungi link**
-si aggiunge una riga, mentre il cestino la rimuove. Puoi
-modificare l’ordine utilizzando il cursore a sinistra: trascina, oppure seleziona il cursore e sposta con
-i tasti freccia su e giù. **Applica** inserisce l’
-elenco nella finestra di dialogo; successivamente, salva come di consueto.
+Le voci dell'elenco. In Studio, è presente un editor che si apre facendo clic
+su **Modifica link**. I link sono a sinistra e i campi della voce selezionata
+sono a destra; fai clic su un link nell'elenco per selezionarne un altro.
+**Aggiungi link** ne crea uno nuovo e lo seleziona, mentre il cestino lo rimuove.
+Puoi modificare l'ordine utilizzando il cursore a sinistra: trascinalo, oppure
+selezionalo, premi Invio per prenderlo, spostalo con i tasti freccia fino alla
+nuova posizione e premi Invio per rilasciarlo. **Applica** inserisce l'elenco
+nella finestra di dialogo; successivamente, salva come di consueto.
 
 Il modo più veloce è utilizzare **Aggiungi elemento alla pagina** nella parte superiore dell’editor:
 il menu a tendina mostra i titoli e i widget della pagina salvata
-(▣ = widget). Un clic crea un link con il nome corrispondente; la destinazione è l’
+(▣ = widget) e la selezione può essere filtrata digitando. Un clic crea un link
+con il nome corrispondente; la destinazione è l’
 ID del blocco (`#…`). Il testo del link può essere modificato in seguito. Le nuove sezioni
 appaiono nella selezione solo dopo che la pagina è stata salvata.
 
-Ogni riga presenta due campi:
+Ogni link presenta due campi:
 
 - **Testo del link** — ciò che appare nell’elenco. Obbligatorio: una voce senza testo del link
   non viene visualizzata.

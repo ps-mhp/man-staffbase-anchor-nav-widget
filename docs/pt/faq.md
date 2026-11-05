@@ -37,8 +37,9 @@ por exemplo `…#equipamento`, fica junto a essa entrada.
 
 ## É possível alterar a ordem?
 
-Sim. No editor, arraste a alça à esquerda ou selecione a alça e desloque-a com as
-teclas de seta. A lista não tem de seguir a ordem da página.
+Sim. No editor, arraste a alça à esquerda ou selecione-a, prima Enter para a
+pegar, desloque-a com as teclas de seta para a nova posição e prima Enter para
+a largar. A lista não tem de seguir a ordem da página.
 
 ## Dois títulos têm o mesmo nome — para onde salta a ligação?
 

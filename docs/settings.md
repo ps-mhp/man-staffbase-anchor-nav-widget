@@ -9,20 +9,22 @@ Der Titel wird mit der Seite übersetzt.
 
 ## Links
 
-Die Einträge der Liste. Im Studio steht an dieser Stelle ein Editor mit einer
-Zeile je Link. Über **Links bearbeiten** öffnet er sich, über **Link
-hinzufügen** kommt eine Zeile dazu, der Papierkorb entfernt sie. Die
-Reihenfolge änderst du am Griff links: ziehen, oder den Griff anwählen und mit
-den Pfeiltasten nach oben und unten verschieben. **Übernehmen** schreibt die
-Liste in den Dialog, danach wie gewohnt speichern.
+Die Einträge der Liste. Im Studio steht an dieser Stelle ein Editor, der sich
+über **Links bearbeiten** öffnet. Links stehen die Links, rechts die Felder des
+gewählten Eintrags; ein Klick in die Liste wählt einen anderen. **Link
+hinzufügen** legt einen neuen an und wählt ihn aus, der Papierkorb entfernt
+ihn. Die Reihenfolge änderst du am Griff links: ziehen, oder den Griff anwählen,
+mit Enter aufnehmen, mit den Pfeiltasten an die neue Stelle bringen und mit
+Enter ablegen. **Übernehmen** schreibt die Liste in den Dialog, danach wie
+gewohnt speichern.
 
 Am schnellsten geht es über **Element der Seite hinzufügen** oben im Editor:
 Die Auswahl zeigt die Überschriften und Widgets der gespeicherten Seite
-(▣ = Widget). Ein Klick legt einen Link mit deren Namen an, das Ziel ist die
+(▣ = Widget) und lässt sich durch Tippen filtern. Ein Klick legt einen Link mit deren Namen an, das Ziel ist die
 Block-ID (`#…`). Den Linktext kannst du danach ändern. Neue Abschnitte
 erscheinen erst in der Auswahl, wenn die Seite gespeichert ist.
 
-Jede Zeile hat zwei Felder:
+Jeder Link hat zwei Felder:
 
 - **Linktext** — was in der Liste steht. Pflicht: ein Eintrag ohne Linktext
   wird nicht angezeigt.

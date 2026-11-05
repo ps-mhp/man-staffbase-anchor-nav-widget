@@ -9,20 +9,24 @@ Le titre est traduit avec la page.
 
 ## Liens
 
-Les éléments de la liste. Dans Studio, cet emplacement contient un éditeur avec une
-ligne par lien. Cliquez sur **Modifier les liens** pour l’ouvrir, sur **Ajouter un lien**
-pour ajouter une ligne, et sur la corbeille pour la supprimer. Vous pouvez
-modifier l’ordre à l’aide de la poignée à gauche : faites-la glisser, ou sélectionnez-la et utilisez
-les touches fléchées pour la déplacer vers le haut ou vers le bas. **Appliquer** enregistre la
-liste dans la boîte de dialogue, puis enregistrez comme d’habitude.
+Les éléments de la liste. Dans Studio, un éditeur s’ouvre en cliquant sur
+**Modifier les liens**. Les liens sont à gauche et les champs de l’élément
+sélectionné à droite ; cliquez sur un lien dans la liste pour en sélectionner
+un autre. **Ajouter un lien** en crée un nouveau et le sélectionne, et la
+corbeille le supprime. Vous pouvez modifier l’ordre à l’aide de la poignée à
+gauche : faites-la glisser, ou sélectionnez-la, appuyez sur Entrée pour la
+saisir, déplacez-la avec les touches fléchées jusqu’à sa nouvelle position et
+appuyez sur Entrée pour la déposer. **Appliquer** enregistre la liste dans la
+boîte de dialogue, puis enregistrez comme d’habitude.
 
 Le plus rapide est d’utiliser **Ajouter un élément à la page** en haut de l’éditeur :
 la sélection affiche les titres et les widgets de la page enregistrée
-(▣ = widget). Un clic crée un lien portant leur nom, dont la destination est l’
+(▣ = widget) et la sélection peut être filtrée en tapant. Un clic crée un lien
+portant leur nom, dont la destination est l’
 ID du bloc (`#…`). Vous pouvez modifier le texte du lien par la suite. Les nouvelles sections
 n’apparaissent dans la liste que lorsque la page est enregistrée.
 
-Chaque ligne comporte deux champs :
+Chaque lien comporte deux champs :
 
 - **Texte du lien** — ce qui apparaît dans la liste. Obligatoire : une entrée sans texte de lien
   ne s’affiche pas.

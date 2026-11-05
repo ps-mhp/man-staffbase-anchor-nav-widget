@@ -37,8 +37,9 @@ such as `…#equipment`, it is positioned at that entry.
 
 ## Can the order be changed?
 
-Yes. In the editor, drag the handle on the left, or select the handle and use the
-arrow keys to move it. The list does not have to follow the order of the page.
+Yes. In the editor, drag the handle on the left, or select the handle, press
+Enter to pick it up, use the arrow keys to bring it to the new position, and
+press Enter to drop it. The list does not have to follow the order of the page.
 
 ## Two headings have the same name—where does the link jump to?
 

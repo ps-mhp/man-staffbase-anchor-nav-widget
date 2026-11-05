@@ -9,20 +9,22 @@ O título é traduzido juntamente com a página.
 
 ## Links
 
-Os itens da lista. No Studio, neste local existe um editor com uma
-linha por link. Clica em **Editar links** para o abrir; com **Adicionar
-link**, é adicionada uma linha; a lixeira remove-a. Podes
-alterar a ordem utilizando o manípulo à esquerda: arrasta ou seleciona o manípulo e, com
-as setas para cima e para baixo, desloca-o. **Aplicar** insere a
-lista na caixa de diálogo; depois, guarda como habitualmente.
+Os itens da lista. No Studio, neste local existe um editor que se abre através
+de **Editar links**. Os links ficam à esquerda e os campos do item selecionado
+à direita; clica num link da lista para selecionar outro. **Adicionar link** cria
+e seleciona um novo, e a lixeira remove-o. Podes alterar a ordem utilizando o
+manípulo à esquerda: arrasta-o ou seleciona-o, prime Enter para o pegar, move-o
+com as teclas de seta para a nova posição e prime Enter para o largar.
+**Aplicar** insere a lista na caixa de diálogo; depois, guarda como habitualmente.
 
 A forma mais rápida é através de **Adicionar elemento à página**, na parte superior do editor:
 A seleção mostra os títulos e os widgets da página guardada
-(▣ = widget). Um clique cria um link com o nome do elemento, sendo o destino o
+(▣ = widget) e a seleção pode ser filtrada escrevendo. Um clique cria um link
+com o nome do elemento, sendo o destino o
 ID do bloco (`#…`). Podes alterar o texto do link posteriormente. Novas secções
 só aparecem na lista de seleção depois de a página ser guardada.
 
-Cada linha tem dois campos:
+Cada link tem dois campos:
 
 - **Texto do link** — o que aparece na lista. Obrigatório: uma entrada sem texto de link
   não é apresentada.

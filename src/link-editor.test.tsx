@@ -12,10 +12,11 @@
  */
 
 import * as React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import { AnchorLink } from "./anchor-links";
-import { LinkEditor } from "./link-editor";
+import { LinkEditor, moveLinks } from "./link-editor";
 import { OutlineEntry } from "./page-outline";
 
 /** Rendert den Editor mit zurückgespiegeltem Wert und liefert die jüngste gemeldete Liste. */
@@ -41,8 +42,22 @@ function setup(value: AnchorLink[], loadOutline?: () => Promise<OutlineEntry[] |
   return () => onChange.mock.calls[onChange.mock.calls.length - 1][0];
 }
 
+describe("moveLinks", () => {
+  const links: AnchorLink[] = ["a", "b", "c"].map((id) => ({ id, label: id.toUpperCase() }));
+  const ids = (list: AnchorLink[]): string[] => list.map((link) => link.id);
+
+  it("schiebt einen Eintrag vor oder hinter das Ziel", () => {
+    expect(ids(moveLinks(links, new Set(["a"]), "c", "after"))).toEqual(["b", "c", "a"]);
+    expect(ids(moveLinks(links, new Set(["c"]), "a", "before"))).toEqual(["c", "a", "b"]);
+  });
+
+  it("lässt die Liste bei unbekanntem Ziel unverändert", () => {
+    expect(ids(moveLinks(links, new Set(["a"]), "x", "after"))).toEqual(["a", "b", "c"]);
+  });
+});
+
 describe("LinkEditor", () => {
-  it("zeigt ohne Links den Hinweis und legt einen leeren an", () => {
+  it("zeigt ohne Links den Hinweis, legt einen leeren an und wählt ihn aus", () => {
     const latest = setup([]);
     expect(screen.getByText(/Noch kein Link/)).toBeInTheDocument();
 
@@ -50,54 +65,69 @@ describe("LinkEditor", () => {
 
     expect(latest()).toHaveLength(1);
     expect(latest()[0].label).toBe("");
+    expect(screen.getByTestId(`link-label-${latest()[0].id}`)).toBeInTheDocument();
     expect(screen.getByText("Ohne Linktext wird dieser Eintrag nicht angezeigt.")).toBeInTheDocument();
   });
 
-  it("übernimmt Linktext und Ziel und leert das Ziel wieder", () => {
+  it("übernimmt Linktext und Ziel des gewählten Links und leert das Ziel wieder", () => {
     const latest = setup([{ id: "a", label: "" }]);
 
     fireEvent.change(screen.getByTestId("link-label-a"), { target: { value: "Ausstattung" } });
     fireEvent.change(screen.getByTestId("link-target-a"), { target: { value: "Ausstattung im Detail" } });
     expect(latest()).toEqual([{ id: "a", label: "Ausstattung", target: "Ausstattung im Detail" }]);
+    expect(within(screen.getByTestId("link-row-a")).getByText("Ausstattung")).toBeInTheDocument();
 
     fireEvent.change(screen.getByTestId("link-target-a"), { target: { value: "" } });
     expect(latest()[0].target).toBeUndefined();
   });
 
-  it("entfernt einen Link", () => {
+  it("wechselt mit einem Klick in der Liste den bearbeiteten Link", () => {
+    setup([
+      { id: "a", label: "A" },
+      { id: "b", label: "B" },
+    ]);
+    expect(screen.getByTestId("link-label-a")).toBeInTheDocument();
+
+    fireEvent.pointerDown(screen.getByTestId("link-row-b"), { pointerType: "mouse", button: 0 });
+    fireEvent.pointerUp(screen.getByTestId("link-row-b"), { pointerType: "mouse", button: 0 });
+    fireEvent.click(screen.getByTestId("link-row-b"));
+
+    expect(screen.getByTestId("link-label-b")).toHaveValue("B");
+  });
+
+  it("entfernt den gewählten Link und wählt den nächsten", () => {
     const latest = setup([
       { id: "a", label: "A" },
       { id: "b", label: "B" },
     ]);
     fireEvent.click(screen.getByTestId("link-remove-a"));
     expect(latest().map((link) => link.id)).toEqual(["b"]);
-  });
-
-  it("ordnet mit den Pfeiltasten am Griff um und bleibt am Rand stehen", () => {
-    const latest = setup([
-      { id: "a", label: "A" },
-      { id: "b", label: "B" },
-    ]);
-
-    fireEvent.keyDown(screen.getByTestId("link-handle-a"), { key: "ArrowDown" });
-    expect(latest().map((link) => link.id)).toEqual(["b", "a"]);
-
-    fireEvent.keyDown(screen.getByTestId("link-handle-a"), { key: "ArrowDown" });
-    expect(latest().map((link) => link.id)).toEqual(["b", "a"]);
+    expect(screen.getByTestId("link-label-b")).toBeInTheDocument();
   });
 
   it("legt aus der Auswahl der Seite einen Link auf die Block-ID an", async () => {
-    const latest = setup([], async () => [
+    const latest = setup([{ id: "x", label: "Neuigkeiten", target: "#b1" }], async () => [
       { blockId: "b1", label: "Neuigkeiten", kind: "heading", depth: 0 },
       { blockId: "b2", label: "Hero-Slider", kind: "widget", depth: 0 },
     ]);
 
-    const select = await screen.findByTestId("link-outline");
-    fireEvent.change(select, { target: { value: "b2" } });
+    const user = userEvent.setup();
+    const input = await screen.findByRole("combobox");
+    await screen.findByPlaceholderText("Überschrift oder Widget suchen …");
+    // React Aria benennt den Knopf über das Label der Auswahl.
+    await user.click(within(screen.getByTestId("link-outline")).getAllByRole("button")[0]);
 
-    expect(latest()).toEqual([expect.objectContaining({ label: "Hero-Slider", target: "#b2" })]);
-    expect(screen.getByRole("option", { name: "▣ Hero-Slider" })).toBeDisabled();
-    expect(screen.getByRole("option", { name: "Neuigkeiten" })).not.toBeDisabled();
+    const listbox = await screen.findByRole("listbox");
+    // Die Liste bleibt im Editor und damit im Shadow Root des Dialogs.
+    expect(screen.getByTestId("link-editor")).toContainElement(listbox);
+    expect(within(listbox).getByRole("option", { name: /Neuigkeiten/ })).toHaveAttribute("aria-disabled", "true");
+    await user.click(within(listbox).getByRole("option", { name: /Hero-Slider/ }));
+    expect(input).toHaveValue("");
+
+    expect(latest().map(({ label, target }) => ({ label, target }))).toEqual([
+      { label: "Neuigkeiten", target: "#b1" },
+      { label: "Hero-Slider", target: "#b2" },
+    ]);
   });
 
   it("meldet eine nicht ladbare Seite und lässt die Eingabe von Hand", async () => {

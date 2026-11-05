@@ -37,8 +37,8 @@ etwa `…#ausstattung`, steht sie bei diesem Eintrag.
 
 ## Lässt sich die Reihenfolge ändern?
 
-Ja. Im Editor am Griff links ziehen, oder den Griff anwählen und mit den
-Pfeiltasten verschieben. Die Liste muss nicht der Reihenfolge der Seite folgen.
+Ja. Im Editor am Griff links ziehen, oder den Griff anwählen, mit Enter
+aufnehmen, mit den Pfeiltasten verschieben und mit Enter ablegen. Die Liste muss nicht der Reihenfolge der Seite folgen.
 
 ## Zwei Überschriften heißen gleich — wohin springt der Verweis?
 

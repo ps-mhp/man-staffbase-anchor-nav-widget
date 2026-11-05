@@ -37,8 +37,9 @@ por ejemplo, `…#equipamiento`, se sitúa junto a esa entrada.
 
 ## ¿Se puede cambiar el orden?
 
-Sí. En el editor, arrastra el controlador de la izquierda o selecciona el controlador y muévelo con las
-teclas de flecha. La lista no tiene por qué seguir el orden de la página.
+Sí. En el editor, arrastra el controlador de la izquierda o selecciónalo, pulsa
+Intro para tomarlo, muévelo con las teclas de flecha hasta la nueva posición y
+pulsa Intro para soltarlo. La lista no tiene por qué seguir el orden de la página.
 
 ## Dos encabezados tienen el mismo nombre: ¿a cuál lleva el enlace?
 

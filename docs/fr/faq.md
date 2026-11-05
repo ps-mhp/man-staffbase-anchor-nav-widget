@@ -37,8 +37,10 @@ par exemple `…#équipement`, elle se trouve alors au niveau de cette entrée.
 
 ## Peut-on modifier l’ordre ?
 
-Oui. Dans l’éditeur, faites glisser la poignée vers la gauche, ou sélectionnez la poignée et déplacez-la à l’aide des
-touches fléchées. La liste ne doit pas nécessairement suivre l’ordre de la page.
+Oui. Dans l’éditeur, faites glisser la poignée vers la gauche, ou
+sélectionnez-la, appuyez sur Entrée pour la saisir, déplacez-la à l’aide des
+touches fléchées jusqu’à sa nouvelle position et appuyez sur Entrée pour la
+déposer. La liste ne doit pas nécessairement suivre l’ordre de la page.
 
 ## Deux titres portent le même nom — vers lequel le lien renvoie-t-il ?
 

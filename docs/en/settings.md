@@ -9,20 +9,22 @@ The title is translated along with the page.
 
 ## Links
 
-The list entries. In Studio, there is an editor here with one
-row per link. Click **Edit Links** to open it; click **Add Link**
-to add a row; the trash can icon removes it. You can
-change the order using the handle on the left: drag it, or select the handle and use
-the up and down arrow keys to move it. **Apply** writes the
-list to the dialog; then save as usual.
+The list entries. In Studio, there is an editor that opens via **Edit Links**.
+The links are on the left, and the fields for the selected entry are on the
+right; click a link in the list to select another. **Add Link** creates and
+selects a new one, and the trash can removes it. You change the order using
+the handle on the left: drag it, or select the handle, press Enter to pick it
+up, use the arrow keys to bring it to the new position, and press Enter to
+drop it. **Apply** writes the list to the dialog; then save as usual.
 
 The fastest way is to use **Add Page Element** at the top of the editor:
 The selection shows the headings and widgets of the saved page
-(▣ = widget). One click creates a link with its name; the destination is the
+(▣ = widget) and can be filtered by typing. One click creates a link with its
+name; the destination is the
 block ID (`#…`). You can change the link text afterward. New sections
 will only appear in the selection once the page has been saved.
 
-Each row has two fields:
+Each link has two fields:
 
 - **Link Text** — what appears in the list. Required: an entry without link text
   will not be displayed.

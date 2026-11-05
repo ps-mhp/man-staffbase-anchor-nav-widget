@@ -9,20 +9,23 @@ Tytuł jest tłumaczony wraz ze stroną.
 
 ## Linki
 
-Pozycje na liście. W Studio w tym miejscu znajduje się edytor z
-wierszem na każdy link. Otwiera się go poprzez **Edytuj linki**, poprzez **Dodaj link**
-dodaje się wiersz, a kosz go usuwa.
-Kolejność można zmienić za pomocą uchwytu po lewej stronie: przeciągając lub zaznaczając uchwyt i
-przesuwając go za pomocą klawiszy strzałek w górę i w dół. **Zastosuj** zapisuje
-listę w oknie dialogowym, po czym należy zapisać stronę w zwykły sposób.
+Pozycje na liście. W Studio znajduje się edytor, który otwiera się poprzez
+**Edytuj linki**. Linki znajdują się po lewej, a pola wybranej pozycji po
+prawej; kliknij link na liście, aby wybrać inny. **Dodaj link** tworzy nowy
+link i go wybiera, a kosz go usuwa. Kolejność można zmienić za pomocą uchwytu
+po lewej stronie: przeciągnij go lub zaznacz, naciśnij Enter, aby go podnieść,
+przesuń za pomocą klawiszy strzałek w nowe miejsce i naciśnij Enter, aby go
+odłożyć. **Zastosuj** zapisuje listę w oknie dialogowym, po czym należy zapisać
+stronę w zwykły sposób.
 
 Najszybciej można to zrobić za pomocą opcji **Dodaj element strony** u góry edytora:
 Lista wyboru pokazuje nagłówki i widżety zapisanej strony
-(▣ = widżet). Jedno kliknięcie tworzy link z ich nazwą, a miejscem docelowym jest
+(▣ = widżet), a listę można filtrować, wpisując tekst. Jedno kliknięcie tworzy
+link z ich nazwą, a miejscem docelowym jest
 identyfikator bloku (`#…`). Tekst linku można później zmienić. Nowe sekcje
 pojawiają się w liście dopiero po zapisaniu strony.
 
-Każdy wiersz ma dwa pola:
+Każdy link ma dwa pola:
 
 - **Tekst linku** — to, co widnieje na liście. Obowiązkowe: wpis bez tekstu linku
   nie zostanie wyświetlony.

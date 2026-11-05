@@ -37,8 +37,10 @@ ad esempio `…#attrezzatura`, si trova su quella voce.
 
 ## È possibile modificare l'ordine?
 
-Sì. Nell’editor, trascinare la maniglia a sinistra oppure selezionarla e spostarla con i
-tasti freccia. L’elenco non deve necessariamente seguire l’ordine della pagina.
+Sì. Nell’editor, trascinare la maniglia a sinistra oppure selezionarla, premere
+Invio per prenderla, spostarla con i tasti freccia fino alla nuova posizione e
+premere Invio per rilasciarla. L’elenco non deve necessariamente seguire l’ordine
+della pagina.
 
 ## Due titoli hanno lo stesso nome — a quale si collega il collegamento?
 

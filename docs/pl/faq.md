@@ -36,8 +36,9 @@ na przykład `…#wyposażenie`, znacznik znajduje się przy tym wpisie.
 
 ## Czy można zmienić kolejność?
 
-Tak. W edytorze przeciągnij uchwyt po lewej stronie lub zaznacz uchwyt i przesuń go za pomocą
-klawiszy strzałek. Lista nie musi odpowiadać kolejności na stronie.
+Tak. W edytorze przeciągnij uchwyt po lewej stronie lub zaznacz go, naciśnij
+Enter, aby go podnieść, przesuń za pomocą klawiszy strzałek w nowe miejsce i
+naciśnij Enter, aby go odłożyć. Lista nie musi odpowiadać kolejności na stronie.
 
 ## Dwa nagłówki mają tę samą nazwę — dokąd prowadzi odnośnik?
 

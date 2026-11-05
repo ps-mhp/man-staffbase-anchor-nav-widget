@@ -9,75 +9,185 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Der Link-Editor, nach dem Kachel-Editor des Portfolios. In der Palette des
-// Staffbase-Studios (`@shared/stylings/editor-chrome`) und nicht in der
-// Marke: diese Flächen sehen nur Redakteur:innen, und sie sollen sich in den
-// umgebenden Dialog einfügen.
+// Der Link-Editor (React Aria Components). Er steht im Shadow Root von
+// `@shared/config-modal`: keine Regel des Studios erreicht ihn, deshalb
+// setzt er Schrift und Grundwerte selbst. Zustände kommen als
+// `data-*`-Attribute von React Aria (`data-selected`, `data-focus-visible` …).
 
 @use "@shared/stylings/editor-chrome" as chrome;
-@use "@shared/stylings/man-tokens" as tokens;
 
 .man-ale {
   display: flex;
   flex-direction: column;
-  // Der Dialog von `@shared/config-modal` gibt Höhe und Breite vor; der Editor
-  // füllt sie und lässt nur die Liste scrollen, damit die Fußzeile mit
-  // „Übernehmen“ immer sichtbar bleibt.
+  flex: 1 1 auto;
   height: 100%;
   min-height: 0;
-  flex: 1 1 auto;
   width: 100%;
-  font-family: inherit;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
   color: chrome.$text;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 }
 
+// --- Kopfzeile: Auswahl aus der Seite und „Link hinzufügen“ ---------------
+.man-ale__toolbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 0 0 auto;
+  padding: 16px;
+  background: chrome.$surface-header;
+  border-bottom: 1px solid chrome.$border;
+
+  > .man-ale__button {
+    margin-top: 21px;
+  }
+}
+
+.man-ale__picker {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 560px;
+}
+
+.man-ale__combo {
+  display: flex;
+
+  .man-ale__input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.man-ale__combo-button {
+  flex: 0 0 auto;
+  width: chrome.$control-height;
+  font: inherit;
+  color: chrome.$text-muted-icon;
+  background: chrome.$surface;
+  border: 1px solid chrome.$border-input;
+  border-left: 0;
+  border-radius: 0 chrome.$radius-input chrome.$radius-input 0;
+  cursor: pointer;
+
+  &[data-hovered] {
+    background: chrome.$surface-hover;
+  }
+}
+
+.man-ale__popover {
+  width: var(--trigger-width);
+  max-height: 360px;
+  overflow: auto;
+  background: chrome.$surface;
+  border: 1px solid chrome.$border-menu;
+  border-radius: chrome.$radius-menu;
+  box-shadow: chrome.$shadow-menu;
+}
+
+.man-ale__options {
+  margin: 0;
+  padding: 4px 0;
+  outline: none;
+}
+
+.man-ale__option {
+  display: flex;
+  gap: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  outline: none;
+
+  &[data-focused] {
+    background: chrome.$accent-surface-soft;
+  }
+
+  &[data-disabled] {
+    color: chrome.$text-muted;
+    cursor: default;
+  }
+}
+
+.man-ale__option-kind {
+  color: chrome.$text-muted-icon;
+}
+
+// --- Liste und Felder nebeneinander -----------------------------------------
 .man-ale__body {
+  display: flex;
   flex: 1 1 auto;
   min-height: 0;
-  overflow-y: auto;
-  padding: 16px;
   background: chrome.$surface;
 }
 
-.man-ale__empty {
-  margin: 0 0 12px;
-  color: chrome.$text-muted;
-  font-size: 13px;
-  line-height: 20px;
+.man-ale__list-pane {
+  flex: 0 0 min(420px, 45%);
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px;
+  border-right: 1px solid chrome.$border;
 }
 
-// --- Die Zeilenliste ---------------------------------------------------------
 .man-ale__list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  outline: none;
+
+  &[data-drop-target] {
+    outline: 2px solid chrome.$accent-border;
+  }
 }
 
 .man-ale__row {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 10px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
   background: chrome.$surface-panel;
   border: 1px solid chrome.$border;
   border-radius: chrome.$radius-control;
+  cursor: default;
+  outline: none;
+
+  &[data-hovered] {
+    border-color: chrome.$border-hover;
+  }
+
+  &[data-selected] {
+    background: chrome.$accent-selection;
+    border-color: chrome.$accent-border;
+  }
+
+  &[data-focus-visible] {
+    border-color: chrome.$focus-border;
+    box-shadow: chrome.$focus-ring;
+  }
+
+  &[data-dragging] {
+    opacity: 0.5;
+  }
+
+  // Die Einfügemarke beim Umordnen.
+  &[data-drop-target] {
+    box-shadow: 0 -2px 0 chrome.$accent;
+  }
 }
 
-// Die gezogene Zeile hebt sich ab, solange der Zeiger sie hält: ohne Marke
-// wäre beim Umordnen nicht zu sehen, welcher Link gerade wandert.
-.man-ale__row--dragging {
-  background: chrome.$accent-selection;
-  border-color: chrome.$accent-border;
-  box-shadow: chrome.$shadow-menu;
+.react-aria-DropIndicator[data-drop-target] {
+  height: 2px;
+  background: chrome.$accent;
 }
 
 .man-ale__handle {
   flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 24px;
-  min-height: chrome.$control-height;
+  height: chrome.$control-height-sm;
   font: inherit;
   font-size: 15px;
   line-height: 1;
@@ -85,24 +195,57 @@
   background: chrome.$surface-handle;
   border: 1px solid chrome.$border-soft;
   border-radius: chrome.$radius-small;
-  // Der Griff zieht mit dem Zeiger. Ohne diese Zeile führte dasselbe Ziehen
-  // auf dem Mobilgerät zum Scrollen der Liste, und die Zeile bliebe liegen.
-  touch-action: none;
   cursor: grab;
+  touch-action: none;
 }
 
-.man-ale__handle:active {
-  cursor: grabbing;
-}
-
-.man-ale__fields {
+.man-ale__row-text {
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-width: 0;
 }
 
+.man-ale__row-label,
+.man-ale__row-target {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.man-ale__row-label {
+  font-weight: 600;
+  color: chrome.$text-strong;
+}
+
+.man-ale__row-label--empty {
+  font-style: italic;
+  font-weight: 400;
+  color: chrome.$text-warning;
+}
+
+.man-ale__row-target {
+  font-size: 12px;
+  color: chrome.$text-muted;
+}
+
+.man-ale__detail {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+.man-ale__empty {
+  margin: 0;
+  color: chrome.$text-muted;
+  line-height: 20px;
+}
+
+// --- Felder -------------------------------------------------------------------
 .man-ale__field {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .man-ale__label {
@@ -115,30 +258,82 @@
 
 .man-ale__input {
   display: block;
-  box-sizing: border-box;
   width: 100%;
   min-height: chrome.$control-height;
+  margin: 0;
   padding: 5px 8px;
   font: inherit;
-  font-size: 13px;
   color: chrome.$text-body;
   background: chrome.$surface;
   border: 1px solid chrome.$border-input;
   border-radius: chrome.$radius-input;
-}
-
-.man-ale__input:focus-visible {
   outline: none;
-  border-color: chrome.$focus-border;
-  box-shadow: chrome.$focus-ring;
+
+  &[data-focused] {
+    border-color: chrome.$focus-border;
+    box-shadow: chrome.$focus-ring;
+  }
+
+  &[data-invalid] {
+    border-color: chrome.$text-warning;
+  }
+
+  &[data-disabled] {
+    background: chrome.$surface-muted;
+  }
 }
 
 .man-ale__hint {
   display: block;
-  margin: 4px 0 8px;
+  margin-top: 4px;
   font-size: 12px;
   line-height: 18px;
   color: chrome.$text-muted;
+}
+
+.man-ale__hint--warning {
+  color: chrome.$text-warning;
+}
+
+// --- Schaltflächen ---------------------------------------------------------------
+.man-ale__button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: chrome.$control-height-sm;
+  padding: 4px 12px;
+  font: inherit;
+  color: chrome.$text;
+  background: chrome.$surface;
+  border: 1px solid chrome.$border;
+  border-radius: chrome.$radius-control;
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color chrome.$transition,
+    border-color chrome.$transition;
+
+  &[data-hovered] {
+    background: chrome.$surface-hover;
+    border-color: chrome.$border-hover;
+  }
+
+  &[data-pressed] {
+    background: chrome.$surface-pressed;
+  }
+}
+
+.man-ale__button--primary {
+  color: chrome.$surface;
+  background: chrome.$accent;
+  border-color: chrome.$accent-strong;
+
+  &[data-hovered],
+  &[data-pressed] {
+    background: chrome.$accent-strong;
+    border-color: chrome.$accent-stronger;
+  }
 }
 
 .man-ale__icon {
@@ -146,8 +341,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   font: inherit;
   font-size: 12px;
   line-height: 1;
@@ -156,75 +351,29 @@
   border: 1px solid chrome.$border;
   border-radius: chrome.$radius-small;
   cursor: pointer;
+  outline: none;
+
+  &[data-hovered] {
+    background: chrome.$surface-hover;
+    border-color: chrome.$border-hover;
+  }
 }
 
-.man-ale__icon:hover {
-  background: chrome.$surface-hover;
-  border-color: chrome.$border-hover;
-}
-
-.man-ale__icon--danger:hover {
+.man-ale__icon--danger[data-hovered] {
   color: chrome.$text-warning;
 }
 
-// --- Schaltflächen und Fußzeile ----------------------------------------------
-// Staffbase gestaltet die Knöpfe im Konfigurationsdialog selbst mit: `display`
-// kommt als `flex` an statt als unser `inline-flex`, und die Knöpfe tragen
-// `margin: auto`. Die Wirtsregel steht in einem fremden Stylesheet und lässt
-// sich nur überstimmen — siehe `hero-slider-widget/src/styles/slide-editor.scss`.
-.man-ale__button {
-  @include tokens.man-outshine-host {
-    display: inline-flex;
-    flex: 0 0 auto;
-    width: auto;
-    margin: 0;
+.man-ale__button,
+.man-ale__icon,
+.man-ale__handle,
+.man-ale__combo-button {
+  &[data-focus-visible] {
+    border-color: chrome.$focus-border;
+    box-shadow: chrome.$focus-ring;
   }
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: chrome.$control-height-sm;
-  padding: 4px 10px;
-  font: inherit;
-  font-size: 13px;
-  color: chrome.$text;
-  background: chrome.$surface;
-  border: 1px solid chrome.$border;
-  border-radius: chrome.$radius-control;
-  cursor: pointer;
-  transition:
-    background-color chrome.$transition,
-    border-color chrome.$transition;
 }
 
-.man-ale__button:hover:not(:disabled) {
-  background: chrome.$surface-hover;
-  border-color: chrome.$border-hover;
-}
-
-.man-ale__button--primary {
-  color: chrome.$surface;
-  background: chrome.$accent;
-  border-color: chrome.$accent-strong;
-}
-
-.man-ale__button--primary:hover:not(:disabled) {
-  background: chrome.$accent-strong;
-  border-color: chrome.$accent-stronger;
-}
-
-.man-ale__add {
-  margin-top: 12px;
-}
-
-.man-ale__button:focus-visible,
-.man-ale__icon:focus-visible,
-.man-ale__handle:focus-visible {
-  outline: none;
-  border-color: chrome.$focus-border;
-  box-shadow: chrome.$focus-ring;
-}
-
+// --- Fußzeile ---------------------------------------------------------------------
 .man-ale__footer {
   display: flex;
   align-items: center;
@@ -240,9 +389,4 @@
   margin-right: auto;
   font-size: 12px;
   color: chrome.$text-state;
-}
-
-// --- Auswahl aus der Seite ---------------------------------------------------
-.man-ale__picker {
-  margin-bottom: 16px;
 }
