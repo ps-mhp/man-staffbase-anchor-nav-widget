@@ -9,31 +9,29 @@ De titel wordt samen met de pagina vertaald.
 
 ## Links
 
-De items in de lijst. In Studio staat hier een editor die je opent via
-**Links bewerken**. De links staan links en de velden van het geselecteerde
-item rechts; klik in de lijst op een link om een andere te selecteren.
-**Link toevoegen** maakt een nieuw item aan en selecteert het, de prullenbak
-verwijdert het. De volgorde kun je wijzigen met het handvat aan de linkerkant:
-sleep het, of selecteer het handvat, druk op Enter om het op te pakken, verplaats
-het met de pijltjestoetsen naar de nieuwe positie en druk op Enter om het neer
-te zetten. Met **Toepassen** wordt de lijst in het dialoogvenster geschreven;
-daarna opslaan zoals gewoonlijk.
+De items in de lijst. In de Studio staat hier een editor die je
+via **Links bewerken** kunt openen. Links staan de links, rechts de velden van het
+geselecteerde item; een klik in de lijst selecteert een ander item. **Link
+toevoegen** maakt een nieuwe aan en selecteert deze, de prullenbak verwijdert
+deze. Je kunt de volgorde wijzigen met het handvat aan de linkerkant: slepen, of het handvat selecteren,
+met Enter vastpakken, met de pijltjestoetsen naar de nieuwe positie verplaatsen en met
+Enter neerzetten. **Toepassen** schrijft de lijst naar het dialoogvenster, daarna zoals
+gewoon opslaan.
 
 Het snelst gaat het via **Element aan de pagina toevoegen** bovenaan in de editor:
 De selectie toont de kopteksten en widgets van de opgeslagen pagina
-(▣ = widget) en je kunt de selectie filteren door te typen. Met één klik maak je
-een link aan met de naam van het element; de bestemming is de
+(▣ = widget) en kan door te typen worden gefilterd. Eén klik maakt een link aan met de naam ervan; de bestemming is de
 blok-ID (`#…`). Je kunt de linktekst daarna wijzigen. Nieuwe secties
-verschijnen pas in de lijst als de pagina is opgeslagen.
+verschijnen pas in de selectie als de pagina is opgeslagen.
 
 Elke link heeft twee velden:
 
-- **Linktekst** — wat er in de lijst staat. Verplicht: een item zonder linktekst
+- **Linktekst** — wat er in de lijst staat. Verplicht: een vermelding zonder linktekst
   wordt niet weergegeven.
-- **Bestemming** — waar het item naartoe springt.
+- **Bestemming** — waar de vermelding naartoe springt.
   - **Leeg:** naar de kop op de pagina die precies dezelfde naam heeft als de linktekst.
-  - **Tekst van een kop:** naar deze kop. Zo kan het item een kortere
-    naam hebben dan de paragraaf, bijvoorbeeld „Uitrusting” voor „Uitrusting in detail”.
+  - **Tekst van een kop:** naar deze kop. Zo kan de vermelding korter
+    zijn dan de paragraaf, bijvoorbeeld „Uitrusting” voor „Uitrusting in detail”.
   - **Een blok-ID** zoals `#a447d858-1bba-4a49-b620-b49c60dd67a7`: naar dit
     blok van de pagina. Zo wordt de selectie bovenaan geplaatst. De link blijft ook geldig nadat
     de koptekst is hernoemd.

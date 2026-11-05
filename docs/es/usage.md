@@ -8,7 +8,7 @@
    título encima.
 4. **Crea los enlaces.** Guarda la página una vez y, a continuación, en el cuadro de diálogo **Editar enlaces
   **, en **Añadir elemento a la página**, selecciona para cada sección el
-  encabezado o el widget. Como alternativa, de forma manual: **Añadir enlace
+  encabezado o el widget. Como alternativa, manualmente: **Añadir enlace
   **, introduce el texto del enlace, deja el destino en blanco o introduce el texto del
    encabezado. **Aplicar** y, a continuación, guardar.
 5. **Comprobar en la vista previa.** Haz clic una vez en cada entrada: si no se activa,

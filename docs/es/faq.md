@@ -16,34 +16,33 @@ esta entrada no se mostrará».
 El título con ese texto exacto no existe en la página. La comparación
 se realiza con el destino o —si el destino está vacío— con el texto del enlace. Basta con un error tipográfico,
 una diferencia en mayúsculas y minúsculas o un título que haya cambiado de nombre
-entretanto. Copia el texto del título y pégalo en el destino
+entretanto. Copia el texto del encabezado y pégalo en el destino
 .
 
-Los títulos en una navegación por anclajes nunca cuentan como destino, ni siquiera el
+Los encabezados de una navegación por anclajes nunca cuentan como destino, ni siquiera el
 título de un segundo widget en la misma página.
 
 ## En las páginas traducidas, al hacer clic no se produce el salto.
 
-Los títulos de la página se traducen, pero el texto del enlace y el destino no. En el
-otro idioma, la entrada ya no encuentra su título, y la
+Los encabezados de la página se traducen, pero el texto del enlace y el destino no. En el
+otro idioma, la entrada ya no encuentra su encabezado, y la
 lista sigue mostrando los textos de los enlaces en el idioma en el que se crearon.
 
 ## El marcador rojo no sigue el desplazamiento.
 
-Esto es intencionado. Se queda en la entrada en la que se ha hecho clic por última vez. Antes del
-primer clic, se sitúa junto al título o, si no hay ningún título, junto a la
+Esto es intencionado. Se sitúa en la entrada en la que se ha hecho clic por última vez. Antes del
+primer clic, se sitúa en el título o, si no hay ningún título introducido, en la
 primera entrada. Si alguien abre la página a través de un enlace con marcador de salto,
-por ejemplo, `…#equipamiento`, se sitúa junto a esa entrada.
+por ejemplo, `…#equipamiento`, se sitúa en esa entrada.
 
 ## ¿Se puede cambiar el orden?
 
-Sí. En el editor, arrastra el controlador de la izquierda o selecciónalo, pulsa
-Intro para tomarlo, muévelo con las teclas de flecha hasta la nueva posición y
-pulsa Intro para soltarlo. La lista no tiene por qué seguir el orden de la página.
+Sí. En el editor, arrastra el controlador de la izquierda o selecciona el controlador, pulsa Intro
+para seleccionarlo, utilice las teclas de flecha para moverlo y pulsa Intro para colocarlo. La lista no tiene por qué seguir el orden de la página.
 
-## Dos encabezados tienen el mismo nombre: ¿a cuál lleva el enlace?
+## Si hay dos títulos con el mismo nombre, ¿a cuál lleva el enlace?
 
-Al primero de la página. Si quieres que lleve al segundo, la única solución es
+Al primero que aparezca en la página. Si quieres que lleve al segundo, la única solución es
 dar nombres diferentes a los títulos.
 
 ## ¿Puede una entrada enlazar a otra página?

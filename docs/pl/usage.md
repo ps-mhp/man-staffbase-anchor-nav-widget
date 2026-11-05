@@ -2,8 +2,8 @@
 
 1. **Podziel stronę na sekcje.** Umieść nagłówki tam, gdzie zaczyna się dana sekcja.
    Widżet przeskakuje tylko do nagłówków, które znajdują się na stronie.
-2. **Wstaw blok.** W edytorze wybierz „Nawigacja kotwicowa” — najlepiej w
-   wąskiej kolumnie obok tekstu lub nad pierwszą sekcją.
+2. **Wstaw blok.** W edytorze wybierz opcję „Nawigacja kotwicowa” — najlepiej w
+   wąskiej kolumnie obok tekstu lub nad pierwszym akapitem.
 3. **Wpisz tytuł** — lub pozostaw pole puste. Puste pole oznacza: tylko lista, bez
    nagłówka nad nią.
 4. **Utwórz linki.** Zapisz stronę, a następnie w oknie dialogowym **Edytuj linki
@@ -23,4 +23,4 @@ ważne po zmianie nazwy nagłówka; linki utworzone poprzez tekst – nie.
 ## Na telefonie
 
 Lista jest tam zwinięta i wyświetla tylko tytuł z strzałką. Jedno dotknięcie
-rozwiń ją. Na ekranie o szerokości co najmniej 768 pikseli jest zawsze rozwińta.
+rozwija ją. Na ekranie o szerokości co najmniej 768 pikseli jest zawsze rozwinięta.

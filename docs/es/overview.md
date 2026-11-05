@@ -16,7 +16,7 @@ una directiva con sus apartados. En páginas cortas no merece la pena.
 
 ## Qué no hace
 
-- **No busca encabezados por sí mismo.** Cada entrada se crea manualmente.
+- **No busca encabezados por sí solo.** Cada entrada se crea manualmente.
   Si se añade una sección a la página, también debe incluirse en la lista.
 - **No se desplaza con el usuario.** El marcador no sigue el desplazamiento, sino que permanece en la
   última entrada en la que se ha hecho clic.

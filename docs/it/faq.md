@@ -13,39 +13,37 @@ questa voce non viene visualizzata».
 
 ## Cliccandoci sopra non si viene reindirizzati.
 
-Sulla pagina non esiste un titolo con esattamente quel testo. Il confronto
-viene effettuato con la destinazione oppure — se la destinazione è vuota — con il testo del link. È sufficiente un errore di battitura,
+Il titolo con esattamente questo testo non è presente nella pagina. Il confronto
+viene effettuato con la destinazione o — se la destinazione è vuota — con il testo del link. È sufficiente un errore di battitura,
 una differenza nelle maiuscole e minuscole o un titolo che nel frattempo è stato rinominato
 . Copiare il testo del titolo e incollarlo nella destinazione
 .
 
-I titoli in una navigazione ad ancore non contano mai come destinazione — nemmeno il
+I titoli in una navigazione con ancore non contano mai come destinazione — nemmeno il
 titolo di un secondo widget sulla stessa pagina.
 
-## Nelle pagine tradotte, cliccando non si passa alla pagina di destinazione.
+## Nelle pagine tradotte, cliccando non si viene reindirizzati.
 
-I titoli della pagina vengono tradotti, il testo del link e la destinazione no. Nell’
+I titoli della pagina vengono tradotti, mentre il testo del link e la destinazione no. Nell’
 altra lingua, la voce non trova più il proprio titolo e l’
 elenco continua a mostrare i testi dei link nella lingua in cui sono stati inseriti.
 
 ## L’indicatore rosso non segue lo scorrimento.
 
-È intenzionale. Rimane sulla voce su cui è stato cliccato per ultima. Prima del
+È intenzionale. Si trova sulla voce su cui è stato cliccato per ultima. Prima del
 primo clic si trova sul titolo — oppure, se non è stato inserito alcun titolo, sulla
 prima voce. Se qualcuno apre la pagina tramite un collegamento con un'etichetta di salto,
 ad esempio `…#attrezzatura`, si trova su quella voce.
 
-## È possibile modificare l'ordine?
+## È possibile modificare l’ordine?
 
-Sì. Nell’editor, trascinare la maniglia a sinistra oppure selezionarla, premere
-Invio per prenderla, spostarla con i tasti freccia fino alla nuova posizione e
-premere Invio per rilasciarla. L’elenco non deve necessariamente seguire l’ordine
-della pagina.
+Sì. Nell’editor, trascinare la maniglia a sinistra oppure selezionarla, premere Invio
+per selezionarla, spostarla con i tasti freccia e premere Invio per posizionarla. L’elenco non deve necessariamente seguire l’ordine della pagina.
 
-## Due titoli hanno lo stesso nome — a quale si collega il collegamento?
+## Due titoli hanno lo stesso nome: dove porta il collegamento?
 
-Al primo presente nella pagina. Se si desidera che si colleghi al secondo, l’unica soluzione è
-dare nomi diversi ai titoli.
+Al primo presente nella pagina. Se si desidera che porti al secondo, l’unica soluzione è
+assegnare nomi diversi ai titoli.
 
 ## Una voce può rimandare a un’altra pagina?
 

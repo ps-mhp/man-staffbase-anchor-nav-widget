@@ -4,7 +4,7 @@ Il widget mostra un elenco di collegamenti che gestisci tu stesso. Cliccando su 
 si passa al titolo corrispondente nella pagina; un indicatore rosso mostra quale
 voce è stata cliccata per ultima.
 
-L'elenco non viene generato automaticamente. È l’utente a definire, nella finestra di dialogo delle impostazioni, quali
+L'elenco non si crea automaticamente. È l’utente a definire, nella finestra di dialogo delle impostazioni, quali
 voci sono presenti, come si chiamano e in quale ordine sono disposte. Il
 widget esegue la ricerca nella pagina solo quando qualcuno clicca su una voce — durante il
 caricamento della pagina non esegue alcuna operazione in background.

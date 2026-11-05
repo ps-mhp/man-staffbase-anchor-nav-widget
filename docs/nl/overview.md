@@ -16,7 +16,7 @@ een richtlijn met zijn paragrafen. Op korte pagina’s is het niet de moeite waa
 
 ## Wat het niet doet
 
-- **Geen koppen automatisch vinden.** Elk item wordt handmatig aangemaakt.
+- **Geen kopjes automatisch vinden.** Elk item wordt handmatig aangemaakt.
   Als er een paragraaf aan de pagina wordt toegevoegd, wordt deze ook aan de lijst toegevoegd.
 - **Volgt het scrollen niet.** De markering volgt het scrollen niet, maar blijft bij
   het laatst aangeklikte item.

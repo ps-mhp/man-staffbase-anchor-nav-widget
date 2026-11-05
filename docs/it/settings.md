@@ -2,32 +2,31 @@
 
 ## Titolo
 
-Il titolo sopra l'elenco, ad esempio "In sintesi". Lasciandolo vuoto
+Il titolo sopra l'elenco, ad esempio "In sintesi". Se lasciato vuoto,
 viene nascosto; l'elenco rimane visibile.
 
 Il titolo viene tradotto insieme alla pagina.
 
 ## Link
 
-Le voci dell'elenco. In Studio, è presente un editor che si apre facendo clic
-su **Modifica link**. I link sono a sinistra e i campi della voce selezionata
-sono a destra; fai clic su un link nell'elenco per selezionarne un altro.
-**Aggiungi link** ne crea uno nuovo e lo seleziona, mentre il cestino lo rimuove.
-Puoi modificare l'ordine utilizzando il cursore a sinistra: trascinalo, oppure
-selezionalo, premi Invio per prenderlo, spostalo con i tasti freccia fino alla
-nuova posizione e premi Invio per rilasciarlo. **Applica** inserisce l'elenco
-nella finestra di dialogo; successivamente, salva come di consueto.
+Le voci dell'elenco. In Studio, in questa posizione è presente un editor che si
+apre tramite **Modifica link**. A sinistra ci sono i link, a destra i campi della
+voce selezionata; cliccando nell’elenco se ne seleziona un’altra. **Aggiungi link**
+ne crea uno nuovo e lo seleziona, mentre il cestino lo rimuove
+. Puoi modificare l’ordine utilizzando la maniglia a sinistra: trascina, oppure seleziona la maniglia,
+conferma con Invio, sposta nella nuova posizione con i tasti freccia e
+conferma con Invio. **Applica** inserisce l’elenco nella finestra di dialogo, dopodiché
+salva come di consueto.
 
 Il modo più veloce è utilizzare **Aggiungi elemento alla pagina** nella parte superiore dell’editor:
-il menu a tendina mostra i titoli e i widget della pagina salvata
-(▣ = widget) e la selezione può essere filtrata digitando. Un clic crea un link
-con il nome corrispondente; la destinazione è l’
+la selezione mostra i titoli e i widget della pagina salvata
+(▣ = widget) e può essere filtrata digitando. Un clic crea un link con il nome corrispondente; la destinazione è l’
 ID del blocco (`#…`). Il testo del link può essere modificato in seguito. Le nuove sezioni
 appaiono nella selezione solo dopo che la pagina è stata salvata.
 
-Ogni link presenta due campi:
+Ogni link ha due campi:
 
-- **Testo del link** — ciò che appare nell’elenco. Obbligatorio: una voce senza testo del link
+- **Testo del link** — ciò che compare nell’elenco. Obbligatorio: una voce senza testo del link
   non viene visualizzata.
 - **Destinazione** — dove porta la voce.
   - **Vuoto:** al titolo della pagina che ha lo stesso nome del testo del link.

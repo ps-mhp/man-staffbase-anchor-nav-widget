@@ -9,19 +9,18 @@ Tytuł jest tłumaczony wraz ze stroną.
 
 ## Linki
 
-Pozycje na liście. W Studio znajduje się edytor, który otwiera się poprzez
-**Edytuj linki**. Linki znajdują się po lewej, a pola wybranej pozycji po
-prawej; kliknij link na liście, aby wybrać inny. **Dodaj link** tworzy nowy
-link i go wybiera, a kosz go usuwa. Kolejność można zmienić za pomocą uchwytu
-po lewej stronie: przeciągnij go lub zaznacz, naciśnij Enter, aby go podnieść,
-przesuń za pomocą klawiszy strzałek w nowe miejsce i naciśnij Enter, aby go
-odłożyć. **Zastosuj** zapisuje listę w oknie dialogowym, po czym należy zapisać
-stronę w zwykły sposób.
+Pozycje na liście. W Studio w tym miejscu znajduje się edytor, który
+otwiera się po kliknięciu opcji **Edytuj linki**. Po lewej stronie znajdują się linki, po prawej pola
+wybranego wpisu; kliknięcie na liście powoduje wybranie innego. Opcja **Dodaj link**
+tworzy nowy link i zaznacza go, a opcja „Kosz” usuwa
+go. Kolejność można zmienić za pomocą uchwytu po lewej stronie: przeciągnij lub zaznacz uchwyt,
+potwierdź klawiszem Enter, przenieś w nowe miejsce za pomocą klawiszy strzałek i
+potwierdź klawiszem Enter. Opcja **Zastosuj** zapisuje listę w oknie dialogowym, a następnie należy
+zapisać stronę w zwykły sposób.
 
 Najszybciej można to zrobić za pomocą opcji **Dodaj element strony** u góry edytora:
 Lista wyboru pokazuje nagłówki i widżety zapisanej strony
-(▣ = widżet), a listę można filtrować, wpisując tekst. Jedno kliknięcie tworzy
-link z ich nazwą, a miejscem docelowym jest
+(▣ = widżet) i można ją filtrować, wpisując tekst. Jedno kliknięcie tworzy link z nazwą elementu, a miejscem docelowym jest
 identyfikator bloku (`#…`). Tekst linku można później zmienić. Nowe sekcje
 pojawiają się w liście dopiero po zapisaniu strony.
 
@@ -39,9 +38,9 @@ Każdy link ma dwa pola:
   - **Adres** zaczynający się od `/`, `http://`, `https://` lub `mailto:`
     : zwykły odnośnik, podąża za którym przeglądarka.
 
-Podczas porównywania z nagłówkiem liczy się tekst, a nie poziom — H1 do H6
-są traktowane na równi jako cele. Wielokrotne spacje nie mają znaczenia,
-za to wielkość liter ma. Jeśli istnieje kilka nagłówków o tej samej treści,
+Przy porównywaniu z nagłówkiem liczy się tekst, a nie poziom — H1 do H6
+są traktowane na równi. Wielokrotne spacje nie mają znaczenia,
+za to wielkość liter ma znaczenie. Jeśli istnieje kilka nagłówków o tej samej treści,
 wpis przechodzi do pierwszego z nich.
 
 Jeśli edytor nie wyświetla się, pojawia się tam pole tekstowe z listą w formacie

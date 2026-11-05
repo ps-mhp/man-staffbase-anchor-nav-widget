@@ -11,7 +11,7 @@ chargement de la page, il n’effectue aucune opération en arrière-plan.
 
 ## À quoi cela sert-il ?
 
-Les pages longues avec une structure claire — un modèle de voiture et ses équipements,
+Les pages longues avec une structure claire — un modèle de véhicule et ses équipements,
 une directive et ses sections. Sur les pages courtes, cela ne vaut pas la peine.
 
 ## Ce qu’il ne fait pas
