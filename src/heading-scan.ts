@@ -90,39 +90,56 @@ const BLOCK_MARKER = "data-c13y-component";
 const WIDGET_HOST = "data-sb-custom-block-widget-host";
 
 /**
- * Stammt die Überschrift aus einem Title- oder Text-Block?
+ * Woher eine Überschrift stammt.
  *
- * Der Aufstieg läuft über `ShadowRoot.host` weiter, wie bei `isInside`. Er
- * endet beim ersten Treffer in beide Richtungen: steckt die Überschrift in
- * einem Custom-Block-Widget, trifft er dessen Wirt zuerst — ein Widget liegt
- * im DOM unterhalb des Blocks, in dem es steht —, und die Überschrift gehört
- * dann dem Widget, nicht dem Block darüber.
+ * Beides fällt in einem einzigen Aufstieg an, und beides muss es: `erlaubt`
+ * entscheidet über die einzelne Überschrift, `imDesigner` über die ganze
+ * Seite.
  */
-function fromContentBlock(element: HTMLElement): boolean {
+interface HeadingOrigin {
+  /** Steckt sie in einem Title- oder Text-Block — und in keinem Widget? */
+  readonly erlaubt: boolean;
+  /** Stand auf dem Weg nach oben überhaupt eine Marke des Content Designers? */
+  readonly imDesigner: boolean;
+}
+
+/**
+ * Der Aufstieg von einer Überschrift bis zur Wurzel.
+ *
+ * Er läuft über `ShadowRoot.host` weiter, wie bei `isInside`. Das ist hier
+ * keine Feinheit, sondern der Kern: Staffbase rendert die Bausteine selbst in
+ * Shadow Roots, `document.querySelector` sieht keinen einzigen von ihnen.
+ *
+ * Das Urteil steht beim ersten Treffer fest, der Aufstieg läuft trotzdem
+ * weiter — `imDesigner` gilt für die Seite und nicht für die Überschrift.
+ * Hörte er beim Urteil auf, meldeten Seiten, auf denen jede Überschrift in
+ * einem Widget steckt, fälschlich „kein Content Designer“, und der Rückfall
+ * schaltete den Filter genau dort ab, wo er gebraucht wird.
+ *
+ * Steckt die Überschrift in einem Custom-Block-Widget, trifft der Aufstieg
+ * dessen Wirt zuerst — ein Widget liegt im DOM unterhalb des Blocks, in dem es
+ * steht. Die Überschrift gehört dann dem Widget, nicht dem Block darüber.
+ */
+function headingOrigin(element: HTMLElement): HeadingOrigin {
+  let erlaubt: boolean | null = null;
+  let imDesigner = false;
   let current: Node | null = element;
+
   while (current !== null) {
     if (current instanceof HTMLElement) {
-      if (current.hasAttribute(WIDGET_HOST)) return false;
+      if (erlaubt === null && current.hasAttribute(WIDGET_HOST)) erlaubt = false;
       const component = current.getAttribute(BLOCK_MARKER);
-      if (component !== null && CONTENT_BLOCKS.has(component)) return true;
+      if (component !== null) {
+        imDesigner = true;
+        if (erlaubt === null && CONTENT_BLOCKS.has(component)) erlaubt = true;
+      }
     }
     if (current.parentNode !== null) current = current.parentNode;
     else if (current instanceof ShadowRoot) current = current.host;
     else current = null;
   }
-  return false;
-}
 
-/**
- * Trägt die Seite überhaupt Marken des Content Designers?
- *
- * Nur er vergibt `data-c13y-component`. Auf einer Seite des klassischen
- * Editors trüge keine einzige Überschrift die Marke, und der Filter leerte
- * das Verzeichnis vollständig — der Redakteur sähe ein leeres Widget, ohne
- * den Grund zu erkennen. Ohne Marken gilt der Filter deshalb nicht.
- */
-function hasBlockMarkers(): boolean {
-  return document.querySelector(`[${BLOCK_MARKER}]`) !== null;
+  return { erlaubt: erlaubt ?? false, imDesigner };
 }
 
 /**
@@ -136,6 +153,11 @@ function hasBlockMarkers(): boolean {
  * Darstellung führen — auf einer Seite mit mehreren Widgets ist das Verzeichnis
  * dann voller Zeilen, die kein Abschnitt der Seite sind.
  *
+ * Der Filter greift nur, wenn wenigstens eine Überschrift unter einer Marke
+ * des Content Designers steht. Auf einer Seite des klassischen Editors gibt es
+ * die Bausteine nicht, nach denen er unterscheidet; er leerte das Verzeichnis
+ * dort vollständig, und der Redakteur sähe den Grund nicht.
+ *
  * Unsichtbare Überschriften bleiben drin. Ob ein Abschnitt gerade eingeklappt
  * ist, ändert sich jederzeit, und eine Sichtbarkeitsprüfung hinge an einer
  * Layout-Berechnung bei jedem Durchlauf.
@@ -145,20 +167,31 @@ export function scanHeadings(
   self: HTMLElement | null,
   blocksOnly: boolean = false,
 ): ScannedHeading[] {
-  const headings: ScannedHeading[] = [];
-  const taken = new Map<string, number>();
-  // Einmal je Scan statt einmal je Überschrift: die Antwort gilt für die
-  // ganze Seite und kostet sonst eine Suche pro Treffer.
-  const filter = blocksOnly && hasBlockMarkers();
+  const gefunden: { readonly element: HTMLElement; readonly text: string; readonly origin: HeadingOrigin }[] = [];
 
   for (const element of walk(document.body)) {
     if (element.tagName.toLowerCase() !== level) continue;
     if (self !== null && isInside(element, self)) continue;
-    if (filter && !fromContentBlock(element)) continue;
 
     const text = (element.textContent ?? "").replace(/\s+/g, " ").trim();
     if (text === "") continue;
 
+    gefunden.push({
+      element,
+      text,
+      origin: blocksOnly ? headingOrigin(element) : { erlaubt: true, imDesigner: false },
+    });
+  }
+
+  // Die Frage gilt der Seite, nicht der einzelnen Überschrift: erst wenn
+  // feststeht, dass es überhaupt Bausteine gibt, darf gefiltert werden.
+  const filter = blocksOnly && gefunden.some((kandidat) => kandidat.origin.imDesigner);
+  const bleibt = filter ? gefunden.filter((kandidat) => kandidat.origin.erlaubt) : gefunden;
+
+  const headings: ScannedHeading[] = [];
+  const taken = new Map<string, number>();
+
+  for (const { element, text } of bleibt) {
     const base = slugify(text) || `abschnitt-${headings.length + 1}`;
     const seen = taken.get(base) ?? 0;
     taken.set(base, seen + 1);

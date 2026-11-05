@@ -141,11 +141,48 @@ describe("scanHeadings mit blocksOnly", () => {
     expect(scanHeadings("h2", null, true).map((h) => h.text)).toEqual(["Eins", "Zwei"]);
   });
 
-  it("schlaegt nicht zurueck, sobald irgendwo auf der Seite eine Marke steht", () => {
+  it("schlaegt nicht zurueck, sobald eine Ueberschrift unter einer Marke steht", () => {
     page(`
-      <div data-c13y-component="section-block"></div>
+      <div data-c13y-component="title-block"><h2>Abschnitt</h2></div>
       <article><h2>Fremd</h2></article>`);
+    expect(scanHeadings("h2", null, true).map((h) => h.text)).toEqual(["Abschnitt"]);
+  });
+
+  // Der Fall, an dem die erste Fassung scheiterte: Staffbase rendert die
+  // Bausteine selbst in Shadow Roots. Eine Pruefung ueber `document` sieht dort
+  // keine einzige Marke, schliesst auf „kein Content Designer“ und schaltet den
+  // Filter still ab — auf genau der Seite, fuer die er gebaut wurde.
+  it("sieht Bausteine, die in einem Shadow Root liegen", () => {
+    page("<div id='seite'></div>");
+    withShadow(
+      document.getElementById("seite") as HTMLElement,
+      `<div data-c13y-component="column-block">
+         <div data-c13y-component="title-block"><h2>Abschnitt</h2></div>
+         <div data-sb-custom-block-widget-host><h2>Aus einem Widget</h2></div>
+       </div>`,
+    );
+    expect(document.querySelectorAll("[data-c13y-component]")).toHaveLength(0);
+    expect(scanHeadings("h2", null, true).map((h) => h.text)).toEqual(["Abschnitt"]);
+  });
+
+  it("filtert auch, wenn jede Ueberschrift der Ebene in einem Widget steckt", () => {
+    // Der Aufstieg darf beim Urteil nicht abbrechen: sonst saehe er die Marke
+    // oberhalb des Wirts nie, hielte die Seite fuer eine klassische und zeigte
+    // am Ende genau die Ueberschriften, die raus sollten.
+    page(`
+      <div data-c13y-component="column-block">
+        <div data-sb-custom-block-widget-host><h2>Aus einem Widget</h2></div>
+      </div>`);
     expect(scanHeadings("h2", null, true)).toEqual([]);
+  });
+
+  it("nummeriert Ersatz-Slugs nach der gefilterten Liste", () => {
+    page(`
+      <div data-c13y-component="column-block">
+        <div data-sb-custom-block-widget-host><h2>!!!</h2></div>
+        <div data-c13y-component="title-block"><h2>???</h2></div>
+      </div>`);
+    expect(scanHeadings("h2", null, true).map((h) => h.slug)).toEqual(["abschnitt-1"]);
   });
 });
 
