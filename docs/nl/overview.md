@@ -14,7 +14,7 @@ een richtlijn met zijn paragrafen. Op korte pagina’s is het niet de moeite waa
 
 ## Wat het niet doet
 
-- **Niet naar andere pagina’s verwijzen.** Alle verwijzingen blijven op deze pagina.
+- **Verwijst niet naar andere pagina’s.** Alle verwijzingen blijven op deze pagina.
   Voor verwijzingen naar andere pagina’s is er de navigatiewidget.
-- **Niet genest.** Het toont precies één niveau, geen boomstructuur.
+- **Geen nesteling.** Het toont precies één niveau, geen boomstructuur.
 - **Geen kopteksten aanmaken.** Het vindt alleen wat al in de tekst staat.

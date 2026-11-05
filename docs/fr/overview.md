@@ -4,7 +4,7 @@ Le widget analyse les titres de la page et affiche ceux d'un même niveau — H1
 H6 — sous forme de liste de liens. Un clic permet d'accéder directement à l'endroit correspondant ; pendant la lecture,
 un marqueur rouge se déplace vers le titre sur lequel on se trouve actuellement.
 
-La liste est générée lors de l’affichage de la page. Il n’y a rien à gérer : si vous
+La liste est générée lors de l'affichage de la page. Il n'y a rien à gérer : si vous
 renommez, déplacez ou supprimez un titre, cela modifie automatiquement la navigation.
 
 ## À quoi cela sert-il ?

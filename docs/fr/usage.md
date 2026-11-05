@@ -9,8 +9,8 @@
    le titre de la page est un H1 et que les sections sont des H2, choisissez alors **H2**.
 4. **Saisissez le titre** — ou laissez le champ vide. Si le champ est vide, cela signifie : uniquement la liste, sans
    titre au-dessus.
-5. **Vérifier dans l’aperçu.** La liste s’affiche immédiatement et correctement ; ce qui apparaît dans
-   l’éditeur s’affiche également sur la page.
+5. **Vérifier dans l’aperçu.** La liste s’affiche immédiatement et correctement ; ce qui figure dans
+   l’éditeur apparaît également sur la page.
 
 ## Lors de la modification de la page
 

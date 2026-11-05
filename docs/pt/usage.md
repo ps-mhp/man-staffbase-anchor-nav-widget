@@ -12,7 +12,7 @@
 5. **Verifique na pré-visualização.** A lista aparece imediatamente e corretamente; o que está no
    editor aparece também na página.
 
-## Ao editar a página
+## Ao alterar a página
 
 A lista acompanha o texto enquanto se trabalha nela: um novo título
 aparece, um título eliminado desaparece. Não é preciso clicar em nada, nem

@@ -2,12 +2,7 @@
 
 ## Das Widget zeigt nichts an.
 
-Wurde der Einstellungsdialog des Widgets seit dem Einfügen noch nie geöffnet
-und gespeichert, kennt es die Überschriften der Seite nicht. Im Studio den
-Dialog öffnen, die Zahl der übernommenen Überschriften prüfen, speichern.
-
-Steht dort „0 Überschriften", findet das Studio keine — dann hilft auch das
-Speichern nicht. Andernfalls: Die Seite hat keine Überschrift der eingestellten Ebene. Eine andere Ebene
+Die Seite hat keine Überschrift der eingestellten Ebene. Eine andere Ebene
 wählen oder im Text eine Überschrift setzen. Ein leeres Widget gibt nichts aus —
 auch keinen leeren Kasten und keinen Titel.
 
@@ -43,11 +38,6 @@ Sie folgt dem Scrollen und bleibt bei der Überschrift, die zuletzt das obere
 Viertel des Fensters erreicht hat. Ganz oben auf der Seite steht sie beim Titel
 — oder, wenn kein Titel eingetragen ist, beim ersten Eintrag. Wer „Bewegung
 reduzieren" eingestellt hat, sieht sie springen statt gleiten — das ist Absicht.
-
-## Eine neue oder umbenannte Überschrift fehlt.
-
-Die Liste stammt vom letzten Speichern des Widget-Dialogs. Den Dialog öffnen und
-speichern nimmt die Änderung auf.
 
 ## Lässt sich die Reihenfolge ändern?
 

@@ -20,12 +20,11 @@ describe("blockDefinition", () => {
   });
 
   it("führt genau die Attribute des Schemas", () => {
-    expect(blockDefinition.attributes).toEqual(["level", "heading", "blocks", "headings"]);
+    expect(blockDefinition.attributes).toEqual(["level", "heading", "blocks"]);
     expect(Object.keys(blockDefinition.configurationSchema?.properties ?? {})).toEqual([
       "level",
       "heading",
       "blocks",
-      "headings",
     ]);
   });
 

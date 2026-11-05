@@ -17,4 +17,4 @@ una directiva con sus apartados. En páginas cortas no merece la pena.
 - **No enlaza a otras páginas.** Todos los enlaces se limitan a esta página.
   Para enlaces entre páginas, existe el widget de navegación.
 - **No anida elementos.** Muestra exactamente un nivel, no un árbol.
-- **No crea títulos.** Solo detecta lo que ya figura en el texto.
+- **No crea títulos.** Solo detecta lo que ya aparece en el texto.

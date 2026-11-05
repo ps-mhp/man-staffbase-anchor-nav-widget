@@ -24,7 +24,6 @@ import { startWidget } from "@shared/dev-mode/start-widget";
 import { getTranslationRegistry } from "@shared/translation/registry";
 import {
   BLOCKS_ATTRIBUTE,
-  HEADINGS_ATTRIBUTE,
   HEADING_ATTRIBUTE,
   LEVEL_ATTRIBUTE,
   configurationSchema,
@@ -34,16 +33,15 @@ import {
 } from "./configuration-schema";
 import { ANCHOR_NAV_WIDGET_TAG, anchorNavTranslationProvider, readHeading } from "./translation-provider";
 import { AnchorNavWidget } from "./widget-root";
-import { isStudioPage, startHeadingCapture } from "./heading-capture";
 import icon from "../resources/anchor-nav-widget.svg";
 import pkg from "../package.json";
 
 /** Die Attribute des Widgets; gespiegelt im Konfigurationsschema. */
-const widgetAttributes: string[] = [LEVEL_ATTRIBUTE, HEADING_ATTRIBUTE, BLOCKS_ATTRIBUTE, HEADINGS_ATTRIBUTE];
+const widgetAttributes: string[] = [LEVEL_ATTRIBUTE, HEADING_ATTRIBUTE, BLOCKS_ATTRIBUTE];
 
 const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
   /**
-   * <anchor-nav-widget level="h2" heading="Auf einen Blick" blocks="true" headings='[[2,"News",1]]'></anchor-nav-widget>
+   * <anchor-nav-widget level="h2" heading="Auf einen Blick" blocks="true"></anchor-nav-widget>
    */
   return class AnchorNavWidgetBlock extends BaseBlockClass implements BaseBlock {
     private _root: ReactDOM.Root | null = null;
@@ -58,7 +56,6 @@ const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
           heading={readHeading(attrs[HEADING_ATTRIBUTE])}
           self={container}
           blocksOnly={readBlocksOnly(attrs[BLOCKS_ATTRIBUTE])}
-          headings={attrs[HEADINGS_ATTRIBUTE]}
         />,
       );
     }
@@ -111,10 +108,6 @@ if (typeof window.defineBlock === "function") {
     register: () => {
       getTranslationRegistry().register(anchorNavTranslationProvider);
       window.defineBlock(externalBlockDefinition);
-      // Nur im Studio: dort öffnet der Redakteur den Dialog, in dem die
-      // Überschriften erfasst werden. Auf der veröffentlichten Seite läuft
-      // dadurch kein einziger Beobachter.
-      if (isStudioPage()) startHeadingCapture();
     },
   });
 }

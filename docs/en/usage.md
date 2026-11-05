@@ -10,13 +10,13 @@
 4. **Enter the title**—or leave it blank. Blank means: just the list, no
    heading above it.
 5. **Check the preview.** The list appears immediately and correctly; what’s in the
-   editor is what appears on the page.
+   editor is also what appears on the page.
 
 ## When editing the page
 
 The list follows the text as you work on it: a new heading
-appears, a deleted one disappears. No need to click anything or
-refresh the page.
+appears, a deleted one disappears. No need to click anything, no need to
+refresh.
 
 ## On a phone
 

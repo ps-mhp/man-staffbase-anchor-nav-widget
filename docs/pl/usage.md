@@ -14,7 +14,7 @@
 
 ## Podczas edycji strony
 
-Lista podąża za tekstem podczas pracy nad nim: pojawia się nowy nagłówek,
+Lista dostosowuje się do tekstu w trakcie pracy: pojawia się nowy nagłówek,
 a usunięty znika. Nie trzeba niczego klikać ani
 odświeżać.
 

@@ -10,9 +10,9 @@
 4. **Inserire il titolo** — oppure lasciarlo vuoto. Vuoto significa: solo l’elenco, nessun
    titolo sopra.
 5. **Controllare nell’anteprima.** L’elenco appare immediatamente e correttamente; ciò che è
-   nell’editor appare anche sulla pagina.
+   nell’editor è anche sulla pagina.
 
-## Durante la modifica della pagina
+## Quando si modifica la pagina
 
 L’elenco segue il testo mentre si lavora: un nuovo titolo
 appare, uno cancellato scompare. Non occorre cliccare su nulla, né

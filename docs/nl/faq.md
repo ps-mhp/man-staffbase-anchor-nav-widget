@@ -2,25 +2,20 @@
 
 ## De widget geeft niets weer.
 
-Als het instellingenvenster van de widget sinds het invoegen nog nooit is geopend
-en opgeslagen, kent de widget de koppen van de pagina niet. Open in Studio het
-venster, controleer het aantal overgenomen koppen en sla het op.
-
-Als daar „0 koppen” staat, vindt Studio er geen — dan helpt ook het
-opslaan niet. Anders: de pagina heeft geen kop van het ingestelde niveau. Kies een ander niveau
-of plaats een kop in de tekst. Een leeg widget geeft niets weer —
+De pagina bevat geen koptekst van het ingestelde niveau. Kies een ander niveau
+of voeg een koptekst toe aan de tekst. Een lege widget geeft niets weer —
 ook geen leeg vak en geen titel.
 
-## Er worden te weinig koppen weergegeven.
+## Er worden te weinig kopjes weergegeven.
 
-Koppen met lege tekst worden overgeslagen. En koppen binnen het
-widget zelf tellen niet mee, anders zou het naar zichzelf verwijzen.
+Kopjes met lege tekst worden overgeslagen. En kopjes binnen de
+widget zelf tellen niet mee, anders zou de widget naar zichzelf verwijzen.
 
 Als er bovendien vermeldingen ontbreken, is „Alleen kopteksten uit titel- en
 tekstblokken” ingeschakeld en staat de ontbrekende koptekst in een ander
 bouwsteen. Als je de schakelaar uitschakelt, wordt deze opgenomen.
 
-## Er worden kopteksten weergegeven die helemaal geen paragrafen zijn.
+## Er worden kopteksten weergegeven die helemaal geen alinea’s zijn.
 
 Andere widgets hebben hun eigen koppen — de titels van een nieuwslijst
 bijvoorbeeld. Als die in de lijst staan, is „Alleen koppen uit titel- en
@@ -44,16 +39,11 @@ kwart van het venster heeft bereikt. Helemaal bovenaan de pagina staat deze bij 
 — of, als er geen titel is ingevoerd, bij het eerste item. Wie „Beweging
 verminderen“ heeft ingesteld, ziet het springen in plaats van glijden — dat is de bedoeling.
 
-## Een nieuwe of hernoemde kop ontbreekt.
-
-De lijst is afkomstig van de laatste opslag van het widget-dialoogvenster. Open het dialoogvenster en
-sla de wijziging op.
-
 ## Kan de volgorde worden gewijzigd?
 
 Nee. De lijst volgt de volgorde in de tekst. Wie de volgorde van de verwijzingen
-wil wijzigen, past de volgorde van de paragrafen aan.
+wil wijzigen, wijzigt de volgorde van de paragrafen.
 
-## Twee kopteksten hebben dezelfde naam — springt de link dan naar de juiste kop?
+## Twee koppen hebben dezelfde naam — springt de link dan naar de juiste plek?
 
 Ja. De links onthouden de kop zelf, niet de naam ervan.

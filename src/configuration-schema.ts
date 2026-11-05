@@ -17,7 +17,6 @@ import { JSONSchema7 } from "json-schema";
 export const LEVEL_ATTRIBUTE = "level";
 export const HEADING_ATTRIBUTE = "heading";
 export const BLOCKS_ATTRIBUTE = "blocks";
-export const HEADINGS_ATTRIBUTE = "headings";
 
 /** Die Überschriftenebenen, die HTML kennt. */
 export const HEADING_LEVELS = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
@@ -63,14 +62,6 @@ export const configurationSchema: JSONSchema7 = {
       title: "Nur Überschriften aus Title- und Text-Blöcken",
       default: DEFAULT_BLOCKS_ONLY,
     },
-    // Im Studio ausgeblendet und beim Öffnen des Dialogs aus der Seite
-    // befüllt (heading-capture.tsx). Ein Feld und kein Attribut, das das
-    // Widget selbst setzt: Staffbase speichert nur, was im Formular steht.
-    [HEADINGS_ATTRIBUTE]: {
-      type: "string",
-      title: "Überschriften der Seite",
-      default: "",
-    },
   },
 };
 
@@ -94,12 +85,6 @@ export const uiSchema: UiSchema = {
       "eigenen Darstellung führen. Auf Seiten ohne Content Designer wirkt " +
       "der Schalter nicht — dort gibt es die Bausteine nicht, nach denen er " +
       "unterscheidet.",
-  },
-  [HEADINGS_ATTRIBUTE]: {
-    "ui:help":
-      "Wird beim Öffnen dieses Dialogs aus der Seite übernommen und beim " +
-      "Speichern festgehalten. Nach Änderungen an den Überschriften den " +
-      "Dialog erneut öffnen und speichern.",
   },
 };
 

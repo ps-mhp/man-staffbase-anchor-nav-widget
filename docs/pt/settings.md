@@ -1,27 +1,14 @@
-# Configurações
+# Definições
 
-## Importar títulos
+## Nível de título
 
-O widget não lê os títulos na página publicada, mas sim
-durante a edição no Studio: assim que a caixa de diálogo de configurações do widget se abrir,
-este importa os títulos da página. Na parte inferior da caixa de diálogo, é indicado quantos
-foram importados, por exemplo, «22 títulos da página importados (H1: 12 · H2: 10)».
+O nível que a lista apresenta: **H1** a **H6**. O valor predefinido é **H2**.
 
-Em seguida, guarde. Só então a página publicada terá acesso à lista.
+Trata-se de exatamente um nível, não «a partir deste nível». Quem selecionar H2 obterá o H2
+da página — os H3 abaixo deste ficam de fora.
 
-Se os títulos da página forem alterados, abra novamente a caixa de diálogo e guarde —
-caso contrário, o widget exibirá a versão antiga. Os títulos que já não existem
-são automaticamente removidos.
-
-## Nível dos títulos
-
-Qual o nível que a lista apresenta: **H1** a **H6**. O valor predefinido é **H2**.
-
-Trata-se de exatamente um nível, não «a partir deste nível». Quem selecionar H2 obtém os H2
-da página — os H3 abaixo ficam de fora.
-
-Se o widget não mostrar nada, significa que a página não utiliza esse nível. Nesse caso, verifique no texto
-qual o nível que as secções têm efetivamente.
+Se o widget não apresentar nada, significa que a página não utiliza esse nível. Nesse caso, verifique no texto
+qual é, de facto, o nível das secções.
 
 ## Título
 
@@ -45,5 +32,5 @@ Estes não são secções da página, e uma referência a eles remete para um
 local que o leitor não espera.
 
 Em páginas sem o Content Designer, o botão não funciona. Nelas não existem os
-elementos com base nos quais ele faz a distinção, e a lista mostra, como até agora,
+elementos com base nos quais ele faz a distinção, e a lista mostra, como antes,
 todos os títulos desse nível — um widget vazio não teria sentido nesse contexto.
