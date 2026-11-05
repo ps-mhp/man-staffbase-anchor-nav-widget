@@ -1,49 +1,42 @@
 # Configuración
 
-## Aplicar encabezados
-
-El widget no lee los encabezados de la página publicada, sino
-mientras se edita en Studio: en cuanto se abre el cuadro de diálogo de configuración del widget,
-este aplica los encabezados de la página. En la parte inferior del cuadro de diálogo se indica cuántos
-se han importado, por ejemplo, «Se han importado 22 encabezados de la página (H1: 12 · H2: 10)».
-
-A continuación, guarda los cambios. Solo entonces la página publicada reconocerá la lista.
-
-Si cambian los encabezados de la página, vuelve a abrir el cuadro de diálogo y guarda los cambios;
-de lo contrario, el widget mostrará la información antigua. Los encabezados que ya no existan
-se eliminarán automáticamente.
-
-## Nivel de encabezado
-
-Nivel que muestra la lista: de **H1** a **H6**. El valor predeterminado es **H2**.
-
-Se trata de un único nivel, no de «a partir de este nivel». Si se selecciona H2, se mostrarán los H2
-de la página; los H3 que estén por debajo quedarán excluidos.
-
-Si el widget no muestra nada, significa que la página no utiliza ese nivel. En ese caso, comprueba en el texto
-qué nivel tienen realmente las secciones.
-
 ## Título
 
-El título que aparece encima de la lista, por ejemplo, «De un vistazo». Si se deja en blanco,
-se oculta; la lista permanece.
+El encabezado que aparece sobre la lista, por ejemplo, «De un vistazo». Si lo dejas en blanco
+, se oculta; la lista permanece.
 
-El título se traduce junto con la página. Las entradas de la lista no necesitan
-eso: son los encabezados de la página y ya llevan su traducción
-de todos modos.
+El título se traduce junto con la página.
 
-## Solo encabezados de bloques «Title» y «Text»
+## Enlaces
 
-Activado de forma predeterminada. En ese caso, la lista solo cuenta los encabezados que se encuentran en un
-bloque **Title** o **Text**, es decir, las secciones que tú mismo
-has escrito.
+Las entradas de la lista. En Studio, en este lugar hay un editor con una
+línea por enlace. Se abre con **Editar enlaces**; con **Añadir enlace**
+se añade una línea, y con la papelera se elimina. El
+orden se cambia con el controlador de la izquierda: arrastra o selecciona el controlador y
+muévelo con las teclas de flecha arriba y abajo. **Aplicar** guarda la
+lista en el cuadro de diálogo; a continuación, guarda como de costumbre.
 
-Si está desactivada, se cuentan todos los encabezados de ese nivel que aparecen en la página. Esto
-incluye también aquellos que otros widgets muestran en su propia presentación: los
-títulos de una lista de noticias, por ejemplo, o las etiquetas de un portafolio.
-Estos no forman parte de la página, y un enlace a ellos lleva a un
-lugar que el lector no espera.
+Cada línea tiene dos campos:
 
-En las páginas sin Content Designer, el conmutador no funciona. Allí no existen los
-elementos en función de los cuales distingue, y la lista muestra, como hasta ahora,
-todos los encabezados de ese nivel; un widget vacío no tendría sentido en ese contexto.
+- **Texto del enlace**: lo que aparece en la lista. Obligatorio: una entrada sin texto de enlace
+  no se muestra.
+- **Destino**: a dónde lleva la entrada.
+  - **Vacío:** al título de la página que tiene el mismo nombre que el texto del enlace.
+  - **Texto de un título:** a ese título. De este modo, la entrada puede tener un nombre más corto
+    que el apartado, por ejemplo, «Equipamiento» en lugar de «Equipamiento en detalle».
+  - **Una dirección** que comience por `#`, `/`, `http://`, `https://` o `mailto:`
+    : un enlace normal que sigue el navegador.
+
+A la hora de comparar con el título, lo que cuenta es el texto, no el nivel —de H1 a H6
+son destinos equivalentes. Los espacios múltiples no influyen,
+pero sí se distingue entre mayúsculas y minúsculas. Si hay varios encabezados con el mismo texto,
+la entrada salta al primero.
+
+Si en algún momento no aparece el editor, habrá un campo de texto con la lista en formato
+JSON, por ejemplo:
+
+```json
+[{ "label": "Equipamiento", "target": "Equipamiento en detalle" }]
+```
+
+`label` es el texto del enlace, `target` es el destino (opcional).

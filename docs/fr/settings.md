@@ -1,48 +1,42 @@
 # Paramètres
 
-## Reprendre les titres
-
-Le widget ne lit pas les titres sur la page publiée, mais
-lors de la modification dans Studio : dès que la boîte de dialogue des paramètres du widget s'ouvre,
-il reprend les titres de la page. En bas de la boîte de dialogue, le nombre de
-titres récupérés est indiqué, par exemple « 22 titres de la page récupérés (H1 : 12 · H2 : 10) ».
-
-Enregistrez ensuite. Ce n’est qu’à ce moment-là que la page publiée prendra en compte la liste.
-
-Si les titres de la page changent, rouvrez la boîte de dialogue et enregistrez —
-sinon, le widget affichera l'ancienne version. Les titres qui n'existent plus
-sont automatiquement supprimés.
-
-## Niveau des titres
-
-Niveau affiché par la liste : **H1** à **H6**. La valeur par défaut est **H2**.
-
-Il s’agit d’un niveau précis, et non pas « à partir de ce niveau ». Si vous sélectionnez H2, vous obtiendrez les H2
-de la page — les H3 situés en dessous ne seront pas pris en compte.
-
-Si le widget n’affiche rien, cela signifie que la page n’utilise pas ce niveau. Vérifiez alors dans le texte
-quel niveau les sections ont réellement.
-
 ## Titre
 
-Le titre au-dessus de la liste, par exemple « En un coup d’œil ». Si vous laissez ce champ vide,
-il est masqué ; la liste reste affichée.
+Le titre au-dessus de la liste, par exemple « En un coup d'œil ». Si vous laissez ce champ vide,
+le titre est masqué ; la liste reste affichée.
 
-Le titre est traduit avec la page. Les éléments de la liste n’en ont pas besoin
-: ce sont les titres de la page et ils portent de toute façon leur traduction.
+Le titre est traduit avec la page.
 
-## Uniquement les titres des blocs **Title** et **Text**
+## Liens
 
-Activé par défaut. Dans ce cas, la liste ne prend en compte que les titres figurant dans un
-bloc **Title** ou **Text** — c’est-à-dire les sections que vous avez vous-même
-rédigées.
+Les éléments de la liste. Dans Studio, cet emplacement contient un éditeur avec une
+ligne par lien. Cliquez sur **Modifier les liens** pour l’ouvrir, sur **Ajouter un lien**
+pour ajouter une ligne, et sur la corbeille pour la supprimer. Vous pouvez
+modifier l’ordre à l’aide de la poignée à gauche : faites-la glisser, ou sélectionnez-la et utilisez
+les touches fléchées pour la déplacer vers le haut ou vers le bas. **Appliquer** enregistre la
+liste dans la boîte de dialogue ; enregistrez ensuite comme d’habitude.
 
-Lorsqu’elle est désactivée, chaque titre de ce niveau présent sur la page est pris en compte. Cela
-inclut également ceux que d’autres widgets affichent dans leur propre présentation : les
-titres d’une liste d’actualités, par exemple, ou les légendes d’un portfolio.
-Ceux-ci ne constituent pas une section de la page, et un lien vers eux renvoie à un
-endroit auquel le lecteur ne s’attend pas.
+Chaque ligne comporte deux champs :
 
-Sur les pages sans Content Designer, le bouton ne fonctionne pas. Ces pages ne disposent pas des
-éléments sur lesquels il se base pour faire la distinction, et la liste affiche comme auparavant
-tous les titres de ce niveau — un widget vide serait en effet inexplicable dans ce contexte.
+- **Texte du lien** — ce qui apparaît dans la liste. Obligatoire : une entrée sans texte de lien
+  n’est pas affichée.
+- **Destination** — où mène l’entrée.
+  - **Vide :** vers le titre de la page portant le même nom que le texte du lien.
+  - **Texte d’un titre :** vers ce titre. L’entrée peut ainsi être plus courte
+    que le titre de la section, par exemple « Équipement » pour « Équipement en détail ».
+  - **Une adresse** commençant par `#`, `/`, `http://`, `https://` ou `mailto:`
+    : un lien classique que le navigateur suit.
+
+Lors de la comparaison avec le titre, c’est le texte qui compte, pas le niveau — H1 à H6
+sont toutes des cibles au même titre. Les espaces multiples n’ont aucune importance,
+contrairement à la distinction entre majuscules et minuscules. S’il existe plusieurs titres identiques,
+l’entrée renvoie vers le premier.
+
+Si l’éditeur n’apparaît pas, un champ de texte contenant la liste au format
+JSON s’affiche, par exemple :
+
+```json
+[{ "label": "Équipement", "target": "Équipement en détail" }]
+```
+
+`label` correspond au texte du lien, `target` à la cible (facultative).

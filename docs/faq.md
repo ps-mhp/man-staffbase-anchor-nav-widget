@@ -2,58 +2,50 @@
 
 ## Das Widget zeigt nichts an.
 
-Wurde der Einstellungsdialog des Widgets seit dem Einfügen noch nie geöffnet
-und gespeichert, kennt es die Überschriften der Seite nicht. Im Studio den
-Dialog öffnen, die Zahl der übernommenen Überschriften prüfen, speichern.
+Es gibt noch keinen Eintrag mit Linktext. Im Studio den Dialog öffnen, über
+**Links bearbeiten** Einträge anlegen, übernehmen und speichern. Ein leeres
+Widget gibt nichts aus — auch keinen leeren Kasten und keinen Titel.
 
-Steht dort „0 Überschriften", findet das Studio keine — dann hilft auch das
-Speichern nicht. Andernfalls: Die Seite hat keine Überschrift der eingestellten Ebene. Eine andere Ebene
-wählen oder im Text eine Überschrift setzen. Ein leeres Widget gibt nichts aus —
-auch keinen leeren Kasten und keinen Titel.
+## Ein Eintrag fehlt in der Liste.
 
-## Es zeigt zu wenige Überschriften.
+Ihm fehlt der Linktext. Im Editor steht dann unter der Zeile „Ohne Linktext wird
+dieser Eintrag nicht angezeigt."
 
-Überschriften mit leerem Text werden übergangen. Und Überschriften innerhalb des
-Widgets selbst zählen nicht mit, sonst verwiese es auf sich.
+## Ein Klick springt nicht.
 
-Fehlen darüber hinaus Einträge, ist „Nur Überschriften aus Title- und
-Text-Blöcken" eingeschaltet und die vermisste Überschrift steht in einem anderen
-Baustein. Den Schalter ausschalten nimmt sie auf.
+Die Überschrift mit genau diesem Text gibt es auf der Seite nicht. Verglichen
+wird mit dem Ziel, oder — ist das Ziel leer — mit dem Linktext. Ein Tippfehler,
+eine andere Groß- und Kleinschreibung oder eine inzwischen umbenannte
+Überschrift reichen. Den Text von der Überschrift kopieren und ins Ziel
+einsetzen.
 
-## Es zeigt Überschriften, die gar keine Abschnitte sind.
+Überschriften in einer Ankernavigation zählen nie als Ziel — auch nicht der
+Titel eines zweiten Widgets auf derselben Seite.
 
-Andere Widgets führen eigene Überschriften — die Titel einer Nachrichtenliste
-etwa. Stehen die in der Liste, ist „Nur Überschriften aus Title- und
-Text-Blöcken" ausgeschaltet. Einschalten beschränkt die Liste auf die
-Abschnitte, die du selbst geschrieben hast.
+## Auf übersetzten Seiten springt ein Klick nicht.
 
-Bleiben sie auch danach stehen, liegt die Seite nicht im Content Designer. Dort
-gibt es die Bausteine nicht, nach denen der Schalter unterscheidet, und er wirkt
-nicht.
+Die Überschriften der Seite werden übersetzt, Linktext und Ziel nicht. In der
+anderen Sprache findet der Eintrag seine Überschrift dann nicht mehr, und die
+Liste zeigt weiter die Linktexte in der Sprache, in der sie gepflegt wurden.
 
-## Es zeigt seinen eigenen Titel als Eintrag.
+## Die rote Marke folgt dem Scrollen nicht.
 
-Das sollte nicht vorkommen. Tritt es doch auf, steht die Überschrift außerhalb
-des Widget-Containers — etwa als eigener Textblock darüber. Dann entweder den
-Titel des Widgets verwenden oder eine Ebene wählen, die der Textblock nicht hat.
-
-## Die rote Marke springt nicht mit.
-
-Sie folgt dem Scrollen und bleibt bei der Überschrift, die zuletzt das obere
-Viertel des Fensters erreicht hat. Ganz oben auf der Seite steht sie beim Titel
-— oder, wenn kein Titel eingetragen ist, beim ersten Eintrag. Wer „Bewegung
-reduzieren" eingestellt hat, sieht sie springen statt gleiten — das ist Absicht.
-
-## Eine neue oder umbenannte Überschrift fehlt.
-
-Die Liste stammt vom letzten Speichern des Widget-Dialogs. Den Dialog öffnen und
-speichern nimmt die Änderung auf.
+Das ist Absicht. Sie steht beim Eintrag, der zuletzt angeklickt wurde. Vor dem
+ersten Klick steht sie beim Titel — oder, wenn kein Titel eingetragen ist, beim
+ersten Eintrag. Öffnet jemand die Seite über einen Verweis mit Sprungmarke,
+etwa `…#ausstattung`, steht sie bei diesem Eintrag.
 
 ## Lässt sich die Reihenfolge ändern?
 
-Nein. Die Liste folgt der Reihenfolge im Text. Wer die Reihenfolge der Verweise
-ändern will, ändert die Reihenfolge der Abschnitte.
+Ja. Im Editor am Griff links ziehen, oder den Griff anwählen und mit den
+Pfeiltasten verschieben. Die Liste muss nicht der Reihenfolge der Seite folgen.
 
-## Zwei Überschriften heißen gleich — springt der Verweis richtig?
+## Zwei Überschriften heißen gleich — wohin springt der Verweis?
 
-Ja. Die Verweise merken sich die Überschrift selbst, nicht ihren Namen.
+Zur ersten auf der Seite. Soll er zur zweiten springen, hilft nur, die
+Überschriften unterschiedlich zu benennen.
+
+## Kann ein Eintrag auf eine andere Seite verweisen?
+
+Ja. Als Ziel eine Adresse eintragen, die mit `/`, `http://` oder `https://`
+beginnt. Der Klick folgt ihr wie jedem anderen Verweis.

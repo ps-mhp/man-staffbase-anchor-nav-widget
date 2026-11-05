@@ -2,58 +2,50 @@
 
 ## El widget no muestra nada.
 
-Si el cuadro de diálogo de configuración del widget no se ha abierto
-ni guardado desde que se insertó, no reconoce los encabezados de la página. En Studio,
-abre el cuadro de diálogo, comprueba el número de encabezados aplicados y guarda los cambios.
+Aún no hay ninguna entrada con texto de enlace. Abre el cuadro de diálogo en Studio, crea entradas a través de
+**Editar enlaces**, aplica los cambios y guarda. Un widget vacío
+no muestra nada, ni siquiera un recuadro vacío ni un título.
 
-Si aparece «0 encabezados», significa que Studio no encuentra ninguno; en ese caso,
-guardar los cambios tampoco servirá de nada. De lo contrario: la página no tiene ningún encabezado del nivel configurado. Selecciona otro nivel
-o establece un encabezado en el texto. Un widget vacío no muestra nada,
-ni siquiera un recuadro vacío ni un título.
+## Falta una entrada en la lista.
 
-## Muestra muy pocos encabezados.
+Le falta el texto del enlace. En el editor aparecerá entonces debajo de la línea «Sin texto de enlace,
+esta entrada no se mostrará».
 
-Los encabezados con texto vacío se omiten. Y los encabezados dentro del
-propio widget no cuentan, ya que, de lo contrario, se referirían a sí mismos.
+## Al hacer clic no se abre el enlace.
 
-Si, además, faltan entradas, la opción «Solo encabezados de bloques de título y
-texto» está activada y el encabezado que falta se encuentra en otro
-módulo. Al desactivar la opción, se incluirá dicho encabezado.
+El título con ese texto exacto no existe en la página. La comparación
+se realiza con el destino o —si el destino está vacío— con el texto del enlace. Basta con un error tipográfico,
+una diferencia en mayúsculas y minúsculas o un título que haya cambiado de nombre
+entretanto. Copia el texto del título y pégalo en el destino
+.
 
-## Muestra encabezados que no son secciones.
+Los encabezados de una navegación por anclajes nunca cuentan como destino, ni siquiera el
+título de un segundo widget en la misma página.
 
-Otros widgets tienen sus propios encabezados, como los títulos de una lista de noticias,
-por ejemplo. Si aparecen en la lista, la opción «Solo encabezados de bloques de título y
-texto» está desactivada. Al activarla, la lista se limita a las
-secciones que tú mismo has escrito.
+## En las páginas traducidas, al hacer clic no se produce el salto.
 
-Si siguen apareciendo después de eso, la página no se encuentra en el Content Designer. Allí
-no existen los bloques según los cuales se distingue el interruptor, por lo que este
-no funciona.
+Los encabezados de la página se traducen, pero el texto del enlace y el destino no. En el
+otro idioma, la entrada ya no encuentra su título, y la
+lista sigue mostrando los textos de los enlaces en el idioma en el que se crearon.
 
-## Muestra su propio título como entrada.
+## El marcador rojo no sigue el desplazamiento.
 
-Esto no debería ocurrir. Si, a pesar de todo, ocurre, el encabezado se encuentra fuera
-del contenedor del widget —por ejemplo, como un bloque de texto independiente encima de él—. En ese caso, utiliza el
-título del widget o selecciona un nivel que el bloque de texto no tenga.
-
-## El marcador rojo no se desplaza con el contenido.
-
-Sigue el desplazamiento y permanece junto al título que haya alcanzado en último lugar el
-cuarto superior de la ventana. En la parte superior de la página, se sitúa junto al título
-—o, si no hay ningún título introducido, junto a la primera entrada. Quien haya activado la opción «Reducir
-el movimiento» verá que salta en lugar de deslizarse; esto es intencionado.
-
-## Falta un encabezado nuevo o renombrado.
-
-La lista procede del último guardado del cuadro de diálogo del widget. Abre el cuadro de diálogo y
-guarda para que se aplique el cambio.
+Esto es intencionado. Se queda en la entrada en la que se ha hecho clic por última vez. Antes del
+primer clic, se sitúa junto al título o, si no hay ningún título, junto a la
+primera entrada. Si alguien abre la página a través de un enlace con marcador de salto,
+por ejemplo, `…#equipamiento`, se sitúa junto a esa entrada.
 
 ## ¿Se puede cambiar el orden?
 
-No. La lista sigue el orden del texto. Si quieres cambiar el orden de los enlaces,
-cambia el orden de las secciones.
+Sí. En el editor, arrastra el controlador de la izquierda o selecciona el controlador y muévelo con las
+teclas de flecha. La lista no tiene por qué seguir el orden de la página.
 
-## Hay dos títulos con el mismo nombre: ¿el enlace funciona correctamente?
+## Dos encabezados tienen el mismo nombre: ¿a cuál lleva el enlace?
 
-Sí. Los enlaces memorizan el título en sí, no su nombre.
+Al primero de la página. Si quieres que lleve al segundo, la única solución es
+dar nombres diferentes a los títulos.
+
+## ¿Puede una entrada enlazar a otra página?
+
+Sí. Introduce como destino una dirección que empiece por `/`, `http://` o `https://`.
+Al hacer clic, se abrirá como cualquier otro enlace.

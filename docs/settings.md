@@ -1,49 +1,42 @@
 # Einstellungen
 
-## Überschriften übernehmen
-
-Das Widget liest die Überschriften nicht auf der veröffentlichten Seite, sondern
-beim Bearbeiten im Studio: Sobald sich der Einstellungsdialog des Widgets öffnet,
-übernimmt er die Überschriften der Seite. Unten im Dialog steht, wie viele
-angekommen sind, etwa „22 Überschriften der Seite übernommen (H1: 12 · H2: 10)".
-
-Danach speichern. Erst dann kennt die veröffentlichte Seite die Liste.
-
-Ändern sich Überschriften der Seite, den Dialog erneut öffnen und speichern —
-sonst zeigt das Widget den alten Stand. Überschriften, die es nicht mehr gibt,
-fallen von selbst weg.
-
-## Überschriftenebene
-
-Welche Ebene die Liste zeigt: **H1** bis **H6**. Vorgabe ist **H2**.
-
-Es ist genau eine Ebene, nicht „ab dieser Ebene". Wer H2 wählt, bekommt die H2
-der Seite — die H3 darunter bleiben außen vor.
-
-Zeigt das Widget nichts, verwendet die Seite diese Ebene nicht. Dann im Text
-nachsehen, welche Ebene die Abschnitte tatsächlich tragen.
-
 ## Titel
 
 Die Überschrift über der Liste, zum Beispiel „Auf einen Blick". Leer lassen
 blendet sie aus; die Liste bleibt.
 
-Der Titel wird mit der Seite übersetzt. Die Einträge der Liste brauchen das
-nicht — sie sind die Überschriften der Seite und tragen deren Übersetzung
-ohnehin.
+Der Titel wird mit der Seite übersetzt.
 
-## Nur Überschriften aus Title- und Text-Blöcken
+## Links
 
-Ab Werk eingeschaltet. Dann zählt die Liste nur Überschriften, die in einem
-**Title**- oder **Text**-Block stehen — also die Abschnitte, die du selbst
-geschrieben hast.
+Die Einträge der Liste. Im Studio steht an dieser Stelle ein Editor mit einer
+Zeile je Link. Über **Links bearbeiten** öffnet er sich, über **Link
+hinzufügen** kommt eine Zeile dazu, der Papierkorb entfernt sie. Die
+Reihenfolge änderst du am Griff links: ziehen, oder den Griff anwählen und mit
+den Pfeiltasten nach oben und unten verschieben. **Übernehmen** schreibt die
+Liste in den Dialog, danach wie gewohnt speichern.
 
-Ausgeschaltet zählt jede Überschrift der Ebene, die auf der Seite steht. Dazu
-gehören auch die, die andere Widgets in ihrer eigenen Darstellung führen: die
-Titel einer Nachrichtenliste etwa, oder die Beschriftungen eines Portfolios.
-Die sind kein Abschnitt der Seite, und ein Verweis darauf springt an eine
-Stelle, die der Leser nicht erwartet.
+Jede Zeile hat zwei Felder:
 
-Auf Seiten ohne Content Designer wirkt der Schalter nicht. Dort gibt es die
-Bausteine nicht, nach denen er unterscheidet, und die Liste zeigt wie bisher
-alle Überschriften der Ebene — ein leeres Widget wäre dort nicht zu erklären.
+- **Linktext** — was in der Liste steht. Pflicht: ein Eintrag ohne Linktext
+  wird nicht angezeigt.
+- **Ziel** — wohin der Eintrag springt.
+  - **Leer:** zur Überschrift auf der Seite, die genauso heißt wie der Linktext.
+  - **Text einer Überschrift:** zu dieser Überschrift. So kann der Eintrag kürzer
+    heißen als der Abschnitt, etwa „Ausstattung" für „Ausstattung im Detail".
+  - **Eine Adresse**, die mit `#`, `/`, `http://`, `https://` oder `mailto:`
+    beginnt: ein gewöhnlicher Verweis, dem der Browser folgt.
+
+Beim Vergleich mit der Überschrift zählt der Text, nicht die Ebene — H1 bis H6
+sind gleichermaßen Ziel. Mehrfache Leerzeichen spielen keine Rolle,
+Groß- und Kleinschreibung schon. Gibt es mehrere gleichlautende Überschriften,
+springt der Eintrag zur ersten.
+
+Erscheint der Editor einmal nicht, steht dort ein Textfeld mit der Liste als
+JSON, zum Beispiel:
+
+```json
+[{ "label": "Ausstattung", "target": "Ausstattung im Detail" }]
+```
+
+`label` ist der Linktext, `target` das Ziel (optional).

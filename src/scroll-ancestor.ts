@@ -15,14 +15,9 @@
  * Den rollfähigen Vorfahren einer Überschrift bestimmen — über Shadow-Root-
  * Grenzen hinweg.
  *
- * Zwei Stellen im Widget brauchen dieselbe Antwort: der Klick muss den
- * richtigen Bereich rollen (`window.scrollTo` rollt ausschließlich das
- * Hauptdokument, trifft also im Content Designer, wo die Leinwand in einem
- * eigenen Container rollt, daneben), und der Scroll-Spy muss auf genau
- * diesem Bereich zuhören (`scroll` ist nicht `composed` und steigt über eine
- * Shadow-Root-Grenze nie bis zum `document` auf). Eine gemeinsame Funktion
- * verhindert, dass beide Stellen bei einer künftigen Änderung auseinander-
- * laufen.
+ * Der Klick muss den richtigen Bereich rollen: `window.scrollTo` rollt
+ * ausschließlich das Hauptdokument und trifft im Content Designer, wo die
+ * Leinwand in einem eigenen Container rollt, daneben.
  */
 
 /**
@@ -83,59 +78,4 @@ export function findScrollParent(element: HTMLElement): HTMLElement | null {
     node = parentOrHost(node);
   }
   return null;
-}
-
-/**
- * Je Element der nächste rollfähige Vorfahre, ohne Duplikate — nicht die
- * ganze Kette: liegt ein Element in einem geschachtelten Container (ein
- * Roller innerhalb eines weiteren Rollers), liefert diese Funktion nur den
- * inneren.
- *
- * Für den Scroll-Spy heißt das: ein äußerer Roller, der selbst scrollt,
- * ohne dass der innere mitläuft, bleibt unbeobachtet — eine Überschrift
- * könnte dadurch ins Erfassungsband wandern, ohne dass `useActiveHeading`
- * davon erfährt. Bewusst nicht behoben: geschachtelte Scroll-Container
- * innerhalb eines Shadow-Root-Blocks sind im Content Designer kein
- * dokumentierter oder beobachteter Fall (ein Block bekommt einen Roller,
- * keine mehreren ineinander), und die ganze Kette zu liefern verdoppelt die
- * Zahl der Lauscher für einen Fall, der bislang spekulativ ist. Träfe er doch
- * ein, ist hier die Stelle, die `parentOrHost`-Schleife nicht beim ersten
- * Treffer abbrechen zu lassen.
- *
- * Mehrere Überschriften können denselben Container teilen (nur einmal
- * anmelden) oder in getrennten Containern liegen (auf jeden einzeln
- * zuhören) — das deckt diese Funktion ab.
- */
-export function findScrollParents(elements: readonly HTMLElement[]): HTMLElement[] {
-  // `isScrollableElement` ruft `getComputedStyle` und liest `scrollHeight`
-  // und `clientHeight` — jedes davon zwingt den Browser zu einem Layout.
-  // Alle Überschriften einer Seite teilen sich den größten Teil ihrer
-  // Vorfahrenkette; ohne dieses Gedächtnis wird jeder gemeinsame Vorfahre
-  // einmal je Überschrift vermessen. Bei zwanzig Überschriften und tiefer
-  // Schachtelung sind das vierstellig viele erzwungene Layouts je Scan.
-  const urteil = new Map<HTMLElement, boolean>();
-  const rollt = (node: HTMLElement): boolean => {
-    const bekannt = urteil.get(node);
-    if (bekannt !== undefined) return bekannt;
-    const frisch = isScrollableElement(node);
-    urteil.set(node, frisch);
-    return frisch;
-  };
-
-  const seen = new Set<HTMLElement>();
-  const result: HTMLElement[] = [];
-  for (const element of elements) {
-    let node = parentOrHost(element);
-    while (node !== null) {
-      if (node instanceof HTMLElement && rollt(node)) break;
-      node = parentOrHost(node);
-    }
-
-    const scrollParent = node instanceof HTMLElement ? node : null;
-    if (scrollParent !== null && !seen.has(scrollParent)) {
-      seen.add(scrollParent);
-      result.push(scrollParent);
-    }
-  }
-  return result;
 }

@@ -1,20 +1,23 @@
 # Navigation par ancres
 
-Le widget analyse les titres de la page et affiche ceux d'un même niveau — H1 à
-H6 — sous forme de liste de liens. Un clic permet d'accéder directement à l'endroit correspondant ; pendant la lecture,
-un marqueur rouge se déplace vers le titre sur lequel on se trouve actuellement.
+Ce widget affiche une liste de liens que vous gérez vous-même. Un clic
+vous permet d'accéder directement au titre correspondant sur la page ; un marqueur rouge indique quelle
+entrée a été cliquée en dernier.
 
-La liste est générée lors de l’affichage de la page. Il n’y a rien à gérer : si vous
-renommez, déplacez ou supprimez un titre, cela modifie automatiquement la navigation.
+La liste ne se crée pas toute seule. C’est vous qui définissez, dans la boîte de dialogue des paramètres, quelles
+entrées sont disponibles, comment elles s’appellent et dans quel ordre elles apparaissent. Le
+widget n’effectue une recherche sur la page que lorsqu’un utilisateur clique sur une entrée — lors du
+chargement de la page, il n’effectue aucune opération en arrière-plan.
 
 ## À quoi cela sert-il ?
 
-Aux longues pages présentant une structure claire — un modèle de voiture avec ses équipements,
-une directive avec ses sections. Cela ne vaut pas la peine sur les pages courtes.
+Les pages longues avec une structure claire — un modèle de véhicule et ses équipements,
+une directive et ses sections. Cela ne vaut pas la peine sur les pages courtes.
 
 ## Ce qu’il ne fait pas
 
-- **Ne renvoie pas vers d’autres pages.** Tous les liens restent sur cette page.
-  Pour les liens vers d’autres pages, il existe le widget de navigation.
-- **Pas d’imbrication.** Il n’affiche qu’un seul niveau, pas d’arborescence.
-- **Ne crée pas de titres.** Il ne détecte que ce qui figure déjà dans le texte.
+- **Il ne détecte pas les titres de lui-même.** Chaque entrée est créée manuellement.
+  Si une section est ajoutée à la page, elle doit également figurer dans la liste.
+- **Ne suit pas le défilement.** Le curseur ne suit pas le défilement, mais reste sur la
+  dernière entrée cliquée.
+- **Pas de hiérarchie imbriquée.** La liste est plate, ce n’est pas une arborescence.

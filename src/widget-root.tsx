@@ -13,20 +13,15 @@
 
 import React, { useMemo } from "react";
 
+import { parseAnchorLinks } from "./anchor-links";
 import { AnchorNav } from "./anchor-nav";
-import { HeadingLevel } from "./configuration-schema";
-import { readHeadings } from "./heading-scan";
-import { useResolvedHeadings } from "./use-resolved-headings";
 
 export interface AnchorNavWidgetProps {
-  readonly level: HeadingLevel;
   readonly heading: string | null;
-  /** Der eigene Container. Alles darin bleibt bei der Suche außen vor. */
+  /** Das Attribut `links`, roh (siehe `parseAnchorLinks`). */
+  readonly links: unknown;
+  /** Der eigene Container. Überschriften darin sind kein Sprungziel. */
   readonly self: HTMLElement | null;
-  /** Nur Überschriften aus Title- und Text-Blöcken zeigen. */
-  readonly blocksOnly: boolean;
-  /** Das Attribut `headings`, wie es im Studio erfasst wurde (roh, siehe `readHeadings`). */
-  readonly headings: unknown;
 }
 
 /**
@@ -36,14 +31,7 @@ export interface AnchorNavWidgetProps {
  * Anmeldung beim Host und dem Lesen der Attribute, und ein Test müsste das
  * ganze Modul samt `defineBlock` laden, um eine Liste zu prüfen.
  */
-export function AnchorNavWidget({
-  level,
-  heading,
-  self,
-  blocksOnly,
-  headings: raw,
-}: AnchorNavWidgetProps): React.ReactElement | null {
-  const texts = useMemo(() => readHeadings(raw), [raw]);
-  const headings = useResolvedHeadings(texts, level, blocksOnly, self);
-  return <AnchorNav headings={headings} heading={heading} />;
+export function AnchorNavWidget({ heading, links: raw, self }: AnchorNavWidgetProps): React.ReactElement | null {
+  const links = useMemo(() => parseAnchorLinks(raw), [raw]);
+  return <AnchorNav links={links} heading={heading} self={self} />;
 }

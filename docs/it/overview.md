@@ -1,20 +1,23 @@
 # Navigazione tramite ancore
 
-Il widget legge i titoli della pagina e mostra quelli di un determinato livello — da H1 a
-H6 — sotto forma di elenco di collegamenti. Cliccando su uno di essi si passa direttamente a quel punto; durante la lettura,
-un indicatore rosso si sposta sul titolo in cui ci si trova in quel momento.
+Il widget mostra un elenco di collegamenti che gestisci tu stesso. Cliccando su uno di essi
+si passa al titolo corrispondente nella pagina; un indicatore rosso mostra quale
+voce è stata cliccata per ultima.
 
-L'elenco viene generato al momento della visualizzazione della pagina. Non c'è nulla da gestire: chi
-rinomina, sposta o elimina un titolo, modifica di conseguenza la navigazione.
+L'elenco non viene generato automaticamente. È l’utente a definire, nella finestra di dialogo delle impostazioni, quali
+voci sono presenti, come si chiamano e in quale ordine sono disposte. Il
+widget esegue la ricerca nella pagina solo quando qualcuno clicca su una voce — durante il
+caricamento della pagina non esegue alcuna operazione in background.
 
 ## A cosa serve
 
-Pagine lunghe con una struttura chiara — un modello di auto con le sue dotazioni,
-una direttiva con le sue sezioni. Su pagine brevi non ne vale la pena.
+Pagine lunghe con una struttura chiara — un modello di auto con i suoi allestimenti,
+una linea guida con le sue sezioni. Nelle pagine brevi non ne vale la pena.
 
 ## Cosa non fa
 
-- **Non rimanda ad altre pagine.** Tutti i collegamenti rimangono all’interno di questa pagina.
-  Per i collegamenti tra pagine diverse c’è il widget di navigazione.
-- **Non supporta il nesting.** Mostra esattamente un livello, non un albero.
-- **Non crea titoli.** Trova solo ciò che è già presente nel testo.
+- **Non individua automaticamente i titoli.** Ogni voce viene creata manualmente.
+  Se alla pagina viene aggiunta una sezione, questa viene inserita nell’elenco.
+- **Non segue lo scorrimento.** L’indicatore non segue lo scorrimento, ma rimane sull’
+  elemento cliccato per ultimo.
+- **Non è gerarchico.** L’elenco è piatto, non è una struttura ad albero.

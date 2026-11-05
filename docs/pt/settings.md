@@ -1,49 +1,42 @@
 # Configurações
 
-## Importar títulos
-
-O widget não lê os títulos na página publicada, mas sim
-durante a edição no Studio: assim que a caixa de diálogo de configurações do widget se abrir,
-este importa os títulos da página. Na parte inferior da caixa de diálogo, é indicado quantos
-foram importados, por exemplo, «22 títulos da página importados (H1: 12 · H2: 10)».
-
-Em seguida, guarde. Só então a página publicada terá acesso à lista.
-
-Se os títulos da página forem alterados, abra novamente a caixa de diálogo e guarde —
-caso contrário, o widget exibirá a versão antiga. Os títulos que já não existem
-são automaticamente removidos.
-
-## Nível dos títulos
-
-Qual o nível que a lista apresenta: **H1** a **H6**. O valor predefinido é **H2**.
-
-Trata-se de exatamente um nível, não «a partir deste nível». Quem selecionar H2 obtém os H2
-da página — os H3 abaixo ficam de fora.
-
-Se o widget não mostrar nada, significa que a página não utiliza esse nível. Nesse caso, verifique no texto
-qual o nível que as secções têm efetivamente.
-
 ## Título
 
-O título acima da lista, por exemplo, «Em resumo». Se deixar em branco,
-este é ocultado; a lista permanece.
+O título acima da lista, por exemplo, «Em resumo». Se o deixares em branco,
+este fica oculto; a lista permanece.
 
-O título é traduzido juntamente com a página. As entradas da lista não precisam disso
-— são os títulos da página e já incluem a respetiva tradução
-de qualquer forma.
+O título é traduzido juntamente com a página.
 
-## Apenas títulos de blocos «Title» e «Text»
+## Links
 
-Ativado por predefinição. Nesse caso, a lista conta apenas os títulos que se encontram num
-bloco **Title** ou **Text** — ou seja, as secções que o próprio
-escreveu.
+Os itens da lista. No Studio, neste local existe um editor com uma
+linha por link. Clica em **Editar links** para o abrir; com **Adicionar
+link**, é adicionada uma linha; a lixeira remove-a. Podes
+alterar a ordem utilizando o manípulo à esquerda: arrasta ou seleciona o manípulo e, com
+as setas para cima e para baixo, desloca-o. **Aplicar** insere a
+lista na caixa de diálogo; depois, guarde como habitualmente.
 
-Quando desativada, conta-se qualquer título desse nível que conste na página. Isso
-inclui também aqueles que outros widgets apresentam na sua própria visualização: os
-títulos de uma lista de notícias, por exemplo, ou as legendas de um portfólio.
-Estes não são secções da página, e uma referência a eles remete para um
-local que o leitor não espera.
+Cada linha tem dois campos:
 
-Em páginas sem o Content Designer, o botão não funciona. Nelas não existem os
-elementos com base nos quais ele faz a distinção, e a lista mostra, como até agora,
-todos os títulos desse nível — um widget vazio não teria sentido nesse contexto.
+- **Texto do link** — o que aparece na lista. Obrigatório: uma entrada sem texto de link
+  não é apresentada.
+- **Destino** — para onde a entrada remete.
+  - **Em branco:** para o título na página com o mesmo nome que o texto do link.
+  - **Texto de um título:** para esse título. Assim, a entrada pode ter um nome mais curto
+    do que a secção, por exemplo, «Equipamento» em vez de «Equipamento em detalhe».
+  - **Um endereço** que comece por `#`, `/`, `http://`, `https://` ou `mailto:`
+    : uma referência normal, que o navegador segue.
+
+Na comparação com o título, o que conta é o texto, não o nível — H1 a H6
+são todos destinos equivalentes. Os espaços múltiplos não têm importância,
+mas as maiúsculas e minúsculas sim. Se houver vários títulos com o mesmo texto,
+a entrada salta para o primeiro.
+
+Caso o editor não apareça, existe um campo de texto com a lista em formato
+JSON, por exemplo:
+
+```json
+[{ "label": "Equipamento", "target": "Equipamento em detalhe" }]
+```
+
+`label` é o texto do link, `target` é o destino (opcional).

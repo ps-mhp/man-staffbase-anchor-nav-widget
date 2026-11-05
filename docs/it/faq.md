@@ -2,58 +2,50 @@
 
 ## Il widget non visualizza nulla.
 
-Se la finestra di dialogo delle impostazioni del widget non è mai stata aperta
-e salvata dopo l'inserimento, il widget non riconosce i titoli della pagina. In Studio,
-aprire la finestra di dialogo, verificare il numero di titoli rilevati e salvare.
+Non c'è ancora nessuna voce con testo del link. Aprire la finestra di dialogo in Studio, creare le voci tramite
+**Modifica link**, applicare le modifiche e salvare. Un widget vuoto
+non visualizza nulla — nemmeno un riquadro vuoto né un titolo.
 
-Se è indicato «0 titoli», Studio non ne rileva alcuno — in tal caso, nemmeno il
-salvataggio risolve il problema. Altrimenti: la pagina non presenta alcun titolo del livello impostato. Selezionare un altro livello
-oppure inserire un titolo nel testo. Un widget vuoto non visualizza nulla —
-nemmeno una casella vuota né un titolo.
+## Manca una voce nell’elenco.
 
-## Visualizza troppo pochi titoli.
+Manca il testo del link. Nell’editor, sotto la riga, compare la dicitura «Senza testo del link,
+questa voce non viene visualizzata».
 
-I titoli con testo vuoto vengono ignorati. E i titoli all’interno del
-widget stesso non vengono conteggiati, altrimenti il widget farebbe riferimento a se stesso.
+## Cliccandoci sopra non si viene reindirizzati.
 
-Se mancano ulteriori voci, l’opzione «Solo titoli dai blocchi Title e
-Text» è attivata e il titolo mancante si trova in un altro
-modulo. Disattivando l’opzione, il titolo verrà incluso.
+Sulla pagina non esiste un titolo con esattamente quel testo. Il confronto
+viene effettuato con la destinazione oppure — se la destinazione è vuota — con il testo del link. È sufficiente un errore di battitura,
+una differenza nelle maiuscole e minuscole o un titolo che nel frattempo è stato rinominato
+. Copiare il testo del titolo e incollarlo nella destinazione
+.
 
-## Vengono visualizzati titoli che non corrispondono a sezioni.
+I titoli in una navigazione ad ancore non contano mai come destinazione — nemmeno il
+titolo di un secondo widget sulla stessa pagina.
 
-Altri widget contengono titoli propri — ad esempio i titoli di un elenco di notizie.
-Se questi sono presenti nell’elenco, l’opzione «Solo titoli dai blocchi "Titolo" e
-"Testo"» è disattivata. Attivandola, l’elenco viene limitato alle
-sezioni che hai scritto tu stesso.
+## Nelle pagine tradotte, cliccando non si passa alla pagina di destinazione.
 
-Se rimangono visibili anche dopo, la pagina non si trova nel Content Designer. Lì
-non sono presenti i moduli in base ai quali l’opzione effettua la distinzione, e quindi
-non funziona.
-
-## Mostra il proprio titolo come voce.
-
-Questo non dovrebbe accadere. Se dovesse comunque verificarsi, il titolo si trova al di fuori
-del contenitore del widget — ad esempio come blocco di testo separato sopra di esso. In tal caso, utilizzare il
-titolo del widget oppure selezionare un livello che il blocco di testo non possiede.
+I titoli della pagina vengono tradotti, il testo del link e la destinazione no. Nell’
+altra lingua, la voce non trova più il proprio titolo e l’
+elenco continua a mostrare i testi dei link nella lingua in cui sono stati inseriti.
 
 ## L’indicatore rosso non segue lo scorrimento.
 
-Segue lo scorrimento e rimane sull’intestazione che per ultima ha raggiunto il
-quarto superiore della finestra. Nella parte superiore della pagina si trova sul titolo
-— oppure, se non è stato inserito alcun titolo, sulla prima voce. Chi ha impostato «Riduci
-il movimento» la vedrà saltare anziché scorrere — è intenzionale.
+È intenzionale. Rimane sulla voce su cui è stato cliccato per ultima. Prima del
+primo clic si trova sul titolo — oppure, se non è stato inserito alcun titolo, sulla
+prima voce. Se qualcuno apre la pagina tramite un collegamento con un'ancora,
+ad esempio `…#attrezzatura`, si trova su quella voce.
 
-## Manca un’intestazione nuova o rinominata.
+## È possibile modificare l'ordine?
 
-L’elenco risale all’ultimo salvataggio della finestra di dialogo del widget. Aprire la finestra di dialogo e
-salvare per applicare la modifica.
+Sì. Nell’editor, trascinare la maniglia a sinistra oppure selezionarla e spostarla con i
+tasti freccia. L’elenco non deve necessariamente seguire l’ordine della pagina.
 
-## È possibile modificare l’ordine?
+## Due titoli hanno lo stesso nome: dove porta il collegamento?
 
-No. L’elenco segue l’ordine presente nel testo. Chi desidera modificare l’ordine dei collegamenti
-deve modificare l’ordine delle sezioni.
+Al primo presente nella pagina. Se si desidera che porti al secondo, l’unica soluzione è
+dare nomi diversi ai titoli.
 
-## Due titoli hanno lo stesso nome: il collegamento funziona correttamente?
+## Una voce può rimandare a un’altra pagina?
 
-Sì. I collegamenti memorizzano il titolo stesso, non il suo nome.
+Sì. Inserisci come destinazione un indirizzo che inizi con `/`, `http://` o `https://`.
+Cliccandoci sopra, si aprirà come qualsiasi altro collegamento.

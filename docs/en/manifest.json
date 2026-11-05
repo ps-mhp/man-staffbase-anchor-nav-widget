@@ -1,6 +1,6 @@
 {
   "title": "Anchor Navigation",
-  "summary": "Displays the headings of a selected level as links that jump to the corresponding location on the page.",
+  "summary": "Displays a custom list of links that jump to headings on the page.",
   "icon": "🧭",
   "pages": [
     {
@@ -26,27 +26,17 @@
   ],
   "examples": [
     {
-      "title": "Level 2 Headings",
+      "title": "With Title",
       "attributes": {
-        "level": "h2",
         "heading": "Auf einen Blick",
-        "blocks": "true"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Ausstattung\",\"target\":\"Ausstattung im Detail\"},{\"label\":\"Kontakt\"}]"
       }
     },
     {
-      "title": "Untitled, Level 3",
+      "title": "Untitled",
       "attributes": {
-        "level": "h3",
         "heading": "",
-        "blocks": "true"
-      }
-    },
-    {
-      "title": "Headings from widgets as well",
-      "attributes": {
-        "level": "h2",
-        "heading": "Auf einen Blick",
-        "blocks": "false"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Kontakt\"}]"
       }
     }
   ]

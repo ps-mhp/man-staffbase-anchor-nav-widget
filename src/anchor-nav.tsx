@@ -11,15 +11,15 @@
  * limitations under the License.
  */
 
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { useHotStyle } from "@shared/hot-style";
-import { ScannedHeading } from "./heading-scan";
+import { AnchorLink, anchorSlugs, headingText } from "./anchor-links";
+import { findHeading } from "./heading-scan";
 import { COMPACT_QUERY, REDUCED_MOTION_QUERY, useMediaQuery } from "./media-query";
 import { measureChromeHeight } from "@shared/staffbase-chrome";
 import { findScrollParent } from "./scroll-ancestor";
 import { containerChromeOverlap, jumpTarget } from "./scroll-target";
-import { useActiveHeading } from "./use-active-heading";
 import anchorNavCss from "./styles/anchor-nav.scss";
 
 /** Der Name der Navigation, wenn der Redakteur keinen Titel eingetragen hat. */
@@ -29,9 +29,19 @@ export const FALLBACK_NAV_LABEL = "Inhaltsverzeichnis";
 export const COMPACT_TOGGLE_LABEL = "Inhalt";
 
 export interface AnchorNavProps {
-  readonly headings: readonly ScannedHeading[];
+  readonly links: readonly AnchorLink[];
   /** Der Titel über der Liste, oder `null`. */
   readonly heading: string | null;
+  /** Der eigene Container. Überschriften darin sind kein Sprungziel. */
+  readonly self: HTMLElement | null;
+}
+
+/** Ein Eintrag, wie die Liste ihn zeigt. */
+interface Entry {
+  readonly link: AnchorLink;
+  /** Der Hash-Slug eines Überschriften-Eintrags; `null` bei einer Adresse. */
+  readonly slug: string | null;
+  readonly href: string;
 }
 
 interface Marker {
@@ -92,24 +102,52 @@ function focusHeading(element: HTMLElement, signal: AbortSignal): void {
   element.addEventListener("blur", () => element.removeAttribute("tabindex"), { once: true, signal });
 }
 
+/** Der Hash der Adresse, dekodiert; leer, wenn keiner da ist. */
+function currentHashSlug(): string {
+  const rawHash = window.location.hash.replace(/^#/, "");
+  // Ein Slug besteht nur aus `[a-z0-9-]`; ein Hash, der sich nicht dekodieren
+  // lässt (z. B. „%“ ohne zwei folgende Hex-Ziffern), trifft damit ohnehin
+  // keinen Eintrag — der rohe Hash ist hier ein sicherer Rückfall.
+  try {
+    return decodeURIComponent(rawHash);
+  } catch {
+    return rawHash;
+  }
+}
+
 /**
  * Das Inhaltsverzeichnis.
  *
- * Ohne Überschriften gibt es nichts aus: eine leere Schiene mit Titel wäre
- * ein sichtbarer Defekt, kein Hinweis.
+ * Ohne Einträge gibt es nichts aus: eine leere Schiene mit Titel wäre ein
+ * sichtbarer Defekt, kein Hinweis.
+ *
+ * Auf der Seite außerhalb des Widgets passiert nichts von selbst: kein
+ * Durchlauf, kein Beobachter, kein Timer. Gesucht wird nur auf Klick — und
+ * einmal beim Laden, wenn die Adresse einen Hash trägt, der zu einem Eintrag
+ * passt. Die Marke zeigt deshalb den zuletzt angeklickten Eintrag und folgt
+ * nicht dem Scrollen.
  */
-export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactElement | null {
+export function AnchorNav({ links, heading, self }: AnchorNavProps): React.ReactElement | null {
   const liveCss = useHotStyle(anchorNavCss, "anchor-nav-widget", "styles/anchor-nav.scss");
-  const active = useActiveHeading(headings);
   const compact = useMediaQuery(COMPACT_QUERY);
   const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
 
+  const entries = useMemo<Entry[]>(() => {
+    const slugs = anchorSlugs(links);
+    return links.map((link, index) => {
+      const slug = slugs[index];
+      return { link, slug, href: slug === null ? (link.target ?? "") : `#${slug}` };
+    });
+  }, [links]);
+
   const [open, setOpen] = useState(false);
   const [marker, setMarker] = useState<Marker | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  // Ändert der Redakteur die Liste, kann der gemerkte Index ins Leere zeigen.
+  const active = activeIndex !== null && activeIndex < entries.length ? activeIndex : null;
 
   const titleRef = useRef<HTMLElement | null>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
-  const navRef = useRef<HTMLElement | null>(null);
   const jumped = useRef(false);
   // `null` bis der Mount-Effekt unten läuft, nicht `new AbortController()`
   // hier im Render: der Ausdruck würde sonst bei jedem Rendern neu
@@ -146,14 +184,14 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
       const behavior = smooth ? "smooth" : "auto";
       const chromeHeight = measureChromeHeight();
       // Der rollfähige Vorfahre entscheidet, wer rollt: im Content Designer
-      // rollt die Leinwand in einem eigenen Container statt am Dokument (siehe
-      // use-active-heading.ts), und `window.scrollTo` bewegt ausschließlich
+      // rollt die Leinwand in einem eigenen Container statt am Dokument, und
+      // `window.scrollTo` bewegt ausschließlich
       // das Hauptdokument — der Klick bewegte dort sichtbar nichts.
       const scrollParent = findScrollParent(element);
 
       if (scrollParent === null) {
-        // Kein `typeof window.scrollTo`-Wächter mehr (anders als bei
-        // `ResizeObserver`/`matchMedia`): `window.scrollTo` gehört seit
+        // Kein `typeof window.scrollTo`-Wächter (anders als bei
+        // `matchMedia`): `window.scrollTo` gehört seit
         // Langem zu jedem Browser, den Staffbase unterstützt — der
         // einzige Fall, in dem die Prüfung je zuschlug, war ein Test, der
         // die Methode künstlich gelöscht hatte.
@@ -183,28 +221,23 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
     [],
   );
 
-  // Ein Aufruf mit Hash springt einmal, sobald der erste Scan etwas gefunden
-  // hat. Hart und nicht weich: beim Laden der Seite ist eine Animation vom
-  // Seitenanfang aus keine Orientierungshilfe, sondern eine Verzögerung.
+  // Ein Aufruf mit Hash springt einmal. Hart und nicht weich: beim Laden der
+  // Seite ist eine Animation vom Seitenanfang aus keine Orientierungshilfe,
+  // sondern eine Verzögerung. Kein zweiter Versuch: steht die Überschrift
+  // noch nicht auf der Seite, bleibt es beim markierten Eintrag.
   useEffect(() => {
-    if (jumped.current || headings.length === 0) return;
+    if (jumped.current || entries.length === 0) return;
     jumped.current = true;
 
-    const rawHash = window.location.hash.replace(/^#/, "");
-    // Ein Slug besteht nur aus `[a-z0-9-]`; ein Hash, der sich nicht dekodieren
-    // lässt (z. B. „%“ ohne zwei folgende Hex-Ziffern), trifft damit ohnehin
-    // keinen Eintrag — der rohe Hash ist hier ein sicherer Rückfall, kein Risiko.
-    let slug: string;
-    try {
-      slug = decodeURIComponent(rawHash);
-    } catch {
-      slug = rawHash;
-    }
+    const slug = currentHashSlug();
     if (slug === "") return;
+    const index = entries.findIndex((entry) => entry.slug === slug);
+    if (index === -1) return;
 
-    const target = headings.find((candidate) => candidate.slug === slug);
-    if (target) scrollTo(target.element, false);
-  }, [headings, scrollTo]);
+    setActiveIndex(index);
+    const element = findHeading(headingText(entries[index].link), self);
+    if (element !== null) scrollTo(element, false);
+  }, [entries, self, scrollTo]);
 
   // Die Lage des Segments. `useLayoutEffect`, damit es nach einem Wechsel
   // nicht erst eine Bildfolge lang an der alten Stelle steht.
@@ -221,70 +254,55 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
 
   useLayoutEffect(() => {
     measureMarker();
-  }, [measureMarker, headings, heading]);
+  }, [measureMarker, entries, heading]);
 
-  // Ändert sich das Layout, ohne dass eine der obigen Abhängigkeiten wechselt —
-  // die Fensterbreite ändert sich ohne `COMPACT_QUERY` zu kreuzen, ein langer
-  // Eintrag bricht um, ein Web-Font lädt nach, eine fremde Seitenspalte klappt
-  // auf —, bliebe die gemessene Lage stehen. `ResizeObserver` meldet genau das;
-  // ist er nicht vorhanden, ist ein Resize-Listener am Fenster der Rückfall
-  // (schwächer: er sieht nur Fensteränderungen, keine reinen Inhaltsumbrüche).
-  //
-  // `headings` steht zusätzlich in den Abhängigkeiten: ohne Überschriften
-  // gibt die Komponente `null` zurück, `navRef.current` ist dann `null`, und
-  // mit nur `measureMarker` in den Abhängigkeiten liefe dieser Effekt nie
-  // erneut, bis `active`/`compact`/`open` wechseln — steht die Seite oben,
-  // passiert das nie, und es wird nie ein Beobachter angelegt. Reicht
-  // `usePageHeadings` die Liste nach, ändert sich die Referenz und der Effekt
-  // läuft erneut, jetzt mit gesetztem `navRef.current`. Fallen alle
-  // Überschriften wieder weg, läuft er aus demselben Grund noch einmal und
-  // die vorherige Aufräumfunktion hängt den Beobachter nicht mehr am
-  // abgehängten `nav` fest.
+  // Ändert sich das Fenster, ohne dass eine der obigen Abhängigkeiten wechselt
+  // (die Breite ändert sich, ohne `COMPACT_QUERY` zu kreuzen, ein Eintrag
+  // bricht anders um), bliebe die gemessene Lage stehen. Bewusst nur das
+  // Fenster und kein `ResizeObserver`: auf der veröffentlichten Seite soll
+  // nichts beobachtet werden.
   useEffect(() => {
-    const navElement = navRef.current;
-    if (navElement === null) return undefined;
-
-    if (typeof ResizeObserver === "function") {
-      const observer = new ResizeObserver(() => measureMarker());
-      observer.observe(navElement);
-      return () => observer.disconnect();
-    }
-
     window.addEventListener("resize", measureMarker);
     return () => window.removeEventListener("resize", measureMarker);
-  }, [measureMarker, headings]);
+  }, [measureMarker]);
 
-  const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, target: ScannedHeading): void => {
+  const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, index: number): void => {
+    const entry = entries[index];
+    // Eine Adresse gehört dem Browser; nur die Marke wandert mit.
+    if (entry.slug === null) {
+      setActiveIndex(index);
+      if (compact) setOpen(false);
+      return;
+    }
+
     // Zusatztasten und Mittelklick gehören dem Browser: „in neuem Tab öffnen"
     // soll weiter funktionieren.
     if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     if (event.button !== 0) return;
 
     event.preventDefault();
-    scrollTo(target.element, !reducedMotion);
-    // `focusAbort.current` ist spätestens nach dem Mount-Effekt gesetzt — ein
-    // Klick ist erst möglich, nachdem die Navigation gerendert und damit
-    // bedienbar ist. Der Rückfall ist rein defensiv (ungebundenes Signal:
-    // kein Abbruch registriert sich nie wirklich auf etwas Fremdes).
-    focusHeading(target.element, (focusAbort.current ?? new AbortController()).signal);
-    // `replaceState` und nicht `pushState`: sonst sammelt der Zurück-Knopf
-    // jeden Klick im Verzeichnis und der Nutzer muss sich rückwärts
-    // hindurchklicken, um die Seite zu verlassen.
-    window.history.replaceState(null, "", `#${target.slug}`);
+    setActiveIndex(index);
+    const element = findHeading(headingText(entry.link), self);
+    if (element !== null) {
+      scrollTo(element, !reducedMotion);
+      // `focusAbort.current` ist spätestens nach dem Mount-Effekt gesetzt — ein
+      // Klick ist erst möglich, nachdem die Navigation gerendert ist. Der
+      // Rückfall ist rein defensiv.
+      focusHeading(element, (focusAbort.current ?? new AbortController()).signal);
+      // `replaceState` und nicht `pushState`: sonst sammelt der Zurück-Knopf
+      // jeden Klick im Verzeichnis.
+      window.history.replaceState(null, "", `#${entry.slug}`);
+    }
     if (compact) setOpen(false);
   };
 
-  if (headings.length === 0) return null;
-
+  if (entries.length === 0) return null;
   const toggleLabel = heading ?? COMPACT_TOGGLE_LABEL;
 
   return (
     <nav
       className="man-anchor-nav"
       aria-label={heading ?? FALLBACK_NAV_LABEL}
-      ref={(element) => {
-        navRef.current = element;
-      }}
     >
       <style>{liveCss}</style>
       <span className="man-anchor-nav__rail" aria-hidden="true" />
@@ -324,21 +342,21 @@ export function AnchorNav({ headings, heading }: AnchorNavProps): React.ReactEle
 
       {listVisible && (
         <ol className="man-anchor-nav__list">
-          {headings.map((entry, index) => (
+          {entries.map((entry, index) => (
             <li
               className="man-anchor-nav__item"
-              key={entry.slug}
+              key={entry.link.id}
               ref={(element) => {
                 itemRefs.current[index] = element;
               }}
             >
               <a
                 className="man-anchor-nav__link"
-                href={`#${entry.slug}`}
+                href={entry.href}
                 {...(index === active ? { "aria-current": "true" as const } : {})}
-                onClick={(event) => onLinkClick(event, entry)}
+                onClick={(event) => onLinkClick(event, index)}
               >
-                {entry.text}
+                {entry.link.label}
               </a>
             </li>
           ))}

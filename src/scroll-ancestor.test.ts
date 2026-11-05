@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-import { findScrollParent, findScrollParents } from "./scroll-ancestor";
+import { findScrollParent } from "./scroll-ancestor";
 
 /** Macht `element` zu einem echten Roller: jsdom liefert sonst immer 0/0. */
 function makeScrollable(element: HTMLElement): void {
@@ -167,42 +167,5 @@ describe("findScrollParent", () => {
     document.body.appendChild(container);
 
     expect(findScrollParent(element)).toBe(container);
-  });
-});
-
-describe("findScrollParents", () => {
-  afterEach(() => {
-    document.body.innerHTML = "";
-  });
-
-  it("liefert eine leere Liste ohne Elemente", () => {
-    expect(findScrollParents([])).toEqual([]);
-  });
-
-  it("findet die rollfähigen Vorfahren mehrerer Elemente ohne Duplikate", () => {
-    const shared = document.createElement("div");
-    makeScrollable(shared);
-    const eins = document.createElement("h2");
-    const zwei = document.createElement("h2");
-    shared.appendChild(eins);
-    shared.appendChild(zwei);
-    document.body.appendChild(shared);
-
-    expect(findScrollParents([eins, zwei])).toEqual([shared]);
-  });
-
-  it("findet unterschiedliche rollfähige Vorfahren verschiedener Elemente", () => {
-    const ersterContainer = document.createElement("div");
-    makeScrollable(ersterContainer);
-    const zweiterContainer = document.createElement("div");
-    makeScrollable(zweiterContainer);
-    const eins = document.createElement("h2");
-    const zwei = document.createElement("h2");
-    ersterContainer.appendChild(eins);
-    zweiterContainer.appendChild(zwei);
-    document.body.appendChild(ersterContainer);
-    document.body.appendChild(zweiterContainer);
-
-    expect(findScrollParents([eins, zwei])).toEqual([ersterContainer, zweiterContainer]);
   });
 });

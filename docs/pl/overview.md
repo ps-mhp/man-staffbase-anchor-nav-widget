@@ -1,20 +1,23 @@
-# Nawigacja oparta na nagłówkach
+# Nawigacja za pomocą zakładek
 
-Widżet odczytuje nagłówki strony i wyświetla te z jednego poziomu — od H1 do
-H6 — jako listę odnośników. Jedno kliknięcie przenosi użytkownika do danego miejsca; podczas czytania
-czerwony znacznik przesuwa się do nagłówka, przy którym aktualnie się znajdujesz.
+Ten widget wyświetla listę odnośników, które sam aktualizujesz. Jedno kliknięcie
+przenosi do odpowiedniego nagłówka na stronie; czerwona kropka wskazuje, który
+wpis został kliknięty jako ostatni.
 
-Lista tworzy się podczas wyświetlania strony. Nie trzeba jej aktualizować: zmiana nazwy,
-przeniesienie lub usunięcie nagłówka powoduje automatyczną aktualizację nawigacji.
+Lista nie tworzy się sama. W oknie dialogowym ustawień określasz, jakie
+pozycje mają się znaleźć, jak się nazywają i w jakiej kolejności mają być wyświetlane.
+Widżet przeszukuje stronę dopiero wtedy, gdy ktoś kliknie daną pozycję — podczas
+ładowania strony nie wykonuje żadnych czynności w tle.
 
 ## Do czego służy
 
 Długie strony o przejrzystym układzie — model samochodu wraz z wyposażeniem,
-dyrektywa wraz z jej sekcjami. Na krótkich stronach nie ma to sensu.
+wytyczne wraz z poszczególnymi sekcjami. Na krótkich stronach nie ma to sensu.
 
 ## Czego nie robi
 
-- **Nie odsyła do innych stron.** Wszystkie odnośniki pozostają na tej stronie.
-  Do odnośników między stronami służy widżet nawigacyjny.
-- **Nie ma funkcji zagnieżdżania.** Wyświetla dokładnie jeden poziom, a nie drzewo.
-- **Nie tworzy nagłówków.** Znajduje tylko to, co już znajduje się w tekście.
+- **Nie wyszukuje nagłówków samodzielnie.** Każda pozycja jest dodawana ręcznie.
+  Jeśli na stronie pojawi się nowy rozdział, należy go dodać do listy.
+- **Nie podąża za przewijaniem.** Wskaźnik nie podąża za przewijaniem, lecz pozostaje przy
+  ostatnio klikniętej pozycji.
+- **Nie tworzy hierarchii.** Lista jest płaska, nie ma struktury drzewa.

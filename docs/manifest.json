@@ -1,6 +1,6 @@
 {
   "title": "Ankernavigation",
-  "summary": "Zeigt die Überschriften einer gewählten Ebene als Verweise, die zur Stelle auf der Seite springen.",
+  "summary": "Zeigt eine selbst gepflegte Liste von Verweisen, die zu Überschriften auf der Seite springen.",
   "icon": "🧭",
   "pages": [
     { "id": "overview", "title": "Übersicht", "file": "overview.md" },
@@ -10,16 +10,18 @@
   ],
   "examples": [
     {
-      "title": "Überschriften der Ebene 2",
-      "attributes": { "level": "h2", "heading": "Auf einen Blick", "blocks": "true" }
+      "title": "Mit Titel",
+      "attributes": {
+        "heading": "Auf einen Blick",
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Ausstattung\",\"target\":\"Ausstattung im Detail\"},{\"label\":\"Kontakt\"}]"
+      }
     },
     {
-      "title": "Ohne Titel, Ebene 3",
-      "attributes": { "level": "h3", "heading": "", "blocks": "true" }
-    },
-    {
-      "title": "Auch Überschriften aus Widgets",
-      "attributes": { "level": "h2", "heading": "Auf einen Blick", "blocks": "false" }
+      "title": "Ohne Titel",
+      "attributes": {
+        "heading": "",
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Kontakt\"}]"
+      }
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "title": "Navigatie via ankers",
-  "summary": "Geeft de kopteksten van een geselecteerd niveau weer als links die naar de betreffende plaats op de pagina leiden.",
+  "summary": "Toont een zelf bijgewerkte lijst met links die naar kopjes op de pagina leiden.",
   "icon": "🧭",
   "pages": [
     {
@@ -26,27 +26,17 @@
   ],
   "examples": [
     {
-      "title": "Koppen van niveau 2",
+      "title": "Met titel",
       "attributes": {
-        "level": "h2",
         "heading": "Auf einen Blick",
-        "blocks": "true"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Ausstattung\",\"target\":\"Ausstattung im Detail\"},{\"label\":\"Kontakt\"}]"
       }
     },
     {
-      "title": "Zonder titel, niveau 3",
+      "title": "Zonder titel",
       "attributes": {
-        "level": "h3",
         "heading": "",
-        "blocks": "true"
-      }
-    },
-    {
-      "title": "Ook koppen uit widgets",
-      "attributes": {
-        "level": "h2",
-        "heading": "Auf einen Blick",
-        "blocks": "false"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Kontakt\"}]"
       }
     }
   ]

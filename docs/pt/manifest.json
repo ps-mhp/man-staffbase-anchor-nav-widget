@@ -1,6 +1,6 @@
 {
   "title": "Navegação por âncora",
-  "summary": "Apresenta os títulos de um nível selecionado como ligações que levam diretamente à respetiva secção da página.",
+  "summary": "Apresenta uma lista, criada pelo próprio utilizador, de ligações que levam diretamente aos títulos da página.",
   "icon": "🧭",
   "pages": [
     {
@@ -26,27 +26,17 @@
   ],
   "examples": [
     {
-      "title": "Títulos de nível 2",
+      "title": "Com título",
       "attributes": {
-        "level": "h2",
         "heading": "Auf einen Blick",
-        "blocks": "true"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Ausstattung\",\"target\":\"Ausstattung im Detail\"},{\"label\":\"Kontakt\"}]"
       }
     },
     {
-      "title": "Sem título, nível 3",
+      "title": "Sem título",
       "attributes": {
-        "level": "h3",
         "heading": "",
-        "blocks": "true"
-      }
-    },
-    {
-      "title": "Também títulos provenientes de widgets",
-      "attributes": {
-        "level": "h2",
-        "heading": "Auf einen Blick",
-        "blocks": "false"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Kontakt\"}]"
       }
     }
   ]

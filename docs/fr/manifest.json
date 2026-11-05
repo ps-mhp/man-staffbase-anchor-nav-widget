@@ -1,6 +1,6 @@
 {
-  "title": "Navigation au mouillage",
-  "summary": "Affiche les titres d'un niveau sélectionné sous forme de liens permettant d'accéder directement à l'emplacement correspondant sur la page.",
+  "title": "Navigation à l'ancre",
+  "summary": "Affiche une liste, mise à jour manuellement, de liens permettant d'accéder directement aux titres de la page.",
   "icon": "🧭",
   "pages": [
     {
@@ -26,27 +26,17 @@
   ],
   "examples": [
     {
-      "title": "Titres de niveau 2",
+      "title": "Avec titre",
       "attributes": {
-        "level": "h2",
         "heading": "Auf einen Blick",
-        "blocks": "true"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Ausstattung\",\"target\":\"Ausstattung im Detail\"},{\"label\":\"Kontakt\"}]"
       }
     },
     {
-      "title": "Sans titre, niveau 3",
+      "title": "Sans titre",
       "attributes": {
-        "level": "h3",
         "heading": "",
-        "blocks": "true"
-      }
-    },
-    {
-      "title": "Y compris les titres provenant des widgets",
-      "attributes": {
-        "level": "h2",
-        "heading": "Auf einen Blick",
-        "blocks": "false"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Kontakt\"}]"
       }
     }
   ]

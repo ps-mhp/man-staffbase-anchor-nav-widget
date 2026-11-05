@@ -22,28 +22,19 @@ import ReactDOM from "react-dom/client";
 import { BlockFactory, BlockDefinition, ExternalBlockDefinition, BaseBlock } from "widget-sdk";
 import { startWidget } from "@shared/dev-mode/start-widget";
 import { getTranslationRegistry } from "@shared/translation/registry";
-import {
-  BLOCKS_ATTRIBUTE,
-  HEADINGS_ATTRIBUTE,
-  HEADING_ATTRIBUTE,
-  LEVEL_ATTRIBUTE,
-  configurationSchema,
-  readBlocksOnly,
-  readLevel,
-  uiSchema,
-} from "./configuration-schema";
+import { HEADING_ATTRIBUTE, LINKS_ATTRIBUTE, configurationSchema, uiSchema } from "./configuration-schema";
 import { ANCHOR_NAV_WIDGET_TAG, anchorNavTranslationProvider, readHeading } from "./translation-provider";
 import { AnchorNavWidget } from "./widget-root";
-import { isStudioPage, startHeadingCapture } from "./heading-capture";
+import { isStudioPage, startLinkEditorInjector } from "./link-editor-injector";
 import icon from "../resources/anchor-nav-widget.svg";
 import pkg from "../package.json";
 
 /** Die Attribute des Widgets; gespiegelt im Konfigurationsschema. */
-const widgetAttributes: string[] = [LEVEL_ATTRIBUTE, HEADING_ATTRIBUTE, BLOCKS_ATTRIBUTE, HEADINGS_ATTRIBUTE];
+const widgetAttributes: string[] = [HEADING_ATTRIBUTE, LINKS_ATTRIBUTE];
 
 const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
   /**
-   * <anchor-nav-widget level="h2" heading="Auf einen Blick" blocks="true" headings='[[2,"News",1]]'></anchor-nav-widget>
+   * <anchor-nav-widget heading="Auf einen Blick" links='[{"label":"Ausstattung"}]'></anchor-nav-widget>
    */
   return class AnchorNavWidgetBlock extends BaseBlockClass implements BaseBlock {
     private _root: ReactDOM.Root | null = null;
@@ -54,11 +45,9 @@ const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
       this._root ??= ReactDOM.createRoot(container);
       this._root.render(
         <AnchorNavWidget
-          level={readLevel(attrs[LEVEL_ATTRIBUTE])}
           heading={readHeading(attrs[HEADING_ATTRIBUTE])}
+          links={attrs[LINKS_ATTRIBUTE]}
           self={container}
-          blocksOnly={readBlocksOnly(attrs[BLOCKS_ATTRIBUTE])}
-          headings={attrs[HEADINGS_ATTRIBUTE]}
         />,
       );
     }
@@ -111,10 +100,10 @@ if (typeof window.defineBlock === "function") {
     register: () => {
       getTranslationRegistry().register(anchorNavTranslationProvider);
       window.defineBlock(externalBlockDefinition);
-      // Nur im Studio: dort öffnet der Redakteur den Dialog, in dem die
-      // Überschriften erfasst werden. Auf der veröffentlichten Seite läuft
-      // dadurch kein einziger Beobachter.
-      if (isStudioPage()) startHeadingCapture();
+      // Nur im Studio: der Injector beobachtet das Dokument mit einem
+      // `MutationObserver`, um den Dialog zu finden. Auf der veröffentlichten
+      // Seite darf kein Beobachter laufen.
+      if (isStudioPage()) startLinkEditorInjector();
     },
   });
 }

@@ -1,6 +1,6 @@
 {
   "title": "Nawigacja za pomocą kotwicy",
-  "summary": "Wyświetla nagłówki wybranego poziomu jako linki, które przenoszą do odpowiedniego miejsca na stronie.",
+  "summary": "Wyświetla samodzielnie utworzoną listę odnośników, które pozwalają przejść do poszczególnych nagłówków na stronie.",
   "icon": "🧭",
   "pages": [
     {
@@ -26,27 +26,17 @@
   ],
   "examples": [
     {
-      "title": "Nagłówki poziomu 2",
+      "title": "Z tytułem",
       "attributes": {
-        "level": "h2",
         "heading": "Auf einen Blick",
-        "blocks": "true"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Ausstattung\",\"target\":\"Ausstattung im Detail\"},{\"label\":\"Kontakt\"}]"
       }
     },
     {
-      "title": "Bez tytułu, poziom 3",
+      "title": "Bez tytułu",
       "attributes": {
-        "level": "h3",
         "heading": "",
-        "blocks": "true"
-      }
-    },
-    {
-      "title": "Również nagłówki z widżetów",
-      "attributes": {
-        "level": "h2",
-        "heading": "Auf einen Blick",
-        "blocks": "false"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Kontakt\"}]"
       }
     }
   ]

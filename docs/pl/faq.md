@@ -2,58 +2,49 @@
 
 ## Widżet nic nie wyświetla.
 
-Jeśli od momentu wstawienia widżetu nigdy nie otwarto
-i nie zapisano okna dialogowego ustawień, widżet nie rozpoznaje nagłówków strony. W Studio
-należy otworzyć okno dialogowe, sprawdzić liczbę przejętych nagłówków i zapisać zmiany.
+Nie ma jeszcze żadnego wpisu z tekstem linku. W Studio otwórz okno dialogowe, za pomocą
+**Edytuj linki** utwórz wpisy, zatwierdź i zapisz. Pusty
+widżet nie wyświetla niczego — ani pustego pola, ani tytułu.
 
-Jeśli widnieje tam „0 nagłówków”, Studio nie znajduje żadnych — wówczas nawet
-zapisanie nie pomoże. W przeciwnym razie: strona nie zawiera nagłówka na ustawionym poziomie. Wybierz inny poziom
-lub ustaw nagłówek w tekście. Pusty widget nie wyświetla niczego —
-ani pustego pola, ani tytułu.
+## Na liście brakuje wpisu.
 
-## Wyświetla zbyt mało nagłówków.
+Brakuje mu tekstu linku. W edytorze pod wierszem widnieje komunikat: „Bez tekstu linku
+ten wpis nie zostanie wyświetlony”.
 
-Nagłówki z pustym tekstem są pomijane. Nagłówki znajdujące się wewnątrz
-samego widgetu nie są brane pod uwagę, w przeciwnym razie widget odsyłałby do samego siebie.
+## Kliknięcie nie powoduje przejścia.
 
-Jeśli dodatkowo brakuje wpisów, oznacza to, że opcja „Tylko nagłówki z bloków tytułowych i
-tekstowych” jest włączona, a brakujący nagłówek znajduje się w innym
-modułu. Wyłączenie tej opcji spowoduje uwzględnienie go.
+Na stronie nie ma nagłówka zawierającego dokładnie ten tekst. Porównanie
+odbywa się z miejscem docelowym lub — jeśli miejsce docelowe jest puste — z tekstem linku. Wystarczy literówka,
+inna wielkość liter lub nagłówek, który w międzyczasie został przemianowany.
+Skopiuj tekst nagłówka i wklej go w polu docelowym.
 
-## Wyświetla nagłówki, które w ogóle nie są sekcjami.
+Nagłówki w nawigacji kotwicowej nigdy nie są traktowane jako miejsce docelowe — nawet
+tytuł drugiego widżetu na tej samej stronie.
 
-Inne widżety zawierają własne nagłówki — na przykład tytuły listy wiadomości.
-Jeśli znajdują się one na liście, opcja „Tylko nagłówki z bloków tytułowych i
-tekstowych” jest wyłączona. Włączenie tej opcji ogranicza listę do
-sekcji, które sam napisałeś.
+## Na przetłumaczonych stronach kliknięcie nie powoduje przejścia.
 
-Jeśli nadal się tam pojawiają, strona nie znajduje się w Content Designerze. Tam
-nie ma bloków, na podstawie których przełącznik dokonuje rozróżnienia, więc nie
-działa.
+Nagłówki strony są tłumaczone, natomiast tekst linku i miejsce docelowe nie. W
+innym języku wpis nie odnajduje już swojego nagłówka, a
+lista nadal wyświetla teksty linków w języku, w którym zostały one wprowadzone.
 
-## Wyświetla swój własny tytuł jako wpis.
+## Czerwony znacznik nie podąża za przewijaniem.
 
-Nie powinno tak być. Jeśli jednak tak się dzieje, nagłówek znajduje się poza
-kontenerem widżetu — na przykład jako osobny blok tekstowy nad nim. W takim przypadku należy albo użyć
-tytułu widżetu, albo wybrać poziom, którego blok tekstowy nie posiada.
-
-## Czerwony znacznik nie przesuwa się wraz z treścią.
-
-Podąża on za przewijaniem i pozostaje przy nagłówku, który jako ostatni
-dotarł do górnej ćwiartki okna. Na samym szczycie strony znajduje się przy tytule
-— lub, jeśli nie wprowadzono tytułu, przy pierwszym wpisie. Kto ustawił opcję „Ogranicz
-ruch”, widzi, że znacznik podskakuje zamiast płynnie się przesuwać — jest to zamierzone zachowanie.
-
-## Brakuje nowego lub przemianowanego nagłówka.
-
-Lista pochodzi z ostatniego zapisu okna dialogowego widżetu. Otwórz okno dialogowe i
-zapisz, aby uwzględnić zmianę.
+Jest to zamierzone. Znajduje się on przy wpisie, który został kliknięty jako ostatni. Przed
+pierwszym kliknięciem znajduje się przy tytule — lub, jeśli nie wprowadzono tytułu, przy
+pierwszym wpisie. Jeśli ktoś otworzy stronę poprzez odnośnik z znacznikiem,
+na przykład `…#wyposażenie`, znacznik znajduje się przy tym wpisie.
 
 ## Czy można zmienić kolejność?
 
-Nie. Lista jest zgodna z kolejnością w tekście. Jeśli chcesz zmienić kolejność odnośników,
-zmień kolejność sekcji.
+Tak. W edytorze należy przeciągnąć uchwyt po lewej stronie lub zaznaczyć uchwyt i przesuwać go za pomocą
+klawiszy strzałek. Lista nie musi odpowiadać kolejności na stronie.
 
-## Dwa nagłówki mają tę samą nazwę — czy odnośnik działa poprawnie?
+## Dwa nagłówki mają tę samą nazwę — dokąd prowadzi odnośnik?
 
-Tak. Odnośniki zapamiętują sam nagłówek, a nie jego nazwę.
+Do pierwszego na stronie. Jeśli ma prowadzić do drugiego, jedynym rozwiązaniem jest
+nadane im różne nazwy.
+
+## Czy wpis może odsyłać do innej strony?
+
+Tak. Jako adres docelowy należy wpisać adres zaczynający się od `/`, `http://` lub `https://`.
+Kliknięcie spowoduje przejście do tej strony, tak jak w przypadku każdego innego odnośnika.

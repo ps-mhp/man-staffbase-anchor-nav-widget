@@ -1,20 +1,23 @@
 # Anchor Navigation
 
-The widget reads the page's headings and displays those at one level—H1 through
-H6—as a list of links. Clicking one takes you to that section; as you read,
-a red marker moves to the heading you're currently on.
+The widget displays a list of links that you maintain yourself. Clicking
+a link takes you to the corresponding heading on the page; a red marker indicates which
+entry was clicked most recently.
 
-The list is generated when the page is displayed. There’s nothing to maintain: if you
-rename, move, or delete a heading, it will change the navigation.
+The list doesn't generate automatically. In the settings dialog, you specify which
+entries are included, what they’re called, and the order in which they appear. The
+widget only scans the page when someone clicks an entry—it doesn’t
+do anything in the background while the page is loading.
 
-## What It’s For
+## What it’s for
 
 Long pages with a clear structure—a car model with its trim levels,
-a guideline with its sections. It’s not worth it for short pages.
+a guideline with its sections. It’s not worth it on short pages.
 
-## What It Doesn’t Do
+## What it doesn’t do
 
-- **Does not link to other pages.** All links remain on this page.
-  For cross-page links, use the navigation widget.
-- **Does not nest.** It displays exactly one level, not a tree structure.
-- **Does not create headings.** It only finds what’s already in the text.
+- **Doesn’t find headings on its own.** Each entry is created manually.
+  If a section is added to the page, it is also included in the list.
+- **Does not follow scrolling.** The marker does not follow the scroll, but remains on the
+  last clicked entry.
+- **Does not nest.** The list is flat, not a tree.

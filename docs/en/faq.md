@@ -2,58 +2,50 @@
 
 ## The widget isn't displaying anything.
 
-If the widget's settings dialog has never been opened
-and saved since the widget was inserted, it doesn't recognize the page's headings. In Studio,
-open the dialog, check the number of headings that have been imported, and save.
+There are no entries with link text yet. Open the dialog in Studio, create entries via
+**Edit Links**, apply the changes, and save. An empty
+widget doesn't display anything—not even an empty box or a title.
 
-If it says “0 headings,” Studio can’t find any—in which case
-saving won’t help. Otherwise: The page has no headings at the specified level. Select a different level
-or set a heading in the text. An empty widget displays nothing—
-not even an empty box or a title.
+## An entry is missing from the list.
 
-## It shows too few headings.
+It is missing the link text. In the Editor, the line “Without link text,
+this entry will not be displayed” will appear.
 
-Headings with empty text are ignored. And headings within the
-widget itself do not count, otherwise it would reference itself.
+## Clicking does not take me anywhere.
 
-If entries are still missing, “Only Headings from Title and
-Text Blocks” is enabled, and the missing heading is in a different
-block. Turning off this toggle will include it.
+There is no heading on the page with exactly this text. The system compares
+the text to the target, or—if the target is empty—to the link text. A typo,
+a difference in capitalization, or a heading that has since been renamed
+is enough to cause this. Copy the text from the heading and paste it into the target
+field.
 
-## It shows headings that aren’t sections at all.
+Headings in anchor navigation never count as targets—not even the
+title of a second widget on the same page.
 
-Other widgets have their own headings—the titles of a news list,
-for example. If these appear in the list, “Only Headings from Title and
-Text Blocks” is turned off. Turning it on limits the list to the
-sections you’ve written yourself.
+## A click does not navigate to the target on translated pages.
 
-If they remain there even after that, the page is not in the Content Designer. There,
-the building blocks that the toggle uses to distinguish between sections do not exist, and the toggle
-does not work.
+The page’s headings are translated, but the link text and target are not. In the
+other language, the entry can no longer find its heading, and the
+list continues to display the link texts in the language in which they were maintained.
 
-## It displays its own title as an entry.
+## The red marker does not follow the scroll.
 
-This shouldn’t happen. If it does occur, the heading is outside
-the widget container—for example, as a separate text block above it. In that case, either use the
-widget’s title or select a layer that the text block doesn’t have.
-
-## The red marker does not move along with the page.
-
-It follows the scrolling and remains with the heading that most recently reached the top
-quarter of the window. At the very top of the page, it is positioned next to the title
-— or, if no title has been entered, next to the first entry. If you’ve set “Reduce
-motion,” you’ll see it jump instead of glide—this is by design.
-
-## A new or renamed heading is missing.
-
-The list is based on the last time the widget dialog was saved. Open the dialog and
-save to apply the change.
+This is intentional. It remains at the entry that was last clicked. Before the
+first click, it is positioned at the title—or, if no title has been entered, at the
+first entry. If someone opens the page via a link with a jump marker,
+such as `…#equipment`, it is positioned at that entry.
 
 ## Can the order be changed?
 
-No. The list follows the order in the text. If you want to change the order of the links,
-change the order of the sections.
+Yes. In the editor, drag the handle on the left, or select the handle and use the
+arrow keys to move it. The list does not have to follow the order of the page.
 
-## Two headings have the same name—does the link jump to the correct one?
+## Two headings have the same name—where does the link jump to?
 
-Yes. The links remember the heading itself, not its name.
+To the first one on the page. If you want it to jump to the second one, the only solution is to
+give the headings different names.
+
+## Can an entry link to another page?
+
+Yes. Enter a URL as the destination that begins with `/`, `http://`, or `https://`.
+Clicking it works just like any other link.

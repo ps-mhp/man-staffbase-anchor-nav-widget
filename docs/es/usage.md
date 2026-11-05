@@ -1,24 +1,25 @@
 # Paso a paso
 
-1. **Estructurar la página.** Colocar los títulos al inicio de cada sección
-   y utilizar el mismo nivel para las secciones del mismo rango. El widget solo puede
-   mostrar lo que ya está ahí.
+1. **Estructurar la página.** Colocar los títulos al inicio de cada sección.
+   El widget solo salta a los títulos que hay en la página.
 2. **Insertar el bloque.** En el editor, selecciona «Navegación por enlaces»; lo mejor es colocarlo en una
    columna estrecha junto al texto o encima del primer apartado.
-3. **Seleccionar el nivel.** El nivel de los apartados, no el del título de la página. Si
-   el título de la página es H1 y las secciones son H2, entonces **H2**.
-4. **Introduce el título** — o déjalo en blanco. En blanco significa: solo la lista, sin
+3. **Introducir el título** — o dejarlo en blanco. Si se deja en blanco, solo aparecerá la lista, sin
    título encima.
-5. **Compruébalo en la vista previa.** La lista aparece al instante y correctamente; lo que
-   aparece en el editor es lo mismo que aparece en la página.
+4. **Crear los enlaces.** En el cuadro de diálogo **Editar enlaces**, para cada sección, **Añadir enlace**
+   e introducir el texto del enlace. Si la entrada tiene el mismo nombre que el
+   título, el destino se deja en blanco; en caso contrario, escribe el texto del título en el destino
+  . **Aplicar** y, a continuación, guardar.
+5. **Comprobar en la vista previa.** Haz clic una vez en cada entrada: si no se activa,
+   significa que el texto del enlace o el destino no coinciden exactamente con el título.
 
 ## Al modificar la página
 
-La lista sigue el texto mientras se trabaja en ella: si aparece un nuevo encabezado,
-este se muestra; si se elimina uno, desaparece. No hay que hacer clic en nada ni
-actualizar nada.
+La lista no se actualiza automáticamente con los cambios de la página. Si se renombra un título,
+hay que adaptar la entrada correspondiente; si se añade o se elimina una sección, también
+hay que actualizar la lista.
 
 ## En el móvil
 
-Allí, la lista está plegada y solo muestra el título con una flecha. Al pulsar una vez
+Allí, la lista aparece plegada y solo muestra el título con una flecha. Al pulsar sobre ella,
 se despliega. En pantallas de 768 píxeles de ancho o más, siempre aparece abierta.

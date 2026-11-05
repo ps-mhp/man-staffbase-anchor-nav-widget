@@ -2,58 +2,50 @@
 
 ## Le widget n'affiche rien.
 
-Si la boîte de dialogue des paramètres du widget n'a jamais été ouverte
-ni enregistrée depuis son insertion, celui-ci ne reconnaît pas les titres de la page. Dans Studio,
-ouvrez la boîte de dialogue, vérifiez le nombre de titres pris en compte, puis enregistrez.
+Il n'y a encore aucune entrée avec un texte de lien. Dans Studio, ouvrez la boîte de dialogue, créez des entrées via
+**Modifier les liens**, validez et enregistrez. Un widget vide
+n'affiche rien — pas même une zone vide ni un titre.
 
-Si le message « 0 titres » s'affiche, cela signifie que Studio n'en trouve aucun — dans ce cas, même
-enregistrer ne changera rien. Sinon : la page ne comporte aucun titre du niveau défini. Choisissez un autre niveau
-ou insérez un titre dans le texte. Un widget vide n’affiche rien —
-pas même une zone vide ni un titre.
+## Une entrée manque dans la liste.
 
-## Il affiche trop peu de titres.
+Il lui manque le texte du lien. Dans l’éditeur, la ligne suivante s’affiche alors : « Sans texte de lien,
+cette entrée ne s’affiche pas. »
 
-Les titres dont le texte est vide sont ignorés. Et les titres situés à l’intérieur du
-widget lui-même ne sont pas pris en compte, sinon il ferait référence à lui-même.
+## Un clic ne redirige pas.
 
-Si, en outre, des entrées manquent, l’option « Uniquement les titres des blocs Title et
-Text » est activée et le titre manquant se trouve dans un autre
-bloc. Désactivez cette option pour l’inclure.
+Le titre correspondant exactement à ce texte n’existe pas sur la page. La comparaison
+se fait avec la cible ou, si celle-ci est vide, avec le texte du lien. Une faute de frappe,
+une différence de majuscules ou de minuscules, ou encore un titre qui a été renommé
+entre-temps suffisent. Copiez le texte du titre et insérez-le dans la cible
+.
 
-## Il affiche des titres qui ne constituent pas du tout des sections.
+Les titres dans une navigation par ancres ne comptent jamais comme destination — pas même le
+titre d’un deuxième widget sur la même page.
 
-D'autres widgets gèrent leurs propres titres — les titres d'une liste d'actualités,
-par exemple. Si ceux-ci figurent dans la liste, l'option « Uniquement les titres des blocs « Titre » et
-« Texte » » est désactivée. L'activer limite la liste aux
-sections que vous avez vous-même rédigées.
+## Sur les pages traduites, le clic ne fonctionne pas.
 
-Si elles apparaissent toujours après cela, la page ne se trouve pas dans le Content Designer. Là-bas,
-les blocs sur lesquels se base le bouton pour faire la distinction n’existent pas, et celui-ci ne fonctionne
-pas.
-
-## Il affiche son propre titre comme entrée.
-
-Cela ne devrait pas se produire. Si c’est pourtant le cas, le titre se trouve en dehors
-du conteneur du widget — par exemple sous la forme d’un bloc de texte distinct situé au-dessus. Dans ce cas, utilisez soit le
-titre du widget, soit un niveau que le bloc de texte ne possède pas.
+Les titres de la page sont traduits, mais pas le texte du lien ni la destination. Dans l’
+autre langue, l’entrée ne retrouve alors plus son titre, et la
+liste continue d’afficher les textes des liens dans la langue dans laquelle ils ont été gérés.
 
 ## Le marqueur rouge ne suit pas le défilement.
 
-Il suit le défilement et reste sur le titre qui a atteint en dernier le
-quart supérieur de la fenêtre. Tout en haut de la page, il se trouve sur le titre
-— ou, si aucun titre n’est saisi, sur la première entrée. Si vous avez activé l’option « Réduire les
-mouvements », vous la verrez sauter au lieu de glisser — c’est voulu.
+C’est voulu. Il se trouve sur l’entrée sur laquelle on a cliqué en dernier. Avant le
+premier clic, elle se trouve au niveau du titre — ou, si aucun titre n’est renseigné, au niveau de la
+première entrée. Si quelqu’un ouvre la page via un lien avec un repère de saut,
+par exemple `…#équipement`, elle se trouve alors au niveau de cette entrée.
 
-## Un titre nouveau ou renommé manque.
+## Peut-on modifier l’ordre ?
 
-La liste provient de la dernière sauvegarde de la boîte de dialogue du widget. Ouvrez la boîte de dialogue et
-enregistrez pour que la modification soit prise en compte.
+Oui. Dans l’éditeur, faites glisser la poignée vers la gauche, ou sélectionnez la poignée et déplacez-la à l’aide des
+touches fléchées. La liste ne doit pas nécessairement suivre l’ordre de la page.
 
-## Peut-on modifier l'ordre ?
+## Deux titres portent le même nom — vers lequel le lien renvoie-t-il ?
 
-Non. La liste suit l'ordre dans le texte. Si vous souhaitez modifier l'ordre des liens,
-modifiez l'ordre des sections.
+Vers le premier sur la page. Si vous souhaitez qu’il renvoie vers le second, la seule solution est de
+donner des noms différents aux titres.
 
-## Deux titres portent le même nom — le lien fonctionne-t-il correctement ?
+## Une entrée peut-elle renvoyer vers une autre page ?
 
-Oui. Les liens mémorisent le titre lui-même, et non son nom.
+Oui. Saisissez comme destination une adresse commençant par `/`, `http://` ou `https://`.
+En cliquant dessus, on y accède comme pour n’importe quel autre lien.

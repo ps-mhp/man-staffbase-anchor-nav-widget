@@ -1,6 +1,6 @@
 {
   "title": "Navegación con ancla",
-  "summary": "Muestra los títulos de un nivel seleccionado como enlaces que llevan directamente a ese punto de la página.",
+  "summary": "Muestra una lista, actualizada por el propio usuario, de enlaces que permiten saltar a los títulos de la página.",
   "icon": "🧭",
   "pages": [
     {
@@ -26,27 +26,17 @@
   ],
   "examples": [
     {
-      "title": "Títulos de nivel 2",
+      "title": "Con título",
       "attributes": {
-        "level": "h2",
         "heading": "Auf einen Blick",
-        "blocks": "true"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Ausstattung\",\"target\":\"Ausstattung im Detail\"},{\"label\":\"Kontakt\"}]"
       }
     },
     {
-      "title": "Sin título, nivel 3",
+      "title": "Sin título",
       "attributes": {
-        "level": "h3",
         "heading": "",
-        "blocks": "true"
-      }
-    },
-    {
-      "title": "También los títulos de los widgets",
-      "attributes": {
-        "level": "h2",
-        "heading": "Auf einen Blick",
-        "blocks": "false"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Kontakt\"}]"
       }
     }
   ]

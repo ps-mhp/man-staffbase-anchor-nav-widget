@@ -1,6 +1,6 @@
 {
   "title": "Navigazione tramite ancore",
-  "summary": "Visualizza i titoli di un livello selezionato sotto forma di collegamenti che rimandano alla corrispondente posizione nella pagina.",
+  "summary": "Mostra un elenco, aggiornato dall'utente, di collegamenti che rimandano ai titoli presenti nella pagina.",
   "icon": "🧭",
   "pages": [
     {
@@ -26,27 +26,17 @@
   ],
   "examples": [
     {
-      "title": "Titoli di livello 2",
+      "title": "Con titolo",
       "attributes": {
-        "level": "h2",
         "heading": "Auf einen Blick",
-        "blocks": "true"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Ausstattung\",\"target\":\"Ausstattung im Detail\"},{\"label\":\"Kontakt\"}]"
       }
     },
     {
-      "title": "Senza titolo, livello 3",
+      "title": "Senza titolo",
       "attributes": {
-        "level": "h3",
         "heading": "",
-        "blocks": "true"
-      }
-    },
-    {
-      "title": "Anche i titoli dei widget",
-      "attributes": {
-        "level": "h2",
-        "heading": "Auf einen Blick",
-        "blocks": "false"
+        "links": "[{\"label\":\"Übersicht\"},{\"label\":\"Kontakt\"}]"
       }
     }
   ]

@@ -2,58 +2,50 @@
 
 ## De widget geeft niets weer.
 
-Als het instellingenvenster van de widget sinds het invoegen nog nooit is geopend
-en opgeslagen, kent de widget de koppen van de pagina niet. Open in Studio het
-venster, controleer het aantal overgenomen koppen en sla het op.
+Er is nog geen item met linktekst. Open het dialoogvenster in Studio, maak via
+**Links bewerken** items aan, pas ze toe en sla ze op. Een lege
+widget geeft niets weer — zelfs geen leeg vakje en geen titel.
 
-Als daar „0 koppen” staat, vindt Studio er geen — dan helpt ook het
-opslaan niet. Anders: de pagina heeft geen kop van het ingestelde niveau. Kies een ander niveau
-of plaats een kop in de tekst. Een leeg widget geeft niets weer —
-ook geen leeg vak en geen titel.
+## Er ontbreekt een vermelding in de lijst.
 
-## Er worden te weinig koppen weergegeven.
+De linktekst ontbreekt. In de editor staat dan onder de regel „Zonder linktekst wordt
+deze vermelding niet weergegeven.”
 
-Koppen met lege tekst worden overgeslagen. En koppen binnen het
-widget zelf tellen niet mee, anders zou het naar zichzelf verwijzen.
+## Een klik leidt niet naar de juiste pagina.
 
-Als er bovendien vermeldingen ontbreken, is „Alleen kopteksten uit titel- en
-tekstblokken” ingeschakeld en staat de ontbrekende koptekst in een ander
-bouwsteen. Als je de schakelaar uitschakelt, wordt deze opgenomen.
+De kop met precies deze tekst komt niet voor op de pagina. Er wordt
+vergeleken met de bestemming, of — als de bestemming leeg is — met de linktekst. Een typefout,
+een verschil in hoofd- en kleine letters of een inmiddels hernoemde
+kop zijn al voldoende. Kopieer de tekst van de kop en plak deze in de bestemming
+.
 
-## Er worden kopteksten weergegeven die helemaal geen paragrafen zijn.
+Koppen in een anker-navigatie tellen nooit als bestemming — ook niet de
+titel van een tweede widget op dezelfde pagina.
 
-Andere widgets hebben hun eigen koppen — de titels van een nieuwslijst
-bijvoorbeeld. Als die in de lijst staan, is „Alleen koppen uit titel- en
-tekstblokken” uitgeschakeld. Als je deze optie inschakelt, wordt de lijst beperkt tot de
-paragrafen die je zelf hebt geschreven.
+## Op vertaalde pagina’s werkt de link niet.
 
-Als ze daarna nog steeds zichtbaar zijn, bevindt de pagina zich niet in de Content Designer. Daar
-zijn de bouwstenen niet aanwezig waarop de schakelaar onderscheid maakt, en werkt deze
-niet.
+De koppen van de pagina worden vertaald, de linktekst en de bestemming niet. In de
+andere taal kan het item zijn koptekst dan niet meer vinden, en de
+lijst toont nog steeds de linkteksten in de taal waarin ze zijn onderhouden.
 
-## Het toont zijn eigen titel als item.
+## De rode markering volgt het scrollen niet.
 
-Dat zou niet mogen gebeuren. Als het toch gebeurt, staat de kop buiten
-de widgetcontainer — bijvoorbeeld als een apart tekstblok erboven. Gebruik dan ofwel de
-titel van de widget, of kies een laag die het tekstblok niet heeft.
-
-## De rode markering springt niet mee.
-
-Deze volgt het scrollen en blijft bij de kop die als laatste het bovenste
-kwart van het venster heeft bereikt. Helemaal bovenaan de pagina staat deze bij de titel
-— of, als er geen titel is ingevoerd, bij het eerste item. Wie „Beweging
-verminderen“ heeft ingesteld, ziet het springen in plaats van glijden — dat is de bedoeling.
-
-## Een nieuwe of hernoemde kop ontbreekt.
-
-De lijst is afkomstig van de laatste opslag van het widget-dialoogvenster. Open het dialoogvenster en
-sla de wijziging op.
+Dat is de bedoeling. Ze staat bij het item dat als laatste is aangeklikt. Vóór de
+eerste klik staat het bij de titel — of, als er geen titel is ingevoerd, bij het
+eerste item. Als iemand de pagina opent via een link met een sprongmarkering,
+bijvoorbeeld `…#uitrusting`, staat het bij dit item.
 
 ## Kan de volgorde worden gewijzigd?
 
-Nee. De lijst volgt de volgorde in de tekst. Wie de volgorde van de verwijzingen
-wil wijzigen, past de volgorde van de paragrafen aan.
+Ja. Sleep in de editor aan het handvat aan de linkerkant, of selecteer het handvat en verplaats het met de
+pijltjestoetsen. De lijst hoeft niet de volgorde van de pagina te volgen.
 
-## Twee kopteksten hebben dezelfde naam — springt de link dan naar de juiste kop?
+## Twee kopteksten hebben dezelfde naam — waar springt de link naartoe?
 
-Ja. De links onthouden de kop zelf, niet de naam ervan.
+Naar de eerste op de pagina. Als je naar de tweede wilt springen, helpt alleen het
+de kopteksten een andere naam te geven.
+
+## Kan een vermelding naar een andere pagina verwijzen?
+
+Ja. Voer als bestemming een adres in dat begint met `/`, `http://` of `https://`.
+De klik volgt deze link net als elke andere link.

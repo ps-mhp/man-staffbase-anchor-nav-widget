@@ -1,20 +1,23 @@
 # Ankernavigatie
 
-De widget leest de koppen van de pagina en toont die van één niveau — H1 tot
-H6 — als een lijst met links. Met één klik spring je naar die plek; tijdens het lezen
-beweegt een rode markering naar de kop waar je op dat moment bent.
+De widget toont een lijst met links die je zelf bijhoudt. Met één klik
+ga je naar de bijbehorende kop op de pagina; een rood vinkje geeft aan welke
+item het laatst is aangeklikt.
 
-De lijst wordt gegenereerd bij het weergeven van de pagina. Er hoeft niets te worden onderhouden: wie een
-koptekst hernoemt, verplaatst of verwijdert, wijzigt daarmee de navigatie.
+De lijst wordt niet automatisch aangemaakt. Je bepaalt in het instellingenvenster welke
+items er zijn, hoe ze heten en in welke volgorde ze staan. De
+widget doorzoekt de pagina pas wanneer iemand op een item klikt — tijdens het
+laden van de pagina doet hij niets op de achtergrond.
 
-## Waarvoor het bedoeld is
+## Waarvoor is het bedoeld
 
 Lange pagina’s met een duidelijke indeling — een automodel met zijn uitrustingsniveaus,
 een richtlijn met zijn paragrafen. Op korte pagina’s is het niet de moeite waard.
 
 ## Wat het niet doet
 
-- **Niet naar andere pagina’s verwijzen.** Alle verwijzingen blijven op deze pagina.
-  Voor verwijzingen naar andere pagina’s is er de navigatiewidget.
-- **Niet genest.** Het toont precies één niveau, geen boomstructuur.
-- **Geen kopteksten aanmaken.** Het vindt alleen wat al in de tekst staat.
+- **Geen koppen automatisch vinden.** Elk item wordt handmatig aangemaakt.
+  Als er een paragraaf aan de pagina wordt toegevoegd, wordt deze ook aan de lijst toegevoegd.
+- **Volgt het scrollen niet.** De markering volgt het scrollen niet, maar blijft bij
+  het laatst aangeklikte item.
+- **Geen nesteling.** De lijst is plat, geen boomstructuur.
