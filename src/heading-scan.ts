@@ -167,18 +167,16 @@ function headingOrigin(element: HTMLElement): HeadingOrigin {
 }
 
 /**
- * Eine Überschrift, wie sie im Attribut `headings` steht: Ebene (1–6), Text
- * und ob sie aus einem Title- oder Text-Block stammt.
+ * Eine Überschrift, wie das Studio sie vorfindet.
  *
- * Erfasst werden alle Ebenen und beide Herkünfte, gefiltert wird erst beim
- * Anzeigen. Sonst müsste das Erfassen im Studio die übrigen Felder des
- * Dialogs auslesen, und ein Wechsel der Ebene ohne erneutes Erfassen zeigte
- * ein leeres Verzeichnis.
+ * Gespeichert wird nur der Text. Die Ebene dient allein der Anzeige im Dialog:
+ * das Studio rendert die Seite mit anderen Ebenen als die veröffentlichte
+ * Seite (gemessen: H1 16 · H2 1 · H3 22 gegenüber 11 H1 und 12 H2). Ebene und
+ * Herkunft entscheidet deshalb erst das Frontend, am echten Element.
  */
 export interface CapturedHeading {
   readonly level: number;
   readonly text: string;
-  readonly inBlock: boolean;
 }
 
 const HEADING_TAG = /^H([1-6])$/;
@@ -204,14 +202,9 @@ const normalize = (element: HTMLElement): string => (element.textContent ?? "").
  * Läuft im Studio, einmal je geöffnetem Dialog — nie auf der veröffentlichten
  * Seite. `exclude` nimmt den Dialog selbst heraus, dessen Titel sonst als
  * Abschnitt der Seite mitkäme.
- *
- * Trägt keine einzige Überschrift eine Marke des Content Designers, ist es
- * eine Seite des klassischen Editors: dann zählt jede als Block-Überschrift,
- * sonst leerte der Filter das Verzeichnis dort vollständig.
  */
 export function captureHeadings(root: ParentNode, exclude: readonly Node[] = []): CapturedHeading[] {
-  const found: { readonly level: number; readonly text: string; readonly origin: HeadingOrigin }[] = [];
-
+  const found: CapturedHeading[] = [];
   for (const element of walk(root)) {
     const match = HEADING_TAG.exec(element.tagName);
     if (match === null) continue;
@@ -219,34 +212,24 @@ export function captureHeadings(root: ParentNode, exclude: readonly Node[] = [])
     if (insideOwnWidget(element)) continue;
 
     const text = normalize(element);
-    if (text === "") continue;
-
-    found.push({ level: Number(match[1]), text, origin: headingOrigin(element) });
+    if (text !== "") found.push({ level: Number(match[1]), text });
   }
-
-  const designer = found.some((entry) => entry.origin.imDesigner);
-  return found.map(({ level, text, origin }) => ({ level, text, inBlock: !designer || origin.erlaubt }));
+  return found;
 }
 
-/**
- * Für das Attribut: je Überschrift `[ebene, text, 0|1]`.
- *
- * Tupel statt Objekte, weil das Attribut im Seitenquelltext steht und bei
- * jedem Aufruf mitgeladen wird; Schlüsselnamen je Eintrag wären reiner
- * Ballast.
- */
+/** Für das Attribut: die Texte in Seitenreihenfolge. */
 export function encodeHeadings(headings: readonly CapturedHeading[]): string {
-  return JSON.stringify(headings.map(({ level, text, inBlock }) => [level, text, inBlock ? 1 : 0]));
+  return JSON.stringify(headings.map(({ text }) => text));
 }
 
 /**
- * Das Attribut zurück in Überschriften. Was sich nicht lesen lässt, fällt
- * still weg: ein kaputter Eintrag soll das Verzeichnis nicht leeren.
+ * Das Attribut zurück in Texte. Was sich nicht lesen lässt, fällt still weg:
+ * ein kaputter Eintrag soll das Verzeichnis nicht leeren.
  *
- * Nimmt auch ein fertiges Array: `parseAttributes` des SDK dekodiert manche
- * Werte selbst, und ob Staffbase dieses Feld so ablegt, liegt nicht bei uns.
+ * Nimmt auch ein fertiges Array (`parseAttributes` des SDK dekodiert manche
+ * Werte selbst) und die Tupel `[ebene, text, …]`, die rc.5 gespeichert hat.
  */
-export function readHeadings(raw: unknown): CapturedHeading[] {
+export function readHeadings(raw: unknown): string[] {
   let parsed: unknown = raw;
   if (typeof raw === "string") {
     if (raw.trim() === "") return [];
@@ -258,77 +241,79 @@ export function readHeadings(raw: unknown): CapturedHeading[] {
   }
   if (!Array.isArray(parsed)) return [];
 
-  const headings: CapturedHeading[] = [];
+  const texts: string[] = [];
   for (const entry of parsed) {
-    if (!Array.isArray(entry)) continue;
-    const [level, text, inBlock] = entry as unknown[];
-    if (typeof level !== "number" || !Number.isInteger(level) || level < 1 || level > 6) continue;
-    if (typeof text !== "string" || text.trim() === "") continue;
-    headings.push({ level, text: text.trim(), inBlock: inBlock !== 0 });
+    const text: unknown = Array.isArray(entry) ? entry[1] : entry;
+    if (typeof text === "string" && text.trim() !== "") texts.push(text.trim());
   }
-  return headings;
+  return texts;
 }
 
-/** Ein Eintrag des Verzeichnisses, bevor feststeht, welches Element er meint. */
-export interface HeadingEntry {
-  readonly text: string;
-  readonly slug: string;
-}
-
-/** Die Einträge für Ebene und Filter, mit eindeutigen Slugs. */
-export function selectHeadings(
-  headings: readonly CapturedHeading[],
-  level: HeadingLevel,
-  blocksOnly: boolean,
-): HeadingEntry[] {
-  const wanted = Number(level.slice(1));
-  const entries: HeadingEntry[] = [];
-  const taken = new Map<string, number>();
-
-  for (const heading of headings) {
-    if (heading.level !== wanted) continue;
-    if (blocksOnly && !heading.inBlock) continue;
-
-    const base = slugify(heading.text) || `abschnitt-${entries.length + 1}`;
-    const seen = taken.get(base) ?? 0;
-    taken.set(base, seen + 1);
-    entries.push({ text: heading.text, slug: seen === 0 ? base : `${base}-${seen + 1}` });
-  }
-  return entries;
+/** Was die Suche ergab: die Einträge und ob jeder gespeicherte Text gefunden wurde. */
+export interface ResolvedHeadings {
+  readonly headings: ScannedHeading[];
+  readonly complete: boolean;
 }
 
 /**
- * Je Eintrag das Element auf der Seite, oder `null`, wenn es (noch) fehlt.
+ * Die gespeicherten Texte auf der Seite wiederfinden und das Verzeichnis
+ * daraus bilden.
  *
- * Zugeordnet wird der Reihe nach über den Text: der Zeiger läuft nur
- * vorwärts, so findet jeder von drei gleichlautenden Einträgen seine eigene
- * Überschrift, und eine Überschrift dazwischen, die das Verzeichnis nicht
- * führt (aus einem Widget etwa), wird übersprungen. Fehlt ein Eintrag, bleibt
- * der Zeiger stehen — die folgenden finden ihr Element trotzdem.
+ * Zugeordnet wird der Reihe nach über den Text, über alle Ebenen: der Zeiger
+ * läuft nur vorwärts, so findet jeder von drei gleichlautenden Texten seine
+ * eigene Überschrift. Fehlt ein Text — etwa die Beschriftung eines
+ * Platzhalters, die es nur im Studio gibt —, bleibt der Zeiger stehen.
+ *
+ * Erst danach wird nach Ebene und Herkunft gefiltert, am Element dieser
+ * Seite. Ohne jede Marke des Content Designers ist es eine Seite des
+ * klassischen Editors: dann zählt jede Überschrift als Block-Überschrift,
+ * sonst leerte der Filter das Verzeichnis dort vollständig.
  */
 export function resolveHeadings(
-  entries: readonly HeadingEntry[],
+  texts: readonly string[],
   level: HeadingLevel,
+  blocksOnly: boolean,
   self: HTMLElement | null,
   root: ParentNode = document.body,
-): (HTMLElement | null)[] {
+): ResolvedHeadings {
+  if (texts.length === 0) return { headings: [], complete: true };
+
   const candidates: { readonly element: HTMLElement; readonly text: string }[] = [];
   for (const element of walk(root)) {
-    if (element.tagName.toLowerCase() !== level) continue;
+    if (!HEADING_TAG.test(element.tagName)) continue;
     if (self !== null && isInside(element, self)) continue;
     candidates.push({ element, text: normalize(element) });
   }
 
   let cursor = 0;
-  return entries.map((entry) => {
+  let found = 0;
+  const matched: HTMLElement[] = [];
+  for (const text of texts) {
     for (let index = cursor; index < candidates.length; index += 1) {
-      if (candidates[index].text === entry.text) {
+      if (candidates[index].text === text) {
         cursor = index + 1;
-        return candidates[index].element;
+        found += 1;
+        if (candidates[index].element.tagName.toLowerCase() === level) matched.push(candidates[index].element);
+        break;
       }
     }
-    return null;
+  }
+
+  const origins = matched.map(headingOrigin);
+  const designer = origins.some((origin) => origin.imDesigner);
+
+  const headings: ScannedHeading[] = [];
+  const taken = new Map<string, number>();
+  matched.forEach((element, index) => {
+    if (blocksOnly && designer && !origins[index].erlaubt) return;
+    const text = normalize(element);
+    const base = slugify(text) || `abschnitt-${headings.length + 1}`;
+    const seen = taken.get(base) ?? 0;
+    taken.set(base, seen + 1);
+    headings.push({ element, text, slug: seen === 0 ? base : `${base}-${seen + 1}` });
   });
+
+  return { headings, complete: found === texts.length };
 }
 
 /**

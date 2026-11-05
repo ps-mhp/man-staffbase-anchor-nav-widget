@@ -18,7 +18,6 @@ import {
   readHeadings,
   resolveHeadings,
   sameHeadings,
-  selectHeadings,
   slugify,
 } from "./heading-scan";
 
@@ -34,9 +33,14 @@ function withShadow(host: HTMLElement, html: string): HTMLElement {
   return host;
 }
 
-/** Die Texte, die das Verzeichnis für Ebene und Filter zeigte. */
+/** Der ganze Weg: im Studio erfassen, durch das Attribut, auf der Seite zuordnen und filtern. */
 const shown = (level: "h1" | "h2" | "h3", blocksOnly: boolean, exclude: Node[] = []): string[] =>
-  selectHeadings(captureHeadings(document.body, exclude), level, blocksOnly).map((entry) => entry.text);
+  resolveHeadings(
+    readHeadings(encodeHeadings(captureHeadings(document.body, exclude))),
+    level,
+    blocksOnly,
+    null,
+  ).headings.map((entry) => entry.text);
 
 describe("captureHeadings", () => {
   it("erfasst alle Ebenen in Dokumentreihenfolge", () => {
@@ -152,16 +156,20 @@ describe("captureHeadings: Herkunft aus Title- und Text-Blöcken", () => {
 
 describe("encodeHeadings / readHeadings", () => {
   const HEADINGS: CapturedHeading[] = [
-    { level: 1, text: "Titel", inBlock: true },
-    { level: 2, text: "Aus „Widget“", inBlock: false },
+    { level: 1, text: "Titel" },
+    { level: 3, text: "Aus „Widget“" },
   ];
 
-  it("übersteht den Weg durch das Attribut unverändert", () => {
-    expect(readHeadings(encodeHeadings(HEADINGS))).toEqual(HEADINGS);
+  it("speichert nur die Texte und übersteht den Weg durch das Attribut", () => {
+    expect(readHeadings(encodeHeadings(HEADINGS))).toEqual(["Titel", "Aus „Widget“"]);
   });
 
   it("nimmt auch ein bereits dekodiertes Array", () => {
-    expect(readHeadings(JSON.parse(encodeHeadings(HEADINGS)))).toEqual(HEADINGS);
+    expect(readHeadings(JSON.parse(encodeHeadings(HEADINGS)))).toEqual(["Titel", "Aus „Widget“"]);
+  });
+
+  it("liest die Tupel, die rc.5 gespeichert hat", () => {
+    expect(readHeadings('[[1,"Titel",1],[2,"Zwei",0]]')).toEqual(["Titel", "Zwei"]);
   });
 
   it("liefert für fehlende oder kaputte Werte eine leere Liste", () => {
@@ -172,72 +180,54 @@ describe("encodeHeadings / readHeadings", () => {
   });
 
   it("verwirft einzelne ungültige Einträge und behält den Rest", () => {
-    expect(readHeadings('[[7,"Zu tief",1],[2,"",1],"x",[2,"Gut",1]]')).toEqual([
-      { level: 2, text: "Gut", inBlock: true },
-    ]);
-  });
-});
-
-describe("selectHeadings", () => {
-  it("macht gleiche Texte über den Slug unterscheidbar", () => {
-    const same = { level: 2, text: "Thema", inBlock: true };
-    expect(selectHeadings([same, same, same], "h2", false).map((e) => e.slug)).toEqual([
-      "thema",
-      "thema-2",
-      "thema-3",
-    ]);
-  });
-
-  it("nummeriert Ersatz-Slugs nach der gefilterten Liste", () => {
-    const headings = [
-      { level: 2, text: "!!!", inBlock: false },
-      { level: 2, text: "???", inBlock: true },
-    ];
-    expect(selectHeadings(headings, "h2", true).map((e) => e.slug)).toEqual(["abschnitt-1"]);
+    expect(readHeadings('["", 7, null, "Gut"]')).toEqual(["Gut"]);
   });
 });
 
 describe("resolveHeadings", () => {
-  it("ordnet gleichlautende Einträge der Reihe nach je einer eigenen Überschrift zu", () => {
+  const texts = (level: "h2" | "h3", stored: string[], self: HTMLElement | null = null): string[] =>
+    resolveHeadings(stored, level, false, self).headings.map((entry) => entry.text);
+
+  it("nimmt die Ebene der Seite, nicht die des Studios", () => {
+    // Im Studio als H3 erfasst, auf der Seite eine H2: zählt als H2.
+    page("<h1>Titel</h1><h2>News</h2><h3>Unter</h3>");
+    expect(texts("h2", ["Titel", "News", "Unter"])).toEqual(["News"]);
+  });
+
+  it("ordnet gleichlautende Texte der Reihe nach je einer eigenen Überschrift zu", () => {
     page("<h2>Thema</h2><h2>Thema</h2>");
     const [a, b] = Array.from(document.querySelectorAll("h2"));
-    const entries = selectHeadings(
-      [
-        { level: 2, text: "Thema", inBlock: true },
-        { level: 2, text: "Thema", inBlock: true },
-      ],
-      "h2",
-      false,
-    );
-    expect(resolveHeadings(entries, "h2", null)).toEqual([a, b]);
+    const { headings } = resolveHeadings(["Thema", "Thema"], "h2", false, null);
+    expect(headings.map((entry) => entry.element)).toEqual([a, b]);
+    expect(headings.map((entry) => entry.slug)).toEqual(["thema", "thema-2"]);
   });
 
-  it("überspringt Überschriften, die das Verzeichnis nicht führt", () => {
+  it("überspringt Überschriften, die nicht gespeichert wurden", () => {
     page("<h2>Eins</h2><h2>Aus einem Widget</h2><h2>Zwei</h2>");
-    const entries = [
-      { text: "Eins", slug: "eins" },
-      { text: "Zwei", slug: "zwei" },
-    ];
-    expect(resolveHeadings(entries, "h2", null).map((e) => e?.textContent)).toEqual(["Eins", "Zwei"]);
+    expect(texts("h2", ["Eins", "Zwei"])).toEqual(["Eins", "Zwei"]);
   });
 
-  it("liefert `null` für einen fehlenden Eintrag, ohne die folgenden zu verlieren", () => {
+  it("überspringt Texte, die es nur im Studio gibt, und meldet sie als fehlend", () => {
     page("<h2>Eins</h2><h2>Drei</h2>");
-    const entries = [
-      { text: "Eins", slug: "eins" },
-      { text: "Zwei", slug: "zwei" },
-      { text: "Drei", slug: "drei" },
-    ];
-    expect(resolveHeadings(entries, "h2", null).map((e) => e?.textContent ?? null)).toEqual(["Eins", null, "Drei"]);
+    const result = resolveHeadings(["Eins", "Platzhalter", "Drei"], "h2", false, null);
+    expect(result.headings.map((entry) => entry.text)).toEqual(["Eins", "Drei"]);
+    expect(result.complete).toBe(false);
+  });
+
+  it("nummeriert Ersatz-Slugs nach der gefilterten Liste", () => {
+    page("<h2>!!!</h2><div data-c13y-component='title-block'><h2>???</h2></div>");
+    expect(resolveHeadings(["!!!", "???"], "h2", true, null).headings.map((entry) => entry.slug)).toEqual([
+      "abschnitt-1",
+    ]);
   });
 
   it("findet Überschriften im Shadow Root und lässt den eigenen Container aus", () => {
     page("<div id='self'><h2>Thema</h2></div><div id='host'></div>");
     withShadow(document.getElementById("host") as HTMLElement, "<h2>Thema</h2>");
     const self = document.getElementById("self") as HTMLElement;
-    const [found] = resolveHeadings([{ text: "Thema", slug: "thema" }], "h2", self);
-    expect(found).not.toBeNull();
-    expect(self.contains(found)).toBe(false);
+    const [found] = resolveHeadings(["Thema"], "h2", false, self).headings;
+    expect(found).toBeDefined();
+    expect(self.contains(found.element)).toBe(false);
   });
 });
 

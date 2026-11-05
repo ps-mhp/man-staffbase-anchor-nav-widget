@@ -82,11 +82,23 @@ export function HeadingCapture({ field }: { readonly field: ConfigField }): Reac
   if (captured.length === 0) {
     return <p>Auf dieser Seite wurden keine Überschriften gefunden.</p>;
   }
+  // Die Ebenen im Studio weichen von der veröffentlichten Seite ab; die
+  // Liste zeigt deshalb nur, welche Texte ankamen, nicht was angezeigt wird.
   return (
-    <p>
-      {captured.length} Überschriften der Seite übernommen ({summarize(captured)}). Sie werden beim Speichern
-      festgehalten.
-    </p>
+    <div>
+      <p>
+        {captured.length} Überschriften der Seite übernommen ({summarize(captured)}). Sie werden beim Speichern
+        festgehalten.
+      </p>
+      <details>
+        <summary>Übernommene Überschriften anzeigen</summary>
+        <ol>
+          {captured.map(({ text }, index) => (
+            <li key={index}>{text}</li>
+          ))}
+        </ol>
+      </details>
+    </div>
   );
 }
 

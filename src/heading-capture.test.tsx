@@ -50,10 +50,7 @@ describe("startHeadingCapture", () => {
       stop = startHeadingCapture();
     });
 
-    expect(readHeadings(field.value)).toEqual([
-      { level: 1, text: "Titel", inBlock: true },
-      { level: 2, text: "Aus einem Widget", inBlock: false },
-    ]);
+    expect(readHeadings(field.value)).toEqual(["Titel", "Aus einem Widget"]);
     // Über ein `input`-Ereignis, sonst erfährt das Formular von React nichts.
     expect(seen).toEqual([field.value]);
     expect(field.style.display).toBe("none");

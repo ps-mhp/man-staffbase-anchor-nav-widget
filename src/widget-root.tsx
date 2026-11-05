@@ -15,7 +15,7 @@ import React, { useMemo } from "react";
 
 import { AnchorNav } from "./anchor-nav";
 import { HeadingLevel } from "./configuration-schema";
-import { readHeadings, selectHeadings } from "./heading-scan";
+import { readHeadings } from "./heading-scan";
 import { useResolvedHeadings } from "./use-resolved-headings";
 
 export interface AnchorNavWidgetProps {
@@ -43,7 +43,7 @@ export function AnchorNavWidget({
   blocksOnly,
   headings: raw,
 }: AnchorNavWidgetProps): React.ReactElement | null {
-  const entries = useMemo(() => selectHeadings(readHeadings(raw), level, blocksOnly), [raw, level, blocksOnly]);
-  const headings = useResolvedHeadings(entries, level, self);
+  const texts = useMemo(() => readHeadings(raw), [raw]);
+  const headings = useResolvedHeadings(texts, level, blocksOnly, self);
   return <AnchorNav headings={headings} heading={heading} />;
 }

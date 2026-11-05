@@ -41,8 +41,8 @@ describe("AnchorNavWidget", () => {
     delete (window as { matchMedia?: unknown }).matchMedia;
   });
 
-  /** Ein Attribut, wie das Studio es schreibt: `[ebene, text, ausBlock]`. */
-  const attr = (...headings: [number, string, 0 | 1][]): string => JSON.stringify(headings);
+  /** Ein Attribut, wie das Studio es schreibt: die Texte in Seitenreihenfolge. */
+  const attr = (...texts: string[]): string => JSON.stringify(texts);
 
   it("zeigt die erfassten Überschriften der gewählten Ebene", () => {
     document.body.innerHTML = "<h3>Drei</h3><h2>Zwei</h2>";
@@ -52,7 +52,7 @@ describe("AnchorNavWidget", () => {
         heading="Auf einen Blick"
         self={null}
         blocksOnly={false}
-        headings={attr([3, "Drei", 1], [2, "Zwei", 1])}
+        headings={attr("Drei", "Zwei")}
       />,
     );
     expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Drei"]);
@@ -67,14 +67,16 @@ describe("AnchorNavWidget", () => {
   });
 
   it("wendet die Beschränkung auf Title- und Text-Blöcke auf das Erfasste an", () => {
-    document.body.innerHTML = "<h2>Abschnitt</h2><h2>Aus einem Widget</h2>";
+    document.body.innerHTML = `
+      <div data-c13y-component="text-container-block"><h2>Abschnitt</h2></div>
+      <div data-sb-custom-block-widget-host><h2>Aus einem Widget</h2></div>`;
     render(
       <AnchorNavWidget
         level="h2"
         heading={null}
         self={null}
         blocksOnly={true}
-        headings={attr([2, "Abschnitt", 1], [2, "Aus einem Widget", 0])}
+        headings={attr("Abschnitt", "Aus einem Widget")}
       />,
     );
     expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Abschnitt"]);
@@ -96,7 +98,7 @@ describe("AnchorNavWidget", () => {
           heading={null}
           self={null}
           blocksOnly={false}
-          headings={attr([2, "Da", 1], [2, "Kommt nie", 1])}
+          headings={attr("Da", "Kommt nie")}
         />,
       );
       await act(async () => {
@@ -121,7 +123,7 @@ describe("AnchorNavWidget", () => {
     try {
       document.body.innerHTML = "";
       render(
-        <AnchorNavWidget level="h2" heading={null} self={null} blocksOnly={false} headings={attr([2, "Später", 1])} />,
+        <AnchorNavWidget level="h2" heading={null} self={null} blocksOnly={false} headings={attr("Später")} />,
       );
       expect(screen.queryAllByRole("link")).toHaveLength(0);
 

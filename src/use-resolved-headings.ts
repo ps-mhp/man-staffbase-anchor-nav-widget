@@ -14,7 +14,7 @@
 import { useEffect, useState } from "react";
 
 import { HeadingLevel } from "./configuration-schema";
-import { HeadingEntry, ScannedHeading, resolveHeadings, sameHeadings } from "./heading-scan";
+import { ScannedHeading, resolveHeadings, sameHeadings } from "./heading-scan";
 
 /**
  * Wann erneut gesucht wird, solange Einträge ohne Element sind.
@@ -26,14 +26,16 @@ import { HeadingEntry, ScannedHeading, resolveHeadings, sameHeadings } from "./h
 export const RESOLVE_RETRY_MS: readonly number[] = [250, 1000, 3000];
 
 /**
- * Die Einträge mit ihren Elementen — nur die, die gefunden wurden.
+ * Das Verzeichnis aus den gespeicherten Texten.
  *
  * Höchstens `1 + RESOLVE_RETRY_MS.length` Durchläufe je Seitenaufruf, und nur
- * so viele, bis jeder Eintrag sein Element hat.
+ * so viele, bis jeder Text sein Element hat. Texte, die es nur im Studio gibt,
+ * kosten also höchstens die drei Wiederholungen.
  */
 export function useResolvedHeadings(
-  entries: readonly HeadingEntry[],
+  texts: readonly string[],
   level: HeadingLevel,
+  blocksOnly: boolean,
   self: HTMLElement | null,
 ): readonly ScannedHeading[] {
   const [resolved, setResolved] = useState<readonly ScannedHeading[]>([]);
@@ -44,15 +46,10 @@ export function useResolvedHeadings(
 
     const run = (): void => {
       timer = null;
-      const elements = entries.length === 0 ? [] : resolveHeadings(entries, level, self);
-      const next: ScannedHeading[] = [];
-      entries.forEach((entry, index) => {
-        const element = elements[index];
-        if (element) next.push({ element, text: entry.text, slug: entry.slug });
-      });
-      setResolved((current) => (sameHeadings(current, next) ? current : next));
+      const { headings, complete } = resolveHeadings(texts, level, blocksOnly, self);
+      setResolved((current) => (sameHeadings(current, headings) ? current : headings));
 
-      if (next.length < entries.length && attempt < RESOLVE_RETRY_MS.length) {
+      if (!complete && attempt < RESOLVE_RETRY_MS.length) {
         timer = setTimeout(run, RESOLVE_RETRY_MS[attempt]);
         attempt += 1;
       }
@@ -62,7 +59,7 @@ export function useResolvedHeadings(
     return () => {
       if (timer !== null) clearTimeout(timer);
     };
-  }, [entries, level, self]);
+  }, [texts, level, blocksOnly, self]);
 
   return resolved;
 }
