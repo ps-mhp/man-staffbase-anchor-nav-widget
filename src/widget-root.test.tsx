@@ -14,7 +14,7 @@
 import React from "react";
 import { act, render, screen } from "@testing-library/react";
 
-import { SCAN_DELAYS_MS } from "./use-scanned-headings";
+import { RESOLVE_RETRY_MS } from "./use-resolved-headings";
 import { AnchorNavWidget } from "./widget-root";
 
 /** Stellt `matchMedia` auf „nichts trifft zu": volle Darstellung, weiche Übergänge. */
@@ -41,7 +41,10 @@ describe("AnchorNavWidget", () => {
     delete (window as { matchMedia?: unknown }).matchMedia;
   });
 
-  it("zeigt die Überschriften der gewählten Ebene", () => {
+  /** Ein Attribut, wie das Studio es schreibt: die Texte in Seitenreihenfolge. */
+  const attr = (...texts: string[]): string => JSON.stringify(texts);
+
+  it("zeigt die erfassten Überschriften der gewählten Ebene", () => {
     document.body.innerHTML = "<h3>Drei</h3><h2>Zwei</h2>";
     render(
       <AnchorNavWidget
@@ -49,20 +52,21 @@ describe("AnchorNavWidget", () => {
         heading="Auf einen Blick"
         self={null}
         blocksOnly={false}
+        headings={attr("Drei", "Zwei")}
       />,
     );
     expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Drei"]);
   });
 
-  it("gibt nichts aus, wenn die Seite die Ebene nicht hat", () => {
+  it("gibt nichts aus, solange im Studio nichts erfasst wurde", () => {
     document.body.innerHTML = "<h2>Zwei</h2>";
     const { container } = render(
-      <AnchorNavWidget level="h3" heading="Auf einen Blick" self={null} blocksOnly={false} />,
+      <AnchorNavWidget level="h2" heading="Auf einen Blick" self={null} blocksOnly={false} headings={undefined} />,
     );
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("wendet die Beschränkung auf Title- und Text-Blöcke an", () => {
+  it("wendet die Beschränkung auf Title- und Text-Blöcke auf das Erfasste an", () => {
     document.body.innerHTML = `
       <div data-c13y-component="text-container-block"><h2>Abschnitt</h2></div>
       <div data-sb-custom-block-widget-host><h2>Aus einem Widget</h2></div>`;
@@ -72,19 +76,20 @@ describe("AnchorNavWidget", () => {
         heading={null}
         self={null}
         blocksOnly={true}
+        headings={attr("Abschnitt", "Aus einem Widget")}
       />,
     );
     expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Abschnitt"]);
   });
 
-  it("beobachtet die Seite nicht und sucht nur endlich oft", async () => {
+  it("beobachtet die Seite nicht und gibt die Suche nach endlich vielen Versuchen auf", async () => {
     // Der Kern dieses Umbaus: auf der veröffentlichten Seite hängt kein
     // `MutationObserver` mehr am Dokument.
     const observe = jest.spyOn(MutationObserver.prototype, "observe");
     jest.useFakeTimers();
     const timeout = jest.spyOn(global, "setTimeout");
     const retries = (): number =>
-      timeout.mock.calls.filter(([, delay]) => SCAN_DELAYS_MS.includes(delay as number)).length;
+      timeout.mock.calls.filter(([, delay]) => RESOLVE_RETRY_MS.includes(delay as number)).length;
     try {
       document.body.innerHTML = "<h2>Da</h2>";
       render(
@@ -93,16 +98,17 @@ describe("AnchorNavWidget", () => {
           heading={null}
           self={null}
           blocksOnly={false}
+          headings={attr("Da", "Kommt nie")}
         />,
       );
       await act(async () => {
         jest.advanceTimersByTime(60_000);
       });
-      expect(retries()).toBe(SCAN_DELAYS_MS.length);
+      expect(retries()).toBe(RESOLVE_RETRY_MS.length);
       await act(async () => {
         jest.advanceTimersByTime(600_000);
       });
-      expect(retries()).toBe(SCAN_DELAYS_MS.length);
+      expect(retries()).toBe(RESOLVE_RETRY_MS.length);
       expect(observe).not.toHaveBeenCalled();
       expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Da"]);
     } finally {
@@ -117,13 +123,13 @@ describe("AnchorNavWidget", () => {
     try {
       document.body.innerHTML = "";
       render(
-        <AnchorNavWidget level="h2" heading={null} self={null} blocksOnly={false} />,
+        <AnchorNavWidget level="h2" heading={null} self={null} blocksOnly={false} headings={attr("Später")} />,
       );
       expect(screen.queryAllByRole("link")).toHaveLength(0);
 
       document.body.insertAdjacentHTML("beforeend", "<h2>Später</h2>");
       await act(async () => {
-        jest.advanceTimersByTime(SCAN_DELAYS_MS[0]);
+        jest.advanceTimersByTime(RESOLVE_RETRY_MS[0]);
       });
       expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Später"]);
     } finally {

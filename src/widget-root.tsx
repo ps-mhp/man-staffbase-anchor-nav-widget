@@ -11,11 +11,12 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 
 import { AnchorNav } from "./anchor-nav";
 import { HeadingLevel } from "./configuration-schema";
-import { useScannedHeadings } from "./use-scanned-headings";
+import { readHeadings } from "./heading-scan";
+import { useResolvedHeadings } from "./use-resolved-headings";
 
 export interface AnchorNavWidgetProps {
   readonly level: HeadingLevel;
@@ -24,6 +25,8 @@ export interface AnchorNavWidgetProps {
   readonly self: HTMLElement | null;
   /** Nur Überschriften aus Title- und Text-Blöcken zeigen. */
   readonly blocksOnly: boolean;
+  /** Das Attribut `headings`, wie es im Studio erfasst wurde (roh, siehe `readHeadings`). */
+  readonly headings: unknown;
 }
 
 /**
@@ -38,7 +41,9 @@ export function AnchorNavWidget({
   heading,
   self,
   blocksOnly,
+  headings: raw,
 }: AnchorNavWidgetProps): React.ReactElement | null {
-  const headings = useScannedHeadings(level, blocksOnly, self);
+  const texts = useMemo(() => readHeadings(raw), [raw]);
+  const headings = useResolvedHeadings(texts, level, blocksOnly, self);
   return <AnchorNav headings={headings} heading={heading} />;
 }

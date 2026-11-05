@@ -1,7 +1,7 @@
 # Nawigacja oparta na nagłówkach
 
 Widżet odczytuje nagłówki strony i wyświetla te z jednego poziomu — od H1 do
-H6 — jako listę odnośników. Kliknięcie powoduje przejście do danego miejsca; podczas czytania
+H6 — jako listę odnośników. Jedno kliknięcie przenosi użytkownika do danego miejsca; podczas czytania
 czerwony znacznik przesuwa się do nagłówka, przy którym aktualnie się znajdujesz.
 
 Lista tworzy się podczas wyświetlania strony. Nie trzeba jej aktualizować: zmiana nazwy,

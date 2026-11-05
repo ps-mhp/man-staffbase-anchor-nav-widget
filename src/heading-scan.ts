@@ -166,6 +166,20 @@ function headingOrigin(element: HTMLElement): HeadingOrigin {
   return { erlaubt: erlaubt ?? false, imDesigner };
 }
 
+/**
+ * Eine Überschrift, wie das Studio sie vorfindet.
+ *
+ * Gespeichert wird nur der Text. Die Ebene dient allein der Anzeige im Dialog:
+ * das Studio rendert die Seite mit anderen Ebenen als die veröffentlichte
+ * Seite (gemessen: H1 16 · H2 1 · H3 22 gegenüber 11 H1 und 12 H2). Ebene und
+ * Herkunft entscheidet deshalb erst das Frontend, am echten Element.
+ */
+export interface CapturedHeading {
+  readonly level: number;
+  readonly text: string;
+}
+
+const HEADING_TAG = /^H([1-6])$/;
 const OWN_TAG = "ANCHOR-NAV-WIDGET";
 
 /** Steckt `element` in einem Ankernavigations-Widget — dem eigenen oder einem zweiten auf der Seite? */
@@ -183,44 +197,123 @@ function insideOwnWidget(element: HTMLElement): boolean {
 const normalize = (element: HTMLElement): string => (element.textContent ?? "").replace(/\s+/g, " ").trim();
 
 /**
- * Das Verzeichnis der Seite: alle Überschriften der Ebene, in
- * Dokumentreihenfolge, mit eindeutigen Slugs.
+ * Alle Überschriften unter `root`, in Dokumentreihenfolge.
  *
- * Ein einziger Durchlauf. Wie oft er läuft, bestimmt `useScannedHeadings` —
- * eine feste, kleine Zahl je Seitenaufruf, nie als Antwort auf Änderungen.
- *
- * Ohne jede Marke des Content Designers ist es eine Seite des klassischen
- * Editors: dann zählt jede Überschrift als Block-Überschrift, sonst leerte der
- * Filter das Verzeichnis dort vollständig.
+ * Läuft im Studio, einmal je geöffnetem Dialog — nie auf der veröffentlichten
+ * Seite. `exclude` nimmt den Dialog selbst heraus, dessen Titel sonst als
+ * Abschnitt der Seite mitkäme.
  */
-export function scanHeadings(
+export function captureHeadings(root: ParentNode, exclude: readonly Node[] = []): CapturedHeading[] {
+  const found: CapturedHeading[] = [];
+  for (const element of walk(root)) {
+    const match = HEADING_TAG.exec(element.tagName);
+    if (match === null) continue;
+    if (exclude.some((node) => isInside(element, node))) continue;
+    if (insideOwnWidget(element)) continue;
+
+    const text = normalize(element);
+    if (text !== "") found.push({ level: Number(match[1]), text });
+  }
+  return found;
+}
+
+/** Für das Attribut: die Texte in Seitenreihenfolge. */
+export function encodeHeadings(headings: readonly CapturedHeading[]): string {
+  return JSON.stringify(headings.map(({ text }) => text));
+}
+
+/**
+ * Das Attribut zurück in Texte. Was sich nicht lesen lässt, fällt still weg:
+ * ein kaputter Eintrag soll das Verzeichnis nicht leeren.
+ *
+ * Nimmt auch ein fertiges Array (`parseAttributes` des SDK dekodiert manche
+ * Werte selbst) und die Tupel `[ebene, text, …]`, die rc.5 gespeichert hat.
+ */
+export function readHeadings(raw: unknown): string[] {
+  let parsed: unknown = raw;
+  if (typeof raw === "string") {
+    if (raw.trim() === "") return [];
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+  if (!Array.isArray(parsed)) return [];
+
+  const texts: string[] = [];
+  for (const entry of parsed) {
+    const text: unknown = Array.isArray(entry) ? entry[1] : entry;
+    if (typeof text === "string" && text.trim() !== "") texts.push(text.trim());
+  }
+  return texts;
+}
+
+/** Was die Suche ergab: die Einträge und ob jeder gespeicherte Text gefunden wurde. */
+export interface ResolvedHeadings {
+  readonly headings: ScannedHeading[];
+  readonly complete: boolean;
+}
+
+/**
+ * Die gespeicherten Texte auf der Seite wiederfinden und das Verzeichnis
+ * daraus bilden.
+ *
+ * Zugeordnet wird der Reihe nach über den Text, über alle Ebenen: der Zeiger
+ * läuft nur vorwärts, so findet jeder von drei gleichlautenden Texten seine
+ * eigene Überschrift. Fehlt ein Text — etwa die Beschriftung eines
+ * Platzhalters, die es nur im Studio gibt —, bleibt der Zeiger stehen.
+ *
+ * Erst danach wird nach Ebene und Herkunft gefiltert, am Element dieser
+ * Seite. Ohne jede Marke des Content Designers ist es eine Seite des
+ * klassischen Editors: dann zählt jede Überschrift als Block-Überschrift,
+ * sonst leerte der Filter das Verzeichnis dort vollständig.
+ */
+export function resolveHeadings(
+  texts: readonly string[],
   level: HeadingLevel,
   blocksOnly: boolean,
   self: HTMLElement | null,
   root: ParentNode = document.body,
-): ScannedHeading[] {
-  const found: { readonly element: HTMLElement; readonly text: string }[] = [];
+): ResolvedHeadings {
+  if (texts.length === 0) return { headings: [], complete: true };
+
+  const candidates: { readonly element: HTMLElement; readonly text: string }[] = [];
   for (const element of walk(root)) {
-    if (element.tagName.toLowerCase() !== level) continue;
+    if (!HEADING_TAG.test(element.tagName)) continue;
     if (self !== null && isInside(element, self)) continue;
-    if (insideOwnWidget(element)) continue;
-    const text = normalize(element);
-    if (text !== "") found.push({ element, text });
+    candidates.push({ element, text: normalize(element) });
   }
 
-  const origins = blocksOnly ? found.map(({ element }) => headingOrigin(element)) : [];
+  let cursor = 0;
+  let found = 0;
+  const matched: HTMLElement[] = [];
+  for (const text of texts) {
+    for (let index = cursor; index < candidates.length; index += 1) {
+      if (candidates[index].text === text) {
+        cursor = index + 1;
+        found += 1;
+        if (candidates[index].element.tagName.toLowerCase() === level) matched.push(candidates[index].element);
+        break;
+      }
+    }
+  }
+
+  const origins = matched.map(headingOrigin);
   const designer = origins.some((origin) => origin.imDesigner);
 
   const headings: ScannedHeading[] = [];
   const taken = new Map<string, number>();
-  found.forEach(({ element, text }, index) => {
-    if (designer && !origins[index].erlaubt) return;
+  matched.forEach((element, index) => {
+    if (blocksOnly && designer && !origins[index].erlaubt) return;
+    const text = normalize(element);
     const base = slugify(text) || `abschnitt-${headings.length + 1}`;
     const seen = taken.get(base) ?? 0;
     taken.set(base, seen + 1);
     headings.push({ element, text, slug: seen === 0 ? base : `${base}-${seen + 1}` });
   });
-  return headings;
+
+  return { headings, complete: found === texts.length };
 }
 
 /**
