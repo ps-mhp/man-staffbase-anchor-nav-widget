@@ -1,5 +1,18 @@
 # Einstellungen
 
+## Überschriften übernehmen
+
+Das Widget liest die Überschriften nicht auf der veröffentlichten Seite, sondern
+beim Bearbeiten im Studio: Sobald sich der Einstellungsdialog des Widgets öffnet,
+übernimmt er die Überschriften der Seite. Unten im Dialog steht, wie viele
+angekommen sind, etwa „22 Überschriften der Seite übernommen (H1: 12 · H2: 10)".
+
+Danach speichern. Erst dann kennt die veröffentlichte Seite die Liste.
+
+Ändern sich Überschriften der Seite, den Dialog erneut öffnen und speichern —
+sonst zeigt das Widget den alten Stand. Überschriften, die es nicht mehr gibt,
+fallen von selbst weg.
+
 ## Überschriftenebene
 
 Welche Ebene die Liste zeigt: **H1** bis **H6**. Vorgabe ist **H2**.

@@ -12,8 +12,9 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 
+import { RESOLVE_RETRY_MS } from "./use-resolved-headings";
 import { AnchorNavWidget } from "./widget-root";
 
 /** Stellt `matchMedia` auf „nichts trifft zu": volle Darstellung, weiche Übergänge. */
@@ -40,38 +41,97 @@ describe("AnchorNavWidget", () => {
     delete (window as { matchMedia?: unknown }).matchMedia;
   });
 
-  it("zeigt die Überschriften der gewählten Ebene", () => {
+  /** Ein Attribut, wie das Studio es schreibt: `[ebene, text, ausBlock]`. */
+  const attr = (...headings: [number, string, 0 | 1][]): string => JSON.stringify(headings);
+
+  it("zeigt die erfassten Überschriften der gewählten Ebene", () => {
     document.body.innerHTML = "<h3>Drei</h3><h2>Zwei</h2>";
-    render(<AnchorNavWidget level="h3" heading="Auf einen Blick" self={null} blocksOnly={false} />);
+    render(
+      <AnchorNavWidget
+        level="h3"
+        heading="Auf einen Blick"
+        self={null}
+        blocksOnly={false}
+        headings={attr([3, "Drei", 1], [2, "Zwei", 1])}
+      />,
+    );
     expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Drei"]);
   });
 
-  it("gibt nichts aus, wenn die Seite die Ebene nicht verwendet", () => {
+  it("gibt nichts aus, solange im Studio nichts erfasst wurde", () => {
     document.body.innerHTML = "<h2>Zwei</h2>";
-    const { container } = render(<AnchorNavWidget level="h4" heading="Auf einen Blick" self={null} blocksOnly={false} />);
+    const { container } = render(
+      <AnchorNavWidget level="h2" heading="Auf einen Blick" self={null} blocksOnly={false} headings={undefined} />,
+    );
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("listet sich nicht selbst auf", () => {
-    document.body.innerHTML = "<h2>Echt</h2>";
-    const self = document.createElement("div");
-    self.innerHTML = "<h2>Auf einen Blick</h2>";
-    document.body.appendChild(self);
-
-    render(<AnchorNavWidget level="h2" heading={null} self={self} blocksOnly={false} />);
-
-    expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Echt"]);
+  it("wendet die Beschränkung auf Title- und Text-Blöcke auf das Erfasste an", () => {
+    document.body.innerHTML = "<h2>Abschnitt</h2><h2>Aus einem Widget</h2>";
+    render(
+      <AnchorNavWidget
+        level="h2"
+        heading={null}
+        self={null}
+        blocksOnly={true}
+        headings={attr([2, "Abschnitt", 1], [2, "Aus einem Widget", 0])}
+      />,
+    );
+    expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Abschnitt"]);
   });
 
-  it("reicht die Beschraenkung auf Title- und Text-Bloecke bis zum Scan durch", () => {
-    document.body.innerHTML = `
-      <div data-c13y-component="column-block">
-        <div data-c13y-component="title-block"><h2>Abschnitt</h2></div>
-        <div data-sb-custom-block-widget-host><h2>Aus einem Widget</h2></div>
-      </div>`;
+  it("beobachtet die Seite nicht und gibt die Suche nach endlich vielen Versuchen auf", async () => {
+    // Der Kern dieses Umbaus: auf der veröffentlichten Seite hängt kein
+    // `MutationObserver` mehr am Dokument.
+    const observe = jest.spyOn(MutationObserver.prototype, "observe");
+    jest.useFakeTimers();
+    const timeout = jest.spyOn(global, "setTimeout");
+    const retries = (): number =>
+      timeout.mock.calls.filter(([, delay]) => RESOLVE_RETRY_MS.includes(delay as number)).length;
+    try {
+      document.body.innerHTML = "<h2>Da</h2>";
+      render(
+        <AnchorNavWidget
+          level="h2"
+          heading={null}
+          self={null}
+          blocksOnly={false}
+          headings={attr([2, "Da", 1], [2, "Kommt nie", 1])}
+        />,
+      );
+      await act(async () => {
+        jest.advanceTimersByTime(60_000);
+      });
+      expect(retries()).toBe(RESOLVE_RETRY_MS.length);
+      await act(async () => {
+        jest.advanceTimersByTime(600_000);
+      });
+      expect(retries()).toBe(RESOLVE_RETRY_MS.length);
+      expect(observe).not.toHaveBeenCalled();
+      expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Da"]);
+    } finally {
+      timeout.mockRestore();
+      jest.useRealTimers();
+      observe.mockRestore();
+    }
+  });
 
-    render(<AnchorNavWidget level="h2" heading={null} self={null} blocksOnly={true} />);
+  it("nimmt eine Überschrift auf, die erst nach dem Widget erscheint", async () => {
+    jest.useFakeTimers();
+    try {
+      document.body.innerHTML = "";
+      render(
+        <AnchorNavWidget level="h2" heading={null} self={null} blocksOnly={false} headings={attr([2, "Später", 1])} />,
+      );
+      expect(screen.queryAllByRole("link")).toHaveLength(0);
 
-    expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Abschnitt"]);
+      document.body.insertAdjacentHTML("beforeend", "<h2>Später</h2>");
+      await act(async () => {
+        jest.advanceTimersByTime(RESOLVE_RETRY_MS[0]);
+      });
+      expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Später"]);
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });

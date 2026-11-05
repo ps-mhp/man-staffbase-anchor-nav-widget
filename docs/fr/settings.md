@@ -1,13 +1,26 @@
 # Paramètres
 
-## Niveau de titre
+## Reprendre les titres
+
+Le widget ne lit pas les titres sur la page publiée, mais
+lors de la modification dans Studio : dès que la boîte de dialogue des paramètres du widget s'ouvre,
+il reprend les titres de la page. En bas de la boîte de dialogue, le nombre de
+titres récupérés est indiqué, par exemple « 22 titres de la page récupérés (H1 : 12 · H2 : 10) ».
+
+Enregistrez ensuite. Ce n’est qu’à ce moment-là que la page publiée prendra en compte la liste.
+
+Si les titres de la page changent, rouvrez la boîte de dialogue et enregistrez —
+sinon, le widget affichera l'ancienne version. Les titres qui n'existent plus
+sont automatiquement supprimés.
+
+## Niveau des titres
 
 Niveau affiché par la liste : **H1** à **H6**. La valeur par défaut est **H2**.
 
-Il s'agit d'un niveau précis, et non pas « à partir de ce niveau ». Si vous sélectionnez H2, vous obtenez les H2
-de la page — les H3 situés en dessous ne sont pas pris en compte.
+Il s’agit d’un niveau précis, et non pas « à partir de ce niveau ». Si vous sélectionnez H2, vous obtiendrez les H2
+de la page — les H3 situés en dessous ne seront pas pris en compte.
 
-Si le widget n'affiche rien, cela signifie que la page n'utilise pas ce niveau. Vérifiez alors dans le texte
+Si le widget n’affiche rien, cela signifie que la page n’utilise pas ce niveau. Vérifiez alors dans le texte
 quel niveau les sections ont réellement.
 
 ## Titre

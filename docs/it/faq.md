@@ -2,16 +2,21 @@
 
 ## Il widget non visualizza nulla.
 
-La pagina non contiene alcun titolo del livello impostato. Scegliere un altro livello
+Se la finestra di dialogo delle impostazioni del widget non è mai stata aperta
+e salvata dopo l'inserimento, il widget non riconosce i titoli della pagina. In Studio,
+aprire la finestra di dialogo, verificare il numero di titoli rilevati e salvare.
+
+Se è indicato «0 titoli», Studio non ne rileva alcuno — in tal caso, nemmeno il
+salvataggio risolve il problema. Altrimenti: la pagina non presenta alcun titolo del livello impostato. Selezionare un altro livello
 oppure inserire un titolo nel testo. Un widget vuoto non visualizza nulla —
-nemmeno un riquadro vuoto né un titolo.
+nemmeno una casella vuota né un titolo.
 
 ## Visualizza troppo pochi titoli.
 
-I titoli con testo vuoto vengono ignorati. Inoltre, i titoli all’interno del
-widget stesso non vengono conteggiati, altrimenti il widget rimanderebbe a se stesso.
+I titoli con testo vuoto vengono ignorati. E i titoli all’interno del
+widget stesso non vengono conteggiati, altrimenti il widget farebbe riferimento a se stesso.
 
-Se mancano ulteriori voci, significa che l’opzione «Solo titoli dai blocchi Title e
+Se mancano ulteriori voci, l’opzione «Solo titoli dai blocchi Title e
 Text» è attivata e il titolo mancante si trova in un altro
 modulo. Disattivando l’opzione, il titolo verrà incluso.
 
@@ -37,13 +42,18 @@ titolo del widget oppure selezionare un livello che il blocco di testo non possi
 Segue lo scorrimento e rimane sull’intestazione che per ultima ha raggiunto il
 quarto superiore della finestra. Nella parte superiore della pagina si trova sul titolo
 — oppure, se non è stato inserito alcun titolo, sulla prima voce. Chi ha impostato «Riduci
-il movimento» la vedrà saltare invece che scorrere — è intenzionale.
+il movimento» la vedrà saltare anziché scorrere — è intenzionale.
+
+## Manca un’intestazione nuova o rinominata.
+
+L’elenco risale all’ultimo salvataggio della finestra di dialogo del widget. Aprire la finestra di dialogo e
+salvare per applicare la modifica.
 
 ## È possibile modificare l’ordine?
 
-No. L’elenco segue l’ordine nel testo. Chi desidera modificare l’ordine dei riferimenti
+No. L’elenco segue l’ordine presente nel testo. Chi desidera modificare l’ordine dei collegamenti
 deve modificare l’ordine delle sezioni.
 
-## Se due titoli hanno lo stesso nome, il collegamento funziona correttamente?
+## Due titoli hanno lo stesso nome: il collegamento funziona correttamente?
 
-Sì. I collegamenti memorizzano il titolo stesso, non il loro nome.
+Sì. I collegamenti memorizzano il titolo stesso, non il suo nome.

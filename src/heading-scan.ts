@@ -167,71 +167,176 @@ function headingOrigin(element: HTMLElement): HeadingOrigin {
 }
 
 /**
- * Die Überschriften der Ebene, in Dokumentreihenfolge.
+ * Eine Überschrift, wie sie im Attribut `headings` steht: Ebene (1–6), Text
+ * und ob sie aus einem Title- oder Text-Block stammt.
  *
- * `self` ist der eigene Container: alles darin bleibt außen vor, sonst führt
- * ein Titel derselben Ebene das Widget in seiner eigenen Liste auf.
- *
- * `blocksOnly` beschränkt die Liste auf Title- und Text-Blöcke. Ohne diese
- * Schranke zählen auch Überschriften, die andere Widgets in ihrer eigenen
- * Darstellung führen — auf einer Seite mit mehreren Widgets ist das Verzeichnis
- * dann voller Zeilen, die kein Abschnitt der Seite sind.
- *
- * Der Filter greift nur, wenn wenigstens eine Überschrift unter einer Marke
- * des Content Designers steht. Auf einer Seite des klassischen Editors gibt es
- * die Bausteine nicht, nach denen er unterscheidet; er leerte das Verzeichnis
- * dort vollständig, und der Redakteur sähe den Grund nicht.
- *
- * Unsichtbare Überschriften bleiben drin. Ob ein Abschnitt gerade eingeklappt
- * ist, ändert sich jederzeit, und eine Sichtbarkeitsprüfung hinge an einer
- * Layout-Berechnung bei jedem Durchlauf.
+ * Erfasst werden alle Ebenen und beide Herkünfte, gefiltert wird erst beim
+ * Anzeigen. Sonst müsste das Erfassen im Studio die übrigen Felder des
+ * Dialogs auslesen, und ein Wechsel der Ebene ohne erneutes Erfassen zeigte
+ * ein leeres Verzeichnis.
  */
-export function scanHeadings(
-  level: HeadingLevel,
-  self: HTMLElement | null,
-  blocksOnly: boolean = false,
-): ScannedHeading[] {
-  const gefunden: { readonly element: HTMLElement; readonly text: string; readonly origin: HeadingOrigin }[] = [];
+export interface CapturedHeading {
+  readonly level: number;
+  readonly text: string;
+  readonly inBlock: boolean;
+}
 
-  for (const element of walk(document.body)) {
-    if (element.tagName.toLowerCase() !== level) continue;
-    if (self !== null && isInside(element, self)) continue;
+const HEADING_TAG = /^H([1-6])$/;
+const OWN_TAG = "ANCHOR-NAV-WIDGET";
 
-    const text = (element.textContent ?? "").replace(/\s+/g, " ").trim();
+/** Steckt `element` in einem Ankernavigations-Widget — dem eigenen oder einem zweiten auf der Seite? */
+function insideOwnWidget(element: HTMLElement): boolean {
+  let current: Node | null = element;
+  while (current !== null) {
+    if (current instanceof HTMLElement && current.tagName === OWN_TAG) return true;
+    if (current.parentNode !== null) current = current.parentNode;
+    else if (current instanceof ShadowRoot) current = current.host;
+    else current = null;
+  }
+  return false;
+}
+
+const normalize = (element: HTMLElement): string => (element.textContent ?? "").replace(/\s+/g, " ").trim();
+
+/**
+ * Alle Überschriften unter `root`, in Dokumentreihenfolge.
+ *
+ * Läuft im Studio, einmal je geöffnetem Dialog — nie auf der veröffentlichten
+ * Seite. `exclude` nimmt den Dialog selbst heraus, dessen Titel sonst als
+ * Abschnitt der Seite mitkäme.
+ *
+ * Trägt keine einzige Überschrift eine Marke des Content Designers, ist es
+ * eine Seite des klassischen Editors: dann zählt jede als Block-Überschrift,
+ * sonst leerte der Filter das Verzeichnis dort vollständig.
+ */
+export function captureHeadings(root: ParentNode, exclude: readonly Node[] = []): CapturedHeading[] {
+  const found: { readonly level: number; readonly text: string; readonly origin: HeadingOrigin }[] = [];
+
+  for (const element of walk(root)) {
+    const match = HEADING_TAG.exec(element.tagName);
+    if (match === null) continue;
+    if (exclude.some((node) => isInside(element, node))) continue;
+    if (insideOwnWidget(element)) continue;
+
+    const text = normalize(element);
     if (text === "") continue;
 
-    gefunden.push({
-      element,
-      text,
-      origin: blocksOnly ? headingOrigin(element) : { erlaubt: true, imDesigner: false },
-    });
+    found.push({ level: Number(match[1]), text, origin: headingOrigin(element) });
   }
 
-  // Die Frage gilt der Seite, nicht der einzelnen Überschrift: erst wenn
-  // feststeht, dass es überhaupt Bausteine gibt, darf gefiltert werden.
-  const filter = blocksOnly && gefunden.some((kandidat) => kandidat.origin.imDesigner);
-  const bleibt = filter ? gefunden.filter((kandidat) => kandidat.origin.erlaubt) : gefunden;
+  const designer = found.some((entry) => entry.origin.imDesigner);
+  return found.map(({ level, text, origin }) => ({ level, text, inBlock: !designer || origin.erlaubt }));
+}
 
-  const headings: ScannedHeading[] = [];
+/**
+ * Für das Attribut: je Überschrift `[ebene, text, 0|1]`.
+ *
+ * Tupel statt Objekte, weil das Attribut im Seitenquelltext steht und bei
+ * jedem Aufruf mitgeladen wird; Schlüsselnamen je Eintrag wären reiner
+ * Ballast.
+ */
+export function encodeHeadings(headings: readonly CapturedHeading[]): string {
+  return JSON.stringify(headings.map(({ level, text, inBlock }) => [level, text, inBlock ? 1 : 0]));
+}
+
+/**
+ * Das Attribut zurück in Überschriften. Was sich nicht lesen lässt, fällt
+ * still weg: ein kaputter Eintrag soll das Verzeichnis nicht leeren.
+ *
+ * Nimmt auch ein fertiges Array: `parseAttributes` des SDK dekodiert manche
+ * Werte selbst, und ob Staffbase dieses Feld so ablegt, liegt nicht bei uns.
+ */
+export function readHeadings(raw: unknown): CapturedHeading[] {
+  let parsed: unknown = raw;
+  if (typeof raw === "string") {
+    if (raw.trim() === "") return [];
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+  if (!Array.isArray(parsed)) return [];
+
+  const headings: CapturedHeading[] = [];
+  for (const entry of parsed) {
+    if (!Array.isArray(entry)) continue;
+    const [level, text, inBlock] = entry as unknown[];
+    if (typeof level !== "number" || !Number.isInteger(level) || level < 1 || level > 6) continue;
+    if (typeof text !== "string" || text.trim() === "") continue;
+    headings.push({ level, text: text.trim(), inBlock: inBlock !== 0 });
+  }
+  return headings;
+}
+
+/** Ein Eintrag des Verzeichnisses, bevor feststeht, welches Element er meint. */
+export interface HeadingEntry {
+  readonly text: string;
+  readonly slug: string;
+}
+
+/** Die Einträge für Ebene und Filter, mit eindeutigen Slugs. */
+export function selectHeadings(
+  headings: readonly CapturedHeading[],
+  level: HeadingLevel,
+  blocksOnly: boolean,
+): HeadingEntry[] {
+  const wanted = Number(level.slice(1));
+  const entries: HeadingEntry[] = [];
   const taken = new Map<string, number>();
 
-  for (const { element, text } of bleibt) {
-    const base = slugify(text) || `abschnitt-${headings.length + 1}`;
+  for (const heading of headings) {
+    if (heading.level !== wanted) continue;
+    if (blocksOnly && !heading.inBlock) continue;
+
+    const base = slugify(heading.text) || `abschnitt-${entries.length + 1}`;
     const seen = taken.get(base) ?? 0;
     taken.set(base, seen + 1);
+    entries.push({ text: heading.text, slug: seen === 0 ? base : `${base}-${seen + 1}` });
+  }
+  return entries;
+}
 
-    headings.push({ element, text, slug: seen === 0 ? base : `${base}-${seen + 1}` });
+/**
+ * Je Eintrag das Element auf der Seite, oder `null`, wenn es (noch) fehlt.
+ *
+ * Zugeordnet wird der Reihe nach über den Text: der Zeiger läuft nur
+ * vorwärts, so findet jeder von drei gleichlautenden Einträgen seine eigene
+ * Überschrift, und eine Überschrift dazwischen, die das Verzeichnis nicht
+ * führt (aus einem Widget etwa), wird übersprungen. Fehlt ein Eintrag, bleibt
+ * der Zeiger stehen — die folgenden finden ihr Element trotzdem.
+ */
+export function resolveHeadings(
+  entries: readonly HeadingEntry[],
+  level: HeadingLevel,
+  self: HTMLElement | null,
+  root: ParentNode = document.body,
+): (HTMLElement | null)[] {
+  const candidates: { readonly element: HTMLElement; readonly text: string }[] = [];
+  for (const element of walk(root)) {
+    if (element.tagName.toLowerCase() !== level) continue;
+    if (self !== null && isInside(element, self)) continue;
+    candidates.push({ element, text: normalize(element) });
   }
 
-  return headings;
+  let cursor = 0;
+  return entries.map((entry) => {
+    for (let index = cursor; index < candidates.length; index += 1) {
+      if (candidates[index].text === entry.text) {
+        cursor = index + 1;
+        return candidates[index].element;
+      }
+    }
+    return null;
+  });
 }
 
 /**
  * Beschreiben zwei Scans dasselbe Verzeichnis?
  *
- * Der `MutationObserver` meldet jede fremde Änderung am Dokument. Ohne diesen
- * Vergleich löste jede davon ein Neurendern aus — und das Segment spränge
- * mitten in seiner Bewegung zurück.
+ * Jeder Suchversuch liefert eine neue Liste. Ohne diesen Vergleich löste
+ * jeder davon ein Neurendern aus — und das Segment spränge mitten in seiner
+ * Bewegung zurück.
  */
 export function sameHeadings(a: readonly ScannedHeading[], b: readonly ScannedHeading[]): boolean {
   return (

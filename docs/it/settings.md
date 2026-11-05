@@ -1,13 +1,26 @@
 # Impostazioni
 
+## Importa titoli
+
+Il widget non legge i titoli dalla pagina pubblicata, ma
+durante la modifica in Studio: non appena si apre la finestra di dialogo delle impostazioni del widget,
+questo importa i titoli della pagina. Nella parte inferiore della finestra di dialogo viene indicato il numero
+di titoli acquisiti, ad esempio «22 titoli della pagina acquisiti (H1: 12 · H2: 10)».
+
+A questo punto salvare. Solo allora la pagina pubblicata riconoscerà l’elenco.
+
+Se i titoli della pagina cambiano, riaprire la finestra di dialogo e salvare —
+altrimenti il widget mostrerà lo stato precedente. I titoli che non esistono più
+vengono automaticamente eliminati.
+
 ## Livello dei titoli
 
-Il livello visualizzato dall'elenco: da **H1** a **H6**. L'impostazione predefinita è **H2**.
+Quale livello mostra l’elenco: da **H1** a **H6**. L’impostazione predefinita è **H2**.
 
-Si tratta di un unico livello, non "a partire da questo livello". Se si seleziona H2, verrà visualizzato l'H2
-della pagina — gli H3 sottostanti non verranno inclusi.
+Si tratta di un unico livello, non «a partire da questo livello». Chi seleziona H2 vedrà gli H2
+della pagina — gli H3 sottostanti non vengono inclusi.
 
-Se il widget non visualizza nulla, significa che la pagina non utilizza quel livello. In tal caso, controllare nel testo
+Se il widget non mostra nulla, significa che la pagina non utilizza quel livello. In tal caso, controllare nel testo
 quale livello abbiano effettivamente le sezioni.
 
 ## Titolo
