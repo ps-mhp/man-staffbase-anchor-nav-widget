@@ -1,6 +1,6 @@
 {
   "name": "@man/anchor-nav-widget",
-  "version": "0.1.0-rc.7",
+  "version": "0.1.0-rc.8",
   "description": "Inhaltsverzeichnis einer Seite: die Überschriften einer wählbaren Ebene als Sprungverweise mit Aktiv-Markierung.",
   "author": "",
   "license": "ISC",
