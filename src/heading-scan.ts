@@ -49,11 +49,35 @@ export function slugify(text: string): string {
  * Licht-Kindern.
  */
 function* walk(root: ParentNode): Generator<HTMLElement> {
-  for (const child of Array.from(root.children)) {
+  // Ein eigener Stapel statt Rekursion mit `yield*`: jede Delegationsebene
+  // reicht jedes Element durch alle darüberliegenden Generatoren hindurch,
+  // die Kosten sind also Elementzahl mal Schachtelungstiefe. Der Content
+  // Designer schachtelt tief (section > column > container > column > …, jede
+  // Ebene zusätzlich mit eigenem Shadow Root), und dieser Durchlauf erfasst
+  // das ganze Dokument — aus einem linearen Scan wurde so ein quadratischer.
+  const stack: Element[] = [];
+  for (let index = root.children.length - 1; index >= 0; index -= 1) {
+    stack.push(root.children[index]);
+  }
+
+  while (stack.length > 0) {
+    const child = stack.pop() as Element;
     if (!(child instanceof HTMLElement)) continue;
     yield child;
-    if (child.shadowRoot) yield* walk(child.shadowRoot);
-    yield* walk(child);
+
+    // In umgekehrter Reihenfolge auf den Stapel, damit die Dokumentreihenfolge
+    // beim Herunternehmen wieder stimmt: erst die Licht-Kinder, dann der
+    // Schatteninhalt darüber — so kommt der Schatten zuerst heraus, wie beim
+    // rekursiven Vorgänger.
+    for (let index = child.children.length - 1; index >= 0; index -= 1) {
+      stack.push(child.children[index]);
+    }
+    const shadow = child.shadowRoot;
+    if (shadow) {
+      for (let index = shadow.children.length - 1; index >= 0; index -= 1) {
+        stack.push(shadow.children[index]);
+      }
+    }
   }
 }
 

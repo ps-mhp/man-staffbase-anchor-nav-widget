@@ -107,10 +107,31 @@ export function findScrollParent(element: HTMLElement): HTMLElement | null {
  * zuhören) — das deckt diese Funktion ab.
  */
 export function findScrollParents(elements: readonly HTMLElement[]): HTMLElement[] {
+  // `isScrollableElement` ruft `getComputedStyle` und liest `scrollHeight`
+  // und `clientHeight` — jedes davon zwingt den Browser zu einem Layout.
+  // Alle Überschriften einer Seite teilen sich den größten Teil ihrer
+  // Vorfahrenkette; ohne dieses Gedächtnis wird jeder gemeinsame Vorfahre
+  // einmal je Überschrift vermessen. Bei zwanzig Überschriften und tiefer
+  // Schachtelung sind das vierstellig viele erzwungene Layouts je Scan.
+  const urteil = new Map<HTMLElement, boolean>();
+  const rollt = (node: HTMLElement): boolean => {
+    const bekannt = urteil.get(node);
+    if (bekannt !== undefined) return bekannt;
+    const frisch = isScrollableElement(node);
+    urteil.set(node, frisch);
+    return frisch;
+  };
+
   const seen = new Set<HTMLElement>();
   const result: HTMLElement[] = [];
   for (const element of elements) {
-    const scrollParent = findScrollParent(element);
+    let node = parentOrHost(element);
+    while (node !== null) {
+      if (node instanceof HTMLElement && rollt(node)) break;
+      node = parentOrHost(node);
+    }
+
+    const scrollParent = node instanceof HTMLElement ? node : null;
     if (scrollParent !== null && !seen.has(scrollParent)) {
       seen.add(scrollParent);
       result.push(scrollParent);

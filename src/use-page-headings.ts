@@ -55,6 +55,14 @@ export function usePageHeadings(
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
     let maxWaitTimer: ReturnType<typeof setTimeout> | null = null;
 
+    // Beobachtet nur die gefundenen Überschriften, nicht die ganze Seite:
+    // `characterData` mit `subtree` an `document.body` meldet jede Textänderung
+    // irgendwo im Dokument — jede Uhr, jeder Zähler, jedes nachladende fremde
+    // Widget. Gebraucht wird davon einzig, dass sich der Text einer
+    // Überschrift ändert, und genau das leistet dieser zweite Beobachter zu
+    // einem Bruchteil der Kosten.
+    const textObserver = new MutationObserver(() => schedule());
+
     const rescan = (): void => {
       if (debounceTimer !== null) {
         clearTimeout(debounceTimer);
@@ -66,28 +74,37 @@ export function usePageHeadings(
       }
 
       const next = scanHeadings(level, self, blocksOnly);
+
+      textObserver.disconnect();
+      for (const { element } of next) {
+        textObserver.observe(element, { characterData: true, childList: true, subtree: true });
+      }
+
       // Dieselbe Liste weitergeben, wenn sich nichts geändert hat: sonst löst
       // jede fremde DOM-Änderung ein Neurendern aus und das Segment springt
       // mitten in seiner Bewegung zurück.
       setHeadings((current) => (sameHeadings(current, next) ? current : next));
     };
 
-    rescan();
-
-    const observer = new MutationObserver(() => {
+    function schedule(): void {
       if (debounceTimer !== null) clearTimeout(debounceTimer);
       debounceTimer = setTimeout(rescan, RESCAN_DELAY_MS);
       // Nur bei der ersten unbearbeiteten Mutation gesetzt: jede weitere vor
       // dem nächsten `rescan` darf die Schranke nicht wieder hinausschieben,
       // sonst wäre sie keine Schranke mehr.
       if (maxWaitTimer === null) maxWaitTimer = setTimeout(rescan, RESCAN_MAX_WAIT_MS);
-    });
-    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+    }
+
+    rescan();
+
+    const observer = new MutationObserver(schedule);
+    observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       if (debounceTimer !== null) clearTimeout(debounceTimer);
       if (maxWaitTimer !== null) clearTimeout(maxWaitTimer);
       observer.disconnect();
+      textObserver.disconnect();
     };
   }, [level, self, blocksOnly]);
 

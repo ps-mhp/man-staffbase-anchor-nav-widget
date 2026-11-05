@@ -121,7 +121,47 @@ describe("usePageHeadings", () => {
     expect(result.current.map((h) => h.text)).not.toEqual(["Eins"]);
   });
 
-  it("meldet den Observer beim Unmount ab", async () => {
+  it("bemerkt eine reine Textaenderung an einer Ueberschrift", async () => {
+    // `nodeValue` zu setzen ist eine reine `characterData`-Mutation: kein
+    // Knoten kommt oder geht, der seitenweite `childList`-Beobachter sieht
+    // davon nichts. Gesehen wird sie allein vom Beobachter, der direkt an der
+    // Ueberschrift haengt.
+    document.body.innerHTML = "<h2>Eins</h2>";
+    const { result } = renderHook(() => usePageHeadings("h2", null, false));
+    expect(result.current.map((h) => h.text)).toEqual(["Eins"]);
+
+    act(() => {
+      (document.querySelector("h2") as HTMLElement).firstChild!.nodeValue = "Geaendert";
+    });
+    await settle();
+
+    expect(result.current.map((h) => h.text)).toEqual(["Geaendert"]);
+  });
+
+  it("bemerkt eine Textaenderung an einer Ueberschrift in einem Shadow Root", async () => {
+    // Der Regressionsfall: ein `MutationObserver` reicht nie ueber eine
+    // Shadow-Grenze, auch nicht mit `subtree`. Der seitenweite Beobachter an
+    // `document.body` kann diese Aenderung grundsaetzlich nicht melden —
+    // frueher wie heute nicht. Nur weil der Textbeobachter an der Ueberschrift
+    // selbst haengt, kommt sie ueberhaupt an. Und die Bloecke des Content
+    // Designers liegen ausnahmslos in Shadow Roots.
+    const host = document.createElement("div");
+    document.body.append(host);
+    const shadow = host.attachShadow({ mode: "open" });
+    shadow.innerHTML = "<h2>Im Schatten</h2>";
+
+    const { result } = renderHook(() => usePageHeadings("h2", null, false));
+    expect(result.current.map((h) => h.text)).toEqual(["Im Schatten"]);
+
+    act(() => {
+      (shadow.querySelector("h2") as HTMLElement).firstChild!.nodeValue = "Neu im Schatten";
+    });
+    await settle();
+
+    expect(result.current.map((h) => h.text)).toEqual(["Neu im Schatten"]);
+  });
+
+  it("meldet beide Observer beim Unmount ab", async () => {
     document.body.innerHTML = "<h2>Eins</h2>";
     const { result, unmount } = renderHook(() => usePageHeadings("h2", null, false));
     const vorher = result.current;
