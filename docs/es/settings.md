@@ -18,3 +18,19 @@ se oculta; la lista permanece.
 El título se traduce junto con la página. Las entradas de la lista no necesitan
 eso: son los encabezados de la página y ya llevan su traducción
 de todos modos.
+
+## Solo encabezados de bloques «Title» y «Text»
+
+Activado de forma predeterminada. En ese caso, la lista solo cuenta los encabezados que se encuentran en un
+bloque **Title** o **Text**, es decir, las secciones que tú mismo
+has escrito.
+
+Si está desactivada, se cuentan todos los encabezados de ese nivel que aparecen en la página. Esto
+incluye también aquellos que otros widgets muestran en su propia presentación: los
+títulos de una lista de noticias, por ejemplo, o las etiquetas de un portafolio.
+Estos no forman parte de la página, y un enlace a ellos lleva a un
+lugar que el lector no espera.
+
+En las páginas sin Content Designer, el conmutador no funciona. Allí no existen los
+elementos en función de los cuales distingue, y la lista muestra, como hasta ahora,
+todos los encabezados de ese nivel; un widget vacío no tendría sentido en ese contexto.

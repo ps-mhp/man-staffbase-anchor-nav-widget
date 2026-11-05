@@ -11,6 +11,21 @@ auch keinen leeren Kasten und keinen Titel.
 Überschriften mit leerem Text werden übergangen. Und Überschriften innerhalb des
 Widgets selbst zählen nicht mit, sonst verwiese es auf sich.
 
+Fehlen darüber hinaus Einträge, ist „Nur Überschriften aus Title- und
+Text-Blöcken" eingeschaltet und die vermisste Überschrift steht in einem anderen
+Baustein. Den Schalter ausschalten nimmt sie auf.
+
+## Es zeigt Überschriften, die gar keine Abschnitte sind.
+
+Andere Widgets führen eigene Überschriften — die Titel einer Nachrichtenliste
+etwa. Stehen die in der Liste, ist „Nur Überschriften aus Title- und
+Text-Blöcken" ausgeschaltet. Einschalten beschränkt die Liste auf die
+Abschnitte, die du selbst geschrieben hast.
+
+Bleiben sie auch danach stehen, liegt die Seite nicht im Content Designer. Dort
+gibt es die Bausteine nicht, nach denen der Schalter unterscheidet, und er wirkt
+nicht.
+
 ## Es zeigt seinen eigenen Titel als Eintrag.
 
 Das sollte nicht vorkommen. Tritt es doch auf, steht die Überschrift außerhalb

@@ -42,13 +42,13 @@ describe("usePageHeadings", () => {
 
   it("liefert nach dem Mount die Überschriften des Dokuments", () => {
     document.body.innerHTML = "<h2>Eins</h2><h2>Zwei</h2>";
-    const { result } = renderHook(() => usePageHeadings("h2", null));
+    const { result } = renderHook(() => usePageHeadings("h2", null, false));
     expect(result.current.map((h) => h.text)).toEqual(["Eins", "Zwei"]);
   });
 
   it("nimmt eine neu eingefügte Überschrift nach der Entprellung auf", async () => {
     document.body.innerHTML = "<h2>Eins</h2>";
-    const { result } = renderHook(() => usePageHeadings("h2", null));
+    const { result } = renderHook(() => usePageHeadings("h2", null, false));
 
     act(() => {
       document.body.insertAdjacentHTML("beforeend", "<h2>Zwei</h2>");
@@ -60,7 +60,7 @@ describe("usePageHeadings", () => {
 
   it("nimmt einen geänderten Überschriftentext auf", async () => {
     document.body.innerHTML = "<h2>Eins</h2>";
-    const { result } = renderHook(() => usePageHeadings("h2", null));
+    const { result } = renderHook(() => usePageHeadings("h2", null, false));
 
     act(() => {
       (document.querySelector("h2") as HTMLElement).textContent = "Anders";
@@ -72,7 +72,7 @@ describe("usePageHeadings", () => {
 
   it("liefert dieselbe Liste weiter, wenn eine fremde Änderung nichts am Verzeichnis ändert", async () => {
     document.body.innerHTML = "<h2>Eins</h2><p id='text'>Alt</p>";
-    const { result } = renderHook(() => usePageHeadings("h2", null));
+    const { result } = renderHook(() => usePageHeadings("h2", null, false));
     const vorher = result.current;
 
     act(() => {
@@ -88,7 +88,7 @@ describe("usePageHeadings", () => {
     // Ohne die Hilfe des Typparameters leitet TypeScript aus `initialProps` die enge Variante "h2"
     // ab und weist dann das spaetere "h3" zurueck.
     type Props = { level: "h2" | "h3" };
-    const { result, rerender } = renderHook<readonly ScannedHeading[], Props>(({ level }) => usePageHeadings(level, null), {
+    const { result, rerender } = renderHook<readonly ScannedHeading[], Props>(({ level }) => usePageHeadings(level, null, false), {
       initialProps: { level: "h2" },
     });
     expect(result.current.map((h) => h.text)).toEqual(["Zwei"]);
@@ -104,7 +104,7 @@ describe("usePageHeadings", () => {
     // Mutation — ohne obere Schranke bliebe das Verzeichnis für immer auf
     // "Eins" stehen, obwohl der Text längst ein anderer ist.
     document.body.innerHTML = "<h2 id='h'>Eins</h2>";
-    const { result } = renderHook(() => usePageHeadings("h2", null));
+    const { result } = renderHook(() => usePageHeadings("h2", null, false));
     expect(result.current.map((h) => h.text)).toEqual(["Eins"]);
 
     const schritte = Math.ceil(1000 / 100) + 1; // überschreitet die 1-Sekunden-Schranke
@@ -123,7 +123,7 @@ describe("usePageHeadings", () => {
 
   it("meldet den Observer beim Unmount ab", async () => {
     document.body.innerHTML = "<h2>Eins</h2>";
-    const { result, unmount } = renderHook(() => usePageHeadings("h2", null));
+    const { result, unmount } = renderHook(() => usePageHeadings("h2", null, false));
     const vorher = result.current;
 
     unmount();

@@ -16,6 +16,7 @@ import { JSONSchema7 } from "json-schema";
 
 export const LEVEL_ATTRIBUTE = "level";
 export const HEADING_ATTRIBUTE = "heading";
+export const BLOCKS_ATTRIBUTE = "blocks";
 
 /** Die Überschriftenebenen, die HTML kennt. */
 export const HEADING_LEVELS = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
@@ -24,6 +25,15 @@ export type HeadingLevel = (typeof HEADING_LEVELS)[number];
 
 /** Die Ebene, die ohne Angabe gilt: h2 ist auf einer Staffbase-Seite die Abschnittsüberschrift. */
 export const DEFAULT_LEVEL: HeadingLevel = "h2";
+
+/**
+ * Ob ohne Angabe nur Title- und Text-Blöcke zählen.
+ *
+ * An: Überschriften, die andere Widgets in ihrer eigenen Darstellung führen,
+ * sind keine Abschnitte der Seite und gehören nicht ins Verzeichnis. Das ist
+ * der Normalfall, deshalb die Vorgabe.
+ */
+export const DEFAULT_BLOCKS_ONLY = true;
 
 /**
  * Das Schema des Konfigurationsdialogs.
@@ -47,6 +57,11 @@ export const configurationSchema: JSONSchema7 = {
       title: "Titel",
       default: "",
     },
+    [BLOCKS_ATTRIBUTE]: {
+      type: "boolean",
+      title: "Nur Überschriften aus Title- und Text-Blöcken",
+      default: DEFAULT_BLOCKS_ONLY,
+    },
   },
 };
 
@@ -64,6 +79,13 @@ export const uiSchema: UiSchema = {
       "Die Zeile über der Liste, etwa „Auf einen Blick“. Bleibt das Feld " +
       "leer, steht dort nichts.",
   },
+  [BLOCKS_ATTRIBUTE]: {
+    "ui:help":
+      "Ausgeschaltet zählen auch Überschriften, die andere Widgets in ihrer " +
+      "eigenen Darstellung führen. Auf Seiten ohne Content Designer wirkt " +
+      "der Schalter nicht — dort gibt es die Bausteine nicht, nach denen er " +
+      "unterscheidet.",
+  },
 };
 
 /**
@@ -77,4 +99,18 @@ export function readLevel(raw: unknown): HeadingLevel {
   return (HEADING_LEVELS as readonly string[]).includes(candidate)
     ? (candidate as HeadingLevel)
     : DEFAULT_LEVEL;
+}
+
+/**
+ * Ob nur Title- und Text-Blöcke zählen.
+ *
+ * Der Dialog führt einen Schalter, im DOM steht ein Attribut: `false` kommt
+ * als Zeichenkette an, nicht als `boolean`. Nur ein ausdrückliches Nein
+ * schaltet den Filter ab — ein fehlendes oder unverständliches Attribut ist
+ * ein Block aus der Zeit vor dieser Einstellung, und für den gilt die Vorgabe.
+ */
+export function readBlocksOnly(raw: unknown): boolean {
+  if (typeof raw === "boolean") return raw;
+  if (typeof raw === "string" && raw.trim().toLowerCase() === "false") return false;
+  return DEFAULT_BLOCKS_ONLY;
 }

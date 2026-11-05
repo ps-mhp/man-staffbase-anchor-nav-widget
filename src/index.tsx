@@ -22,18 +22,26 @@ import ReactDOM from "react-dom/client";
 import { BlockFactory, BlockDefinition, ExternalBlockDefinition, BaseBlock } from "widget-sdk";
 import { startWidget } from "@shared/dev-mode/start-widget";
 import { getTranslationRegistry } from "@shared/translation/registry";
-import { HEADING_ATTRIBUTE, LEVEL_ATTRIBUTE, configurationSchema, readLevel, uiSchema } from "./configuration-schema";
+import {
+  BLOCKS_ATTRIBUTE,
+  HEADING_ATTRIBUTE,
+  LEVEL_ATTRIBUTE,
+  configurationSchema,
+  readBlocksOnly,
+  readLevel,
+  uiSchema,
+} from "./configuration-schema";
 import { ANCHOR_NAV_WIDGET_TAG, anchorNavTranslationProvider, readHeading } from "./translation-provider";
 import { AnchorNavWidget } from "./widget-root";
 import icon from "../resources/anchor-nav-widget.svg";
 import pkg from "../package.json";
 
 /** Die Attribute des Widgets; gespiegelt im Konfigurationsschema. */
-const widgetAttributes: string[] = [LEVEL_ATTRIBUTE, HEADING_ATTRIBUTE];
+const widgetAttributes: string[] = [LEVEL_ATTRIBUTE, HEADING_ATTRIBUTE, BLOCKS_ATTRIBUTE];
 
 const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
   /**
-   * <anchor-nav-widget level="h2" heading="Auf einen Blick"></anchor-nav-widget>
+   * <anchor-nav-widget level="h2" heading="Auf einen Blick" blocks="true"></anchor-nav-widget>
    */
   return class AnchorNavWidgetBlock extends BaseBlockClass implements BaseBlock {
     private _root: ReactDOM.Root | null = null;
@@ -47,6 +55,7 @@ const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
           level={readLevel(attrs[LEVEL_ATTRIBUTE])}
           heading={readHeading(attrs[HEADING_ATTRIBUTE])}
           self={container}
+          blocksOnly={readBlocksOnly(attrs[BLOCKS_ATTRIBUTE])}
         />,
       );
     }

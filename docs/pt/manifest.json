@@ -29,14 +29,24 @@
       "title": "Títulos de nível 2",
       "attributes": {
         "level": "h2",
-        "heading": "Auf einen Blick"
+        "heading": "Auf einen Blick",
+        "blocks": "true"
       }
     },
     {
       "title": "Sem título, nível 3",
       "attributes": {
         "level": "h3",
-        "heading": ""
+        "heading": "",
+        "blocks": "true"
+      }
+    },
+    {
+      "title": "Também títulos provenientes de widgets",
+      "attributes": {
+        "level": "h2",
+        "heading": "Auf einen Blick",
+        "blocks": "false"
       }
     }
   ]

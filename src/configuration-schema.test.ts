@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-import { readLevel } from "./configuration-schema";
+import { readBlocksOnly, readLevel } from "./configuration-schema";
 
 describe("readLevel", () => {
   it("nimmt jede gültige Ebene an", () => {
@@ -32,5 +32,25 @@ describe("readLevel", () => {
 
   it("liest Groß- und Kleinschreibung gleich", () => {
     expect(readLevel("H3")).toBe("h3");
+  });
+});
+
+describe("readBlocksOnly", () => {
+  it("filtert ohne Angabe — Bloecke aus der Zeit vor der Einstellung eingeschlossen", () => {
+    expect(readBlocksOnly(undefined)).toBe(true);
+    expect(readBlocksOnly(null)).toBe(true);
+    expect(readBlocksOnly("")).toBe(true);
+  });
+
+  it("schaltet nur bei einem ausdruecklichen Nein ab", () => {
+    // Aus dem DOM kommt die Zeichenkette, aus dem Dialog der echte Wert.
+    expect(readBlocksOnly("false")).toBe(false);
+    expect(readBlocksOnly("False")).toBe(false);
+    expect(readBlocksOnly(false)).toBe(false);
+  });
+
+  it("nimmt ein Ja in beiden Formen an", () => {
+    expect(readBlocksOnly("true")).toBe(true);
+    expect(readBlocksOnly(true)).toBe(true);
   });
 });

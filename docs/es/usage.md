@@ -15,7 +15,7 @@
 ## Al modificar la página
 
 La lista sigue el texto mientras se trabaja en ella: si aparece un nuevo encabezado,
-este se muestra; si se borra uno, desaparece. No hay que hacer clic en nada ni
+este se muestra; si se elimina uno, desaparece. No hay que hacer clic en nada ni
 actualizar nada.
 
 ## En el móvil

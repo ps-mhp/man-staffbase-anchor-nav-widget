@@ -29,14 +29,24 @@
       "title": "Koppen van niveau 2",
       "attributes": {
         "level": "h2",
-        "heading": "Auf einen Blick"
+        "heading": "Auf einen Blick",
+        "blocks": "true"
       }
     },
     {
       "title": "Zonder titel, niveau 3",
       "attributes": {
         "level": "h3",
-        "heading": ""
+        "heading": "",
+        "blocks": "true"
+      }
+    },
+    {
+      "title": "Ook koppen uit widgets",
+      "attributes": {
+        "level": "h2",
+        "heading": "Auf einen Blick",
+        "blocks": "false"
       }
     }
   ]

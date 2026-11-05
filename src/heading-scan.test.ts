@@ -89,6 +89,66 @@ describe("scanHeadings", () => {
   });
 });
 
+describe("scanHeadings mit blocksOnly", () => {
+  // Aufbau wie im Content Designer, am 05.11.2026 live abgelesen: die
+  // Überschrift eines Widgets hat keinen eigenen Baustein-Marker, ihre Kette
+  // beginnt direkt bei `column-block`.
+  const SEITE = `
+    <div data-c13y-component="section-block">
+      <div data-c13y-component="column-block">
+        <div data-c13y-component="title-block"><h2>Aus dem Title-Block</h2></div>
+        <div data-c13y-component="text-container-block">
+          <div data-c13y-component="big-heading-block"><h2>Aus dem Text-Block</h2></div>
+        </div>
+        <div data-sb-custom-block-widget-host><h2>Aus einem Widget</h2></div>
+        <h2>Ohne Baustein</h2>
+      </div>
+    </div>`;
+
+  it("nimmt nur Title- und Text-Block, ohne Schranke dagegen alles", () => {
+    page(SEITE);
+    expect(scanHeadings("h2", null, true).map((h) => h.text)).toEqual([
+      "Aus dem Title-Block",
+      "Aus dem Text-Block",
+    ]);
+    expect(scanHeadings("h2", null, false)).toHaveLength(4);
+  });
+
+  it("filtert auch, was ein Widget in seinem Shadow Root führt", () => {
+    page(`
+      <div data-c13y-component="column-block">
+        <div data-c13y-component="title-block"><h2>Abschnitt</h2></div>
+        <div data-sb-custom-block-widget-host id="host"></div>
+      </div>`);
+    withShadow(document.getElementById("host") as HTMLElement, "<h2>Im Widget</h2>");
+    expect(scanHeadings("h2", null, true).map((h) => h.text)).toEqual(["Abschnitt"]);
+  });
+
+  it("lässt einen Title-Block innerhalb eines Widgets nicht durch", () => {
+    // Der Aufstieg trifft den Wirt vor dem Baustein darüber: die Überschrift
+    // gehört dem Widget, nicht dem Block, in dem das Widget steht.
+    page(`
+      <div data-c13y-component="title-block">
+        <div data-sb-custom-block-widget-host><h2>Im Widget</h2></div>
+      </div>`);
+    expect(scanHeadings("h2", null, true)).toEqual([]);
+  });
+
+  it("filtert nicht, wenn die Seite gar keine Marken des Content Designers trägt", () => {
+    // Klassischer Editor: ohne Rückfall bliebe das Verzeichnis leer, und der
+    // Redakteur sähe den Grund nicht.
+    page("<article><h2>Eins</h2><h2>Zwei</h2></article>");
+    expect(scanHeadings("h2", null, true).map((h) => h.text)).toEqual(["Eins", "Zwei"]);
+  });
+
+  it("schlaegt nicht zurueck, sobald irgendwo auf der Seite eine Marke steht", () => {
+    page(`
+      <div data-c13y-component="section-block"></div>
+      <article><h2>Fremd</h2></article>`);
+    expect(scanHeadings("h2", null, true)).toEqual([]);
+  });
+});
+
 describe("slugify", () => {
   it("löst Umlaute und Eszett auf", () => {
     expect(slugify("Lösung für Straße")).toBe("loesung-fuer-strasse");

@@ -20,8 +20,12 @@ describe("blockDefinition", () => {
   });
 
   it("führt genau die Attribute des Schemas", () => {
-    expect(blockDefinition.attributes).toEqual(["level", "heading"]);
-    expect(Object.keys(blockDefinition.configurationSchema?.properties ?? {})).toEqual(["level", "heading"]);
+    expect(blockDefinition.attributes).toEqual(["level", "heading", "blocks"]);
+    expect(Object.keys(blockDefinition.configurationSchema?.properties ?? {})).toEqual([
+      "level",
+      "heading",
+      "blocks",
+    ]);
   });
 
   it("ist ein Baustein auf Blockebene", () => {

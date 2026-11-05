@@ -11,13 +11,28 @@ nemmeno un riquadro vuoto né un titolo.
 I titoli con testo vuoto vengono ignorati. Inoltre, i titoli all’interno del
 widget stesso non vengono conteggiati, altrimenti il widget rimanderebbe a se stesso.
 
+Se mancano ulteriori voci, significa che l’opzione «Solo titoli dai blocchi Title e
+Text» è attivata e il titolo mancante si trova in un altro
+modulo. Disattivando l’opzione, il titolo verrà incluso.
+
+## Vengono visualizzati titoli che non corrispondono a sezioni.
+
+Altri widget contengono titoli propri — ad esempio i titoli di un elenco di notizie.
+Se questi sono presenti nell’elenco, l’opzione «Solo titoli dai blocchi "Titolo" e
+"Testo"» è disattivata. Attivandola, l’elenco viene limitato alle
+sezioni che hai scritto tu stesso.
+
+Se rimangono visibili anche dopo, la pagina non si trova nel Content Designer. Lì
+non sono presenti i moduli in base ai quali l’opzione effettua la distinzione, e quindi
+non funziona.
+
 ## Mostra il proprio titolo come voce.
 
-Questo non dovrebbe accadere. Se tuttavia si verifica, significa che il titolo si trova al di fuori
+Questo non dovrebbe accadere. Se dovesse comunque verificarsi, il titolo si trova al di fuori
 del contenitore del widget — ad esempio come blocco di testo separato sopra di esso. In tal caso, utilizzare il
 titolo del widget oppure selezionare un livello che il blocco di testo non possiede.
 
-## L’indicatore rosso non si sposta.
+## L’indicatore rosso non segue lo scorrimento.
 
 Segue lo scorrimento e rimane sull’intestazione che per ultima ha raggiunto il
 quarto superiore della finestra. Nella parte superiore della pagina si trova sul titolo

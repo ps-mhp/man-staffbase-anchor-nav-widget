@@ -15,8 +15,8 @@
 ## When editing the page
 
 The list follows the text as you work on it: a new heading
-appears, a deleted one disappears. No need to click anything or
-refresh the page.
+appears, a deleted one disappears. No need to click anything, no need to
+refresh.
 
 ## On a phone
 

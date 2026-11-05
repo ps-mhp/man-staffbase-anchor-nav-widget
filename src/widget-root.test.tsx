@@ -42,13 +42,13 @@ describe("AnchorNavWidget", () => {
 
   it("zeigt die Überschriften der gewählten Ebene", () => {
     document.body.innerHTML = "<h3>Drei</h3><h2>Zwei</h2>";
-    render(<AnchorNavWidget level="h3" heading="Auf einen Blick" self={null} />);
+    render(<AnchorNavWidget level="h3" heading="Auf einen Blick" self={null} blocksOnly={false} />);
     expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Drei"]);
   });
 
   it("gibt nichts aus, wenn die Seite die Ebene nicht verwendet", () => {
     document.body.innerHTML = "<h2>Zwei</h2>";
-    const { container } = render(<AnchorNavWidget level="h4" heading="Auf einen Blick" self={null} />);
+    const { container } = render(<AnchorNavWidget level="h4" heading="Auf einen Blick" self={null} blocksOnly={false} />);
     expect(container).toBeEmptyDOMElement();
   });
 
@@ -58,8 +58,20 @@ describe("AnchorNavWidget", () => {
     self.innerHTML = "<h2>Auf einen Blick</h2>";
     document.body.appendChild(self);
 
-    render(<AnchorNavWidget level="h2" heading={null} self={self} />);
+    render(<AnchorNavWidget level="h2" heading={null} self={self} blocksOnly={false} />);
 
     expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Echt"]);
+  });
+
+  it("reicht die Beschraenkung auf Title- und Text-Bloecke bis zum Scan durch", () => {
+    document.body.innerHTML = `
+      <div data-c13y-component="column-block">
+        <div data-c13y-component="title-block"><h2>Abschnitt</h2></div>
+        <div data-sb-custom-block-widget-host><h2>Aus einem Widget</h2></div>
+      </div>`;
+
+    render(<AnchorNavWidget level="h2" heading={null} self={null} blocksOnly={true} />);
+
+    expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Abschnitt"]);
   });
 });

@@ -29,14 +29,24 @@
       "title": "Nagłówki poziomu 2",
       "attributes": {
         "level": "h2",
-        "heading": "Auf einen Blick"
+        "heading": "Auf einen Blick",
+        "blocks": "true"
       }
     },
     {
       "title": "Bez tytułu, poziom 3",
       "attributes": {
         "level": "h3",
-        "heading": ""
+        "heading": "",
+        "blocks": "true"
+      }
+    },
+    {
+      "title": "Również nagłówki z widżetów",
+      "attributes": {
+        "level": "h2",
+        "heading": "Auf einen Blick",
+        "blocks": "false"
       }
     }
   ]

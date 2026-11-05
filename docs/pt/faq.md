@@ -3,7 +3,7 @@
 ## O widget não mostra nada.
 
 A página não tem nenhum título do nível definido. Escolha outro nível
-ou insira um título no texto. Um widget vazio não apresenta nada —
+ou insira um título no texto. Um widget vazio não exibe nada —
 nem mesmo uma caixa vazia nem um título.
 
 ## Mostram-se poucos títulos.
@@ -11,17 +11,32 @@ nem mesmo uma caixa vazia nem um título.
 Os títulos com texto vazio são ignorados. E os títulos dentro do
 próprio widget não são contabilizados, caso contrário, o widget remeteria para si próprio.
 
+Se, além disso, faltarem entradas, significa que a opção «Apenas títulos de blocos de título e
+texto» está ativada e que o título em falta se encontra noutro
+módulo. Desativar essa opção faz com que seja incluído.
+
+## Mostram-se títulos que não são, de todo, secções.
+
+Outros widgets têm os seus próprios títulos — os títulos de uma lista de notícias,
+por exemplo. Se estes constarem da lista, a opção «Apenas títulos dos blocos de título e
+texto» está desativada. Ao ativá-la, a lista fica limitada às
+secções que escreveste tu próprio.
+
+Se continuarem a aparecer mesmo depois disso, a página não está no Content Designer. Aí
+não existem os blocos que o botão utiliza para distinguir, e, por isso,
+não funciona.
+
 ## Mostra o seu próprio título como entrada.
 
-Isso não deveria acontecer. Se, mesmo assim, ocorrer, significa que o título está fora
-do contentor do widget — por exemplo, como um bloco de texto separado por cima. Nesse caso, utilize o
+Isso não deveria acontecer. Se, mesmo assim, acontecer, o título está fora
+do contentor do widget — por exemplo, como um bloco de texto próprio acima deste. Nesse caso, utilize o
 título do widget ou selecione um nível que o bloco de texto não tenha.
 
 ## O marcador vermelho não acompanha a rolagem.
 
-Segue a rolagem e permanece junto do título que, por último, atingiu o
-quarto superior da janela. No topo da página, fica junto do título
-— ou, se não houver título introduzido, junto da primeira entrada. Quem tiver definido «Reduzir
+Segue a rolagem e permanece junto do título que mais recentemente
+atingiu o quarto superior da janela. No topo da página, fica junto do título
+— ou, se não houver nenhum título introduzido, junto da primeira entrada. Quem tiver definido «Reduzir
 movimento» vê-a saltar em vez de deslizar — isso é intencional.
 
 ## É possível alterar a ordem?

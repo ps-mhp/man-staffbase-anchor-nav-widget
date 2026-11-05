@@ -76,22 +76,85 @@ function isInside(node: Node, container: Node): boolean {
 }
 
 /**
+ * Die Bausteine, deren Überschriften zählen.
+ *
+ * `title-block` ist das Title-Element, `text-container-block` der Text-Block;
+ * auf den Container geprüft und nicht auf die Überschrift darin
+ * (`big-heading-block` und Geschwister), damit jedes Überschriftenformat des
+ * Text-Blocks mitkommt, ohne dass hier eine Liste seiner Namen gepflegt
+ * werden muss.
+ */
+const CONTENT_BLOCKS = new Set(["title-block", "text-container-block"]);
+
+const BLOCK_MARKER = "data-c13y-component";
+const WIDGET_HOST = "data-sb-custom-block-widget-host";
+
+/**
+ * Stammt die Überschrift aus einem Title- oder Text-Block?
+ *
+ * Der Aufstieg läuft über `ShadowRoot.host` weiter, wie bei `isInside`. Er
+ * endet beim ersten Treffer in beide Richtungen: steckt die Überschrift in
+ * einem Custom-Block-Widget, trifft er dessen Wirt zuerst — ein Widget liegt
+ * im DOM unterhalb des Blocks, in dem es steht —, und die Überschrift gehört
+ * dann dem Widget, nicht dem Block darüber.
+ */
+function fromContentBlock(element: HTMLElement): boolean {
+  let current: Node | null = element;
+  while (current !== null) {
+    if (current instanceof HTMLElement) {
+      if (current.hasAttribute(WIDGET_HOST)) return false;
+      const component = current.getAttribute(BLOCK_MARKER);
+      if (component !== null && CONTENT_BLOCKS.has(component)) return true;
+    }
+    if (current.parentNode !== null) current = current.parentNode;
+    else if (current instanceof ShadowRoot) current = current.host;
+    else current = null;
+  }
+  return false;
+}
+
+/**
+ * Trägt die Seite überhaupt Marken des Content Designers?
+ *
+ * Nur er vergibt `data-c13y-component`. Auf einer Seite des klassischen
+ * Editors trüge keine einzige Überschrift die Marke, und der Filter leerte
+ * das Verzeichnis vollständig — der Redakteur sähe ein leeres Widget, ohne
+ * den Grund zu erkennen. Ohne Marken gilt der Filter deshalb nicht.
+ */
+function hasBlockMarkers(): boolean {
+  return document.querySelector(`[${BLOCK_MARKER}]`) !== null;
+}
+
+/**
  * Die Überschriften der Ebene, in Dokumentreihenfolge.
  *
  * `self` ist der eigene Container: alles darin bleibt außen vor, sonst führt
  * ein Titel derselben Ebene das Widget in seiner eigenen Liste auf.
  *
+ * `blocksOnly` beschränkt die Liste auf Title- und Text-Blöcke. Ohne diese
+ * Schranke zählen auch Überschriften, die andere Widgets in ihrer eigenen
+ * Darstellung führen — auf einer Seite mit mehreren Widgets ist das Verzeichnis
+ * dann voller Zeilen, die kein Abschnitt der Seite sind.
+ *
  * Unsichtbare Überschriften bleiben drin. Ob ein Abschnitt gerade eingeklappt
  * ist, ändert sich jederzeit, und eine Sichtbarkeitsprüfung hinge an einer
  * Layout-Berechnung bei jedem Durchlauf.
  */
-export function scanHeadings(level: HeadingLevel, self: HTMLElement | null): ScannedHeading[] {
+export function scanHeadings(
+  level: HeadingLevel,
+  self: HTMLElement | null,
+  blocksOnly: boolean = false,
+): ScannedHeading[] {
   const headings: ScannedHeading[] = [];
   const taken = new Map<string, number>();
+  // Einmal je Scan statt einmal je Überschrift: die Antwort gilt für die
+  // ganze Seite und kostet sonst eine Suche pro Treffer.
+  const filter = blocksOnly && hasBlockMarkers();
 
   for (const element of walk(document.body)) {
     if (element.tagName.toLowerCase() !== level) continue;
     if (self !== null && isInside(element, self)) continue;
+    if (filter && !fromContentBlock(element)) continue;
 
     const text = (element.textContent ?? "").replace(/\s+/g, " ").trim();
     if (text === "") continue;

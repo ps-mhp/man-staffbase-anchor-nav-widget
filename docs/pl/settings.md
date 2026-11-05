@@ -16,5 +16,21 @@ Nagłówek nad listą, na przykład „W skrócie”. Pozostawienie pola pustego
 spowoduje jego ukrycie; lista pozostanie widoczna.
 
 Tytuł jest tłumaczony wraz ze stroną. Pozycje na liście nie wymagają tego
-— są one nagłówkami strony i i tak zawierają jej tłumaczenie
+— są to nagłówki strony i i tak zawierają ich tłumaczenie
 .
+
+## Tylko nagłówki z bloków **Title** i **Text**
+
+Opcja włączona domyślnie. Wówczas lista uwzględnia tylko nagłówki znajdujące się w
+bloku **Title** lub **Text** — czyli sekcje, które sam
+napisałeś.
+
+Gdy opcja jest wyłączona, liczone są wszystkie nagłówki danego poziomu znajdujące się na stronie. Obejmuje to
+również te, które inne widżety wyświetlają we własnej prezentacji: na przykład
+tytuły listy wiadomości lub opisy w portfolio.
+Nie są one częścią strony, a odnośnik do nich prowadzi do
+miejsce, którego czytelnik się nie spodziewa.
+
+Przełącznik nie działa na stronach bez Content Designera. Nie ma tam
+elementów, na podstawie których dokonuje on rozróżnienia, a lista wyświetla jak dotychczas
+wszystkie nagłówki tego poziomu — pusty widget byłby tam nie do wyjaśnienia.

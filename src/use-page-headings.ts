@@ -44,7 +44,11 @@ export const RESCAN_MAX_WAIT_MS = 1000;
  * Ändert sich ein Block in einem Shadow Root, ändert sich in aller Regel auch
  * sein Container im Hauptdokument.
  */
-export function usePageHeadings(level: HeadingLevel, self: HTMLElement | null): readonly ScannedHeading[] {
+export function usePageHeadings(
+  level: HeadingLevel,
+  self: HTMLElement | null,
+  blocksOnly: boolean,
+): readonly ScannedHeading[] {
   const [headings, setHeadings] = useState<readonly ScannedHeading[]>([]);
 
   useEffect(() => {
@@ -61,7 +65,7 @@ export function usePageHeadings(level: HeadingLevel, self: HTMLElement | null): 
         maxWaitTimer = null;
       }
 
-      const next = scanHeadings(level, self);
+      const next = scanHeadings(level, self, blocksOnly);
       // Dieselbe Liste weitergeben, wenn sich nichts geändert hat: sonst löst
       // jede fremde DOM-Änderung ein Neurendern aus und das Segment springt
       // mitten in seiner Bewegung zurück.
@@ -85,7 +89,7 @@ export function usePageHeadings(level: HeadingLevel, self: HTMLElement | null): 
       if (maxWaitTimer !== null) clearTimeout(maxWaitTimer);
       observer.disconnect();
     };
-  }, [level, self]);
+  }, [level, self, blocksOnly]);
 
   return headings;
 }

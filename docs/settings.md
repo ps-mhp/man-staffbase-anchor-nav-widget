@@ -18,3 +18,19 @@ blendet sie aus; die Liste bleibt.
 Der Titel wird mit der Seite übersetzt. Die Einträge der Liste brauchen das
 nicht — sie sind die Überschriften der Seite und tragen deren Übersetzung
 ohnehin.
+
+## Nur Überschriften aus Title- und Text-Blöcken
+
+Ab Werk eingeschaltet. Dann zählt die Liste nur Überschriften, die in einem
+**Title**- oder **Text**-Block stehen — also die Abschnitte, die du selbst
+geschrieben hast.
+
+Ausgeschaltet zählt jede Überschrift der Ebene, die auf der Seite steht. Dazu
+gehören auch die, die andere Widgets in ihrer eigenen Darstellung führen: die
+Titel einer Nachrichtenliste etwa, oder die Beschriftungen eines Portfolios.
+Die sind kein Abschnitt der Seite, und ein Verweis darauf springt an eine
+Stelle, die der Leser nicht erwartet.
+
+Auf Seiten ohne Content Designer wirkt der Schalter nicht. Dort gibt es die
+Bausteine nicht, nach denen er unterscheidet, und die Liste zeigt wie bisher
+alle Überschriften der Ebene — ein leeres Widget wäre dort nicht zu erklären.

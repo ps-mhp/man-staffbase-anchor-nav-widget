@@ -11,11 +11,15 @@
   "examples": [
     {
       "title": "Überschriften der Ebene 2",
-      "attributes": { "level": "h2", "heading": "Auf einen Blick" }
+      "attributes": { "level": "h2", "heading": "Auf einen Blick", "blocks": "true" }
     },
     {
       "title": "Ohne Titel, Ebene 3",
-      "attributes": { "level": "h3", "heading": "" }
+      "attributes": { "level": "h3", "heading": "", "blocks": "true" }
+    },
+    {
+      "title": "Auch Überschriften aus Widgets",
+      "attributes": { "level": "h2", "heading": "Auf einen Blick", "blocks": "false" }
     }
   ]
 }

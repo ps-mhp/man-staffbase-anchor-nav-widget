@@ -22,6 +22,8 @@ export interface AnchorNavWidgetProps {
   readonly heading: string | null;
   /** Der eigene Container. Alles darin bleibt beim Scan außen vor. */
   readonly self: HTMLElement | null;
+  /** Nur Überschriften aus Title- und Text-Blöcken sammeln. */
+  readonly blocksOnly: boolean;
 }
 
 /**
@@ -31,7 +33,12 @@ export interface AnchorNavWidgetProps {
  * Anmeldung beim Host und dem Lesen der Attribute, und ein Test müsste das
  * ganze Modul samt `defineBlock` laden, um eine Liste zu prüfen.
  */
-export function AnchorNavWidget({ level, heading, self }: AnchorNavWidgetProps): React.ReactElement | null {
-  const headings = usePageHeadings(level, self);
+export function AnchorNavWidget({
+  level,
+  heading,
+  self,
+  blocksOnly,
+}: AnchorNavWidgetProps): React.ReactElement | null {
+  const headings = usePageHeadings(level, self, blocksOnly);
   return <AnchorNav headings={headings} heading={heading} />;
 }
