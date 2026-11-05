@@ -16,6 +16,12 @@ modificare l’ordine utilizzando il cursore a sinistra: trascina, oppure selezi
 i tasti freccia su e giù. **Applica** inserisce l’
 elenco nella finestra di dialogo; successivamente, salvare come di consueto.
 
+Il modo più rapido è **Aggiungi elemento della pagina** in alto nell’editor:
+la selezione mostra i titoli e i widget della pagina salvata
+(▣ = widget). Un clic crea un link con il loro nome; la destinazione è
+l’ID del blocco (`#…`). Puoi poi modificare il testo del link. Le nuove sezioni
+compaiono nella selezione solo dopo aver salvato la pagina.
+
 Ogni riga presenta due campi:
 
 - **Testo del link** — ciò che appare nell’elenco. Obbligatorio: una voce senza testo del link
@@ -24,7 +30,10 @@ Ogni riga presenta due campi:
   - **Vuoto:** al titolo della pagina che ha lo stesso nome del testo del link.
   - **Testo di un titolo:** a quel titolo. In questo modo la voce può avere un nome più breve
     rispetto alla sezione, ad esempio «Dotazione» per «Dotazione in dettaglio».
-  - **Un indirizzo** che inizia con `#`, `/`, `http://`, `https://` o `mailto:`
+  - **Un ID di blocco** come `#a447d858-1bba-4a49-b620-b49c60dd67a7`: a quel
+    blocco della pagina. È ciò che imposta la selezione in alto. Il link resta
+    valido anche dopo la ridenominazione del titolo.
+  - **Un indirizzo** che inizia con `/`, `http://`, `https://` o `mailto:`
     : un normale collegamento seguito dal browser.
 
 Nel confronto con il titolo conta il testo, non il livello — da H1 a H6

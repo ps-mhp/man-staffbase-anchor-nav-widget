@@ -132,3 +132,17 @@ export function findHeading(text: string, self: HTMLElement | null, root: Parent
   }
   return null;
 }
+
+/**
+ * Das Element mit der ID `id` — auch in Shadow Roots, wo
+ * `document.getElementById` nicht hinreicht. Wie `findHeading` nur auf Klick.
+ */
+export function findById(id: string, root: ParentNode = document.body): HTMLElement | null {
+  if (id === "") return null;
+  const direct = document.getElementById(id);
+  if (direct !== null) return direct;
+  for (const element of walk(root)) {
+    if (element.id === id) return element;
+  }
+  return null;
+}

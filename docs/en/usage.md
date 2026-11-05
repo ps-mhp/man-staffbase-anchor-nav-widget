@@ -6,18 +6,18 @@
    narrow column next to the text or above the first section.
 3. **Enter the title**—or leave it blank. Blank means: just the list, no
    heading above it.
-4. **Create the links.** In the **Edit Links** dialog, click **Add Link** for each section
-   and enter the link text. If the entry has the same name as the
-   heading, leave the destination blank; otherwise, enter the heading text into the destination
-   field. **Apply**, then save.
+4. **Create the links.** Save the page once, then in the **Edit Links** dialog,
+   under **Add Page Element**, select the heading or widget for each section.
+   Alternatively, by hand: **Add Link**, enter the link text, leave the destination
+   blank or enter the heading text. **Apply**, then save.
 5. **Check in the preview.** Click each entry once: If it doesn’t jump,
    the text in the link text or destination doesn’t match the heading exactly.
 
 ## When editing the page
 
-The list does not update automatically. If you rename a heading,
-update the corresponding entry; if you add or delete a section, update
-the list as well.
+The list does not update automatically. If you add or delete a section,
+update the list. Links from the selection (block ID) remain valid when a
+heading is renamed; links by text do not.
 
 ## On a phone
 

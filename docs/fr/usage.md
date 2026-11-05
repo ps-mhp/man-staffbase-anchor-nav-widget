@@ -6,18 +6,18 @@
    colonne étroite à côté du texte ou au-dessus de la première section.
 3. **Saisir le titre** — ou laisser le champ vide. Si le champ est vide, cela signifie : uniquement la liste, pas de
    titre au-dessus.
-4. **Créer les liens.** Dans la boîte de dialogue **Modifier les liens**, pour chaque section, cliquez sur **Ajouter un lien**
-   et saisissez le texte du lien. Si l’entrée porte exactement le même nom que le
-   titre, laissez la destination vide ; sinon, saisissez le texte du titre dans la destination
-  . **Appliquer**, puis enregistrer.
+4. **Créer les liens.** Enregistrez la page une fois, puis dans la boîte de dialogue **Modifier les
+   liens**, sous **Ajouter un élément de la page**, sélectionnez le titre ou le widget de
+   chaque section. Sinon, manuellement : **Ajouter un lien**, saisissez le texte du lien,
+   laissez la destination vide ou saisissez le texte du titre. **Appliquer**, puis enregistrer.
 5. **Vérifier dans l’aperçu.** Cliquez une fois sur chaque entrée : si elle ne s’ouvre pas,
    cela signifie que le texte du lien ou la destination ne correspond pas exactement au titre.
 
 ## Lors de la modification de la page
 
-La liste ne suit pas automatiquement la page. Si vous renommez un titre,
-modifiez l'entrée correspondante ; si vous ajoutez ou supprimez une section, modifiez également
-la liste.
+La liste ne suit pas automatiquement la page. Si vous ajoutez ou supprimez une section,
+modifiez la liste. Les liens issus de la sélection (ID de bloc) restent valides lorsqu’un
+titre est renommé ; les liens par texte, non.
 
 ## Sur le téléphone
 

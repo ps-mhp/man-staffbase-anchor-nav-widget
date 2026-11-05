@@ -16,6 +16,12 @@ change the order using the handle on the left: drag it, or select the handle and
 the up and down arrow keys to move it. **Apply** writes the
 list to the dialog; then save as usual.
 
+The quickest way is **Add Page Element** at the top of the editor:
+the selection shows the headings and widgets of the saved page
+(▣ = widget). One click creates a link with its name; the target is the
+block ID (`#…`). You can change the link text afterwards. New sections
+only appear in the selection once the page has been saved.
+
 Each line has two fields:
 
 - **Link Text** — what appears in the list. Required: an entry without link text
@@ -24,7 +30,10 @@ Each line has two fields:
   - **Blank:** to the heading on the page with the same name as the link text.
   - **Text of a heading:** to that heading. This allows the entry to be shorter
     than the section title, such as “Features” for “Features in Detail.”
-  - **An address** that begins with `#`, `/`, `http://`, `https://`, or `mailto:`
+  - **A block ID** such as `#a447d858-1bba-4a49-b620-b49c60dd67a7`: to that
+    block on the page. This is what the selection above sets. The link remains
+    valid even after the heading is renamed.
+  - **An address** that begins with `/`, `http://`, `https://`, or `mailto:`
     is a standard link that the browser follows.
 
 When comparing to the heading, the text matters, not the level—H1 through H6

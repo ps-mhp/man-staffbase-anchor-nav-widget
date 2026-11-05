@@ -6,18 +6,18 @@
    columna estrecha junto al texto o encima del primer apartado.
 3. **Introducir el título** — o dejarlo en blanco. Si se deja en blanco, solo aparecerá la lista, sin
    título encima.
-4. **Crear los enlaces.** En el cuadro de diálogo **Editar enlaces**, para cada sección, **Añadir enlace**
-   e introducir el texto del enlace. Si la entrada tiene el mismo nombre que el
-   título, el destino se deja en blanco; en caso contrario, escribe el texto del título en el destino
-  . **Aplicar** y, a continuación, guardar.
+4. **Crear los enlaces.** Guardar la página una vez y, a continuación, en el cuadro de diálogo **Editar
+   enlaces**, en **Añadir elemento de la página**, seleccionar para cada sección el
+   título o el widget. Alternativamente, a mano: **Añadir enlace**, introducir el texto
+   del enlace y dejar el destino en blanco o escribir el texto del título. **Aplicar** y, a continuación, guardar.
 5. **Comprobar en la vista previa.** Haz clic una vez en cada entrada: si no se activa,
    significa que el texto del enlace o el destino no coinciden exactamente con el título.
 
 ## Al modificar la página
 
-La lista no se actualiza automáticamente con los cambios de la página. Si se renombra un título,
-hay que adaptar la entrada correspondiente; si se añade o se elimina una sección, también
-hay que actualizar la lista.
+La lista no se actualiza automáticamente con los cambios de la página. Si se añade o se elimina una sección,
+hay que actualizar la lista. Los enlaces de la selección (ID de bloque) siguen siendo válidos
+al renombrar un título; los enlaces por texto, no.
 
 ## En el móvil
 

@@ -17,6 +17,7 @@ import { startFieldModalInjector } from "@shared/config-modal";
 import { AnchorLink, parseAnchorLinks, serializeAnchorLinks } from "./anchor-links";
 import { LINKS_ATTRIBUTE } from "./configuration-schema";
 import { LinkEditor } from "./link-editor";
+import { loadStudioOutline } from "./page-outline";
 
 /** Läuft die Seite im Studio — und nicht als veröffentlichte Seite? */
 export function isStudioPage(location: Location = window.location): boolean {
@@ -44,6 +45,6 @@ export function startLinkEditorInjector(root: ParentNode = document): () => void
     // Der Editor zeichnet seinen eigenen Rahmen.
     panelStyle: { padding: "0px" },
     render: ({ value, onChange, onSave, onClose, dirty }) =>
-      React.createElement(LinkEditor, { value, onChange, onSave, onClose, dirty }),
+      React.createElement(LinkEditor, { value, onChange, onSave, onClose, dirty, loadOutline: loadStudioOutline }),
   });
 }

@@ -6,18 +6,19 @@
    schmale Spalte neben dem Text oder über den ersten Abschnitt.
 3. **Den Titel eintragen** — oder leer lassen. Leer heißt: nur die Liste, keine
    Überschrift darüber.
-4. **Die Links anlegen.** Im Dialog **Links bearbeiten**, je Abschnitt **Link
-   hinzufügen** und den Linktext eintragen. Heißt der Eintrag genauso wie die
-   Überschrift, bleibt das Ziel leer; sonst den Text der Überschrift ins Ziel
-   schreiben. **Übernehmen**, dann speichern.
+4. **Die Links anlegen.** Die Seite einmal speichern, dann im Dialog **Links
+   bearbeiten** unter **Element der Seite hinzufügen** je Abschnitt die
+   Überschrift oder das Widget wählen. Alternativ von Hand: **Link
+   hinzufügen**, Linktext eintragen, Ziel leer lassen oder den Text der
+   Überschrift eintragen. **Übernehmen**, dann speichern.
 5. **In der Vorschau prüfen.** Jeden Eintrag einmal anklicken: Springt er nicht,
    stimmt der Text im Linktext oder Ziel nicht genau mit der Überschrift überein.
 
 ## Beim Ändern der Seite
 
-Die Liste folgt der Seite nicht von selbst. Wer eine Überschrift umbenennt,
-passt den passenden Eintrag an; wer einen Abschnitt hinzufügt oder löscht, auch
-die Liste.
+Die Liste folgt der Seite nicht von selbst. Wer einen Abschnitt hinzufügt oder
+löscht, passt die Liste an. Links aus der Auswahl (Block-ID) bleiben beim
+Umbenennen einer Überschrift gültig; Links über den Text nicht.
 
 ## Auf dem Telefon
 

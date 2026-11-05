@@ -6,18 +6,18 @@
    coluna estreita ao lado do texto ou acima da primeira secção.
 3. **Introduzir o título** — ou deixar em branco. Em branco significa: apenas a lista, sem
    título acima.
-4. **Criar os links.** Na caixa de diálogo **Editar links**, para cada secção, clique em **Adicionar link**
-   e introduza o texto do link. Se a entrada tiver exatamente o mesmo nome que o
-   título, deixe o destino em branco; caso contrário, escreva o texto do título no destino
-  . **Aplicar** e, em seguida, guardar.
+4. **Criar os links.** Guarde a página uma vez e, depois, na caixa de diálogo **Editar links**,
+   em **Adicionar elemento da página**, selecione o título ou o widget de cada secção.
+   Em alternativa, manualmente: **Adicionar link**, introduza o texto do link, deixe o
+   destino em branco ou introduza o texto do título. **Aplicar** e, em seguida, guardar.
 5. **Verificar na pré-visualização.** Clique uma vez em cada entrada: se não for redirecionado,
    significa que o texto do link ou o destino não corresponde exatamente ao título.
 
 ## Ao alterar a página
 
-A lista não acompanha a página automaticamente. Quem renomear um título,
-deve ajustar a entrada correspondente; quem adicionar ou eliminar uma secção, deve também
-ajustar a lista.
+A lista não acompanha a página automaticamente. Quem adicionar ou eliminar uma secção
+deve ajustar a lista. Os links da seleção (ID do bloco) continuam válidos ao renomear
+um título; os links por texto não.
 
 ## No telemóvel
 

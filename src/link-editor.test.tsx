@@ -16,9 +16,10 @@ import { fireEvent, render, screen } from "@testing-library/react";
 
 import { AnchorLink } from "./anchor-links";
 import { LinkEditor } from "./link-editor";
+import { OutlineEntry } from "./page-outline";
 
 /** Rendert den Editor mit zurückgespiegeltem Wert und liefert die jüngste gemeldete Liste. */
-function setup(value: AnchorLink[]): () => AnchorLink[] {
+function setup(value: AnchorLink[], loadOutline?: () => Promise<OutlineEntry[] | null>): () => AnchorLink[] {
   const onChange = jest.fn<void, [AnchorLink[]]>();
   function Harness(): React.ReactElement {
     const [links, setLinks] = React.useState(value);
@@ -32,6 +33,7 @@ function setup(value: AnchorLink[]): () => AnchorLink[] {
         onSave={() => {}}
         onClose={() => {}}
         dirty={false}
+        loadOutline={loadOutline}
       />
     );
   }
@@ -82,5 +84,25 @@ describe("LinkEditor", () => {
 
     fireEvent.keyDown(screen.getByTestId("link-handle-a"), { key: "ArrowDown" });
     expect(latest().map((link) => link.id)).toEqual(["b", "a"]);
+  });
+
+  it("legt aus der Auswahl der Seite einen Link auf die Block-ID an", async () => {
+    const latest = setup([], async () => [
+      { blockId: "b1", label: "Neuigkeiten", kind: "heading", depth: 0 },
+      { blockId: "b2", label: "Hero-Slider", kind: "widget", depth: 0 },
+    ]);
+
+    const select = await screen.findByTestId("link-outline");
+    fireEvent.change(select, { target: { value: "b2" } });
+
+    expect(latest()).toEqual([expect.objectContaining({ label: "Hero-Slider", target: "#b2" })]);
+    expect(screen.getByRole("option", { name: "▣ Hero-Slider" })).toBeDisabled();
+    expect(screen.getByRole("option", { name: "Neuigkeiten" })).not.toBeDisabled();
+  });
+
+  it("meldet eine nicht ladbare Seite und lässt die Eingabe von Hand", async () => {
+    setup([], async () => null);
+    expect(await screen.findByTestId("link-outline-failed")).toBeInTheDocument();
+    expect(screen.getByTestId("link-add")).toBeInTheDocument();
   });
 });

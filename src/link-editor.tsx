@@ -24,7 +24,8 @@ import * as React from "react";
 import { ReactElement, useEffect, useRef, useState } from "react";
 
 import { useHotStyle } from "@shared/hot-style";
-import { AnchorLink, emptyAnchorLink } from "./anchor-links";
+import { AnchorLink, emptyAnchorLink, newLinkId } from "./anchor-links";
+import { OutlineEntry } from "./page-outline";
 import linkEditorCss from "./styles/link-editor.scss";
 
 export interface LinkEditorProps {
@@ -33,10 +34,21 @@ export interface LinkEditorProps {
   onSave: () => void;
   onClose: () => void;
   dirty: boolean;
+  /** Lädt die Elemente der Seite für die Auswahl; ohne sie gibt es nur die Eingabe von Hand. */
+  loadOutline?: () => Promise<OutlineEntry[] | null>;
 }
 
+type OutlineState =
+  | { status: "loading" }
+  | { status: "failed" }
+  | { status: "ready"; entries: OutlineEntry[] };
+
 /** Verschiebt den Eintrag an `from` auf die Stelle `to`; am Rand passiert nichts. */
-function reorder(links: AnchorLink[], from: number, to: number): AnchorLink[] | null {
+function reorder(
+  links: AnchorLink[],
+  from: number,
+  to: number,
+): AnchorLink[] | null {
   if (to < 0 || to >= links.length || from === to) return null;
   const next = [...links];
   const [moved] = next.splice(from, 1);
@@ -45,9 +57,46 @@ function reorder(links: AnchorLink[], from: number, to: number): AnchorLink[] | 
   return next;
 }
 
-export function LinkEditor({ value, onChange, onSave, onClose, dirty }: LinkEditorProps): ReactElement {
-  const css = useHotStyle(linkEditorCss, "anchor-nav-widget", "styles/link-editor.scss");
+export function LinkEditor({
+  value,
+  onChange,
+  onSave,
+  onClose,
+  dirty,
+  loadOutline,
+}: LinkEditorProps): ReactElement {
+  const css = useHotStyle(
+    linkEditorCss,
+    "anchor-nav-widget",
+    "styles/link-editor.scss",
+  );
   const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [outline, setOutline] = useState<OutlineState | null>(
+    loadOutline ? { status: "loading" } : null,
+  );
+
+  // Einmal beim Öffnen; ein später eintreffendes Ergebnis nach dem Schließen
+  // wird verworfen.
+  useEffect(() => {
+    if (!loadOutline) return undefined;
+    let alive = true;
+    loadOutline().then(
+      (entries) => {
+        if (alive)
+          setOutline(
+            entries === null
+              ? { status: "failed" }
+              : { status: "ready", entries },
+          );
+      },
+      () => {
+        if (alive) setOutline({ status: "failed" });
+      },
+    );
+    return () => {
+      alive = false;
+    };
+  }, [loadOutline]);
 
   const rowRefs = useRef<Array<HTMLDivElement | null>>([]);
   // Das Ziehen braucht die Stelle, an der der Eintrag jetzt steht, nicht die
@@ -63,7 +112,9 @@ export function LinkEditor({ value, onChange, onSave, onClose, dirty }: LinkEdit
   }
 
   const patch = (index: number, changes: Partial<AnchorLink>): void => {
-    onChange(value.map((link, i) => (i === index ? { ...link, ...changes } : link)));
+    onChange(
+      value.map((link, i) => (i === index ? { ...link, ...changes } : link)),
+    );
   };
 
   const clearDrag = (): void => {
@@ -99,9 +150,26 @@ export function LinkEditor({ value, onChange, onSave, onClose, dirty }: LinkEdit
     onChange([...value, emptyAnchorLink()]);
   };
 
+  const addFromPage = (blockId: string): void => {
+    if (outline?.status !== "ready") return;
+    const entry = outline.entries.find(
+      (candidate) => candidate.blockId === blockId,
+    );
+    if (entry === undefined) return;
+    onChange([
+      ...value,
+      { id: newLinkId(), label: entry.label, target: `#${entry.blockId}` },
+    ]);
+  };
+
+  const linkedTargets = new Set(value.map((link) => link.target));
+
   const endDrag = (event: React.PointerEvent<HTMLButtonElement>): void => {
     const handle = event.currentTarget;
-    if (typeof handle.hasPointerCapture === "function" && handle.hasPointerCapture(event.pointerId)) {
+    if (
+      typeof handle.hasPointerCapture === "function" &&
+      handle.hasPointerCapture(event.pointerId)
+    ) {
       handle.releasePointerCapture(event.pointerId);
     }
     clearDrag();
@@ -116,7 +184,9 @@ export function LinkEditor({ value, onChange, onSave, onClose, dirty }: LinkEdit
       setDragIndex(index);
     };
 
-  const handlePointerMove = (event: React.PointerEvent<HTMLButtonElement>): void => {
+  const handlePointerMove = (
+    event: React.PointerEvent<HTMLButtonElement>,
+  ): void => {
     // React hängt die Zeilen beim Umordnen um, der Browser verliert dabei die
     // Erfassung; ohne gedrückte Taste ist das Ziehen vorbei.
     if (event.buttons === 0) {
@@ -146,7 +216,8 @@ export function LinkEditor({ value, onChange, onSave, onClose, dirty }: LinkEdit
   const handleKeyDown =
     (index: number) =>
     (event: React.KeyboardEvent<HTMLButtonElement>): void => {
-      const delta = event.key === "ArrowUp" ? -1 : event.key === "ArrowDown" ? 1 : 0;
+      const delta =
+        event.key === "ArrowUp" ? -1 : event.key === "ArrowDown" ? 1 : 0;
       if (delta === 0) return;
       event.preventDefault();
       move(index, index + delta);
@@ -159,9 +230,51 @@ export function LinkEditor({ value, onChange, onSave, onClose, dirty }: LinkEdit
       <style>{css}</style>
 
       <div className="man-ale__body">
+        {outline !== null && (
+          <label className="man-ale__field man-ale__picker">
+            <span className="man-ale__label">Element der Seite hinzufügen</span>
+            {outline.status === "loading" && (
+              <span className="man-ale__hint">Seite wird geladen …</span>
+            )}
+            {outline.status === "failed" && (
+              <span className="man-ale__hint" data-testid="link-outline-failed">
+                Die Seite ließ sich nicht laden. Links können weiter von Hand
+                eingetragen werden.
+              </span>
+            )}
+            {outline.status === "ready" && (
+              <select
+                className="man-ale__input"
+                data-testid="link-outline"
+                value=""
+                onChange={(event) => addFromPage(event.target.value)}
+              >
+                <option value="">
+                  {outline.entries.length === 0
+                    ? "Keine Überschriften oder Widgets gefunden"
+                    : "Element wählen …"}
+                </option>
+                {outline.entries.map((entry) => (
+                  <option
+                    key={entry.blockId}
+                    value={entry.blockId}
+                    disabled={linkedTargets.has(`#${entry.blockId}`)}
+                  >
+                    {`${"\u00a0\u00a0".repeat(entry.depth)}${entry.kind === "heading" ? "" : "▣ "}${entry.label}`}
+                  </option>
+                ))}
+              </select>
+            )}
+            <span className="man-ale__hint">
+              Überschriften und Widgets der gespeicherten Seite; ▣ = Widget.
+            </span>
+          </label>
+        )}
+
         {value.length === 0 && (
           <p className="man-ale__empty">
-            Noch kein Link. Lege über <strong>Link hinzufügen</strong> den ersten an.
+            Noch kein Link. Lege über <strong>Link hinzufügen</strong> den
+            ersten an.
           </p>
         )}
 
@@ -199,12 +312,17 @@ export function LinkEditor({ value, onChange, onSave, onClose, dirty }: LinkEdit
                     className="man-ale__input"
                     data-testid={`link-label-${link.id}`}
                     value={link.label}
-                    onChange={(event) => patch(index, { label: event.target.value })}
+                    onChange={(event) =>
+                      patch(index, { label: event.target.value })
+                    }
                   />
                 </label>
 
                 {link.label.trim() === "" && (
-                  <p className="man-ale__hint" data-testid={`link-unlabelled-${link.id}`}>
+                  <p
+                    className="man-ale__hint"
+                    data-testid={`link-unlabelled-${link.id}`}
+                  >
                     Ohne Linktext wird dieser Eintrag nicht angezeigt.
                   </p>
                 )}
@@ -217,12 +335,18 @@ export function LinkEditor({ value, onChange, onSave, onClose, dirty }: LinkEdit
                     data-testid={`link-target-${link.id}`}
                     value={link.target ?? ""}
                     onChange={(event) =>
-                      patch(index, { target: event.target.value === "" ? undefined : event.target.value })
+                      patch(index, {
+                        target:
+                          event.target.value === ""
+                            ? undefined
+                            : event.target.value,
+                      })
                     }
                   />
                   <span className="man-ale__hint">
-                    Leer lassen: springt zur Überschrift mit dem Linktext. Sonst der Text einer anderen
-                    Überschrift, oder eine Adresse (#…, /…, https://…).
+                    Leer lassen: springt zur Überschrift mit dem Linktext. Sonst
+                    der Text einer anderen Überschrift, oder eine Adresse
+                    (#Block-ID, /…, https://…).
                   </span>
                 </label>
               </div>
@@ -251,8 +375,15 @@ export function LinkEditor({ value, onChange, onSave, onClose, dirty }: LinkEdit
       </div>
 
       <div className="man-ale__footer">
-        <span className="man-ale__footer-note">{dirty ? "Ungesicherte Änderungen" : "Keine Änderungen"}</span>
-        <button type="button" className="man-ale__button" data-testid="link-editor-cancel" onClick={onClose}>
+        <span className="man-ale__footer-note">
+          {dirty ? "Ungesicherte Änderungen" : "Keine Änderungen"}
+        </span>
+        <button
+          type="button"
+          className="man-ale__button"
+          data-testid="link-editor-cancel"
+          onClick={onClose}
+        >
           Abbrechen
         </button>
         <button

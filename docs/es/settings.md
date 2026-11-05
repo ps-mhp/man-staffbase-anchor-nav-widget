@@ -16,6 +16,12 @@ orden se cambia con el controlador de la izquierda: arrastra o selecciona el con
 muévelo con las teclas de flecha arriba y abajo. **Aplicar** guarda la
 lista en el cuadro de diálogo; a continuación, guarda como de costumbre.
 
+La forma más rápida es **Añadir elemento de la página**, en la parte superior del editor:
+la selección muestra los títulos y widgets de la página guardada
+(▣ = widget). Con un clic se crea un enlace con su nombre; el destino es el
+ID de bloque (`#…`). Después puedes cambiar el texto del enlace. Las secciones nuevas
+solo aparecen en la selección cuando la página se ha guardado.
+
 Cada línea tiene dos campos:
 
 - **Texto del enlace**: lo que aparece en la lista. Obligatorio: una entrada sin texto de enlace
@@ -24,7 +30,10 @@ Cada línea tiene dos campos:
   - **Vacío:** al título de la página que tiene el mismo nombre que el texto del enlace.
   - **Texto de un título:** a ese título. De este modo, la entrada puede tener un nombre más corto
     que el apartado, por ejemplo, «Equipamiento» en lugar de «Equipamiento en detalle».
-  - **Una dirección** que comience por `#`, `/`, `http://`, `https://` o `mailto:`
+  - **Un ID de bloque** como `#a447d858-1bba-4a49-b620-b49c60dd67a7`: a ese
+    bloque de la página. Así lo establece la selección de arriba. El enlace sigue
+    siendo válido aunque se renombre el título.
+  - **Una dirección** que comience por `/`, `http://`, `https://` o `mailto:`
     : un enlace normal que sigue el navegador.
 
 A la hora de comparar con el título, lo que cuenta es el texto, no el nivel —de H1 a H6

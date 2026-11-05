@@ -16,6 +16,12 @@ Kolejność można zmienić za pomocą uchwytu po lewej stronie: przeciągając 
 przesuwając za pomocą klawiszy strzałek w górę i w dół. **Zastosuj** zapisuje
 listę w oknie dialogowym, a następnie należy ją zapisać w zwykły sposób.
 
+Najszybciej jest skorzystać z opcji **Dodaj element strony** u góry edytora:
+lista wyboru pokazuje nagłówki i widżety zapisanej strony
+(▣ = widżet). Jedno kliknięcie tworzy link z ich nazwą, a celem jest
+identyfikator bloku (`#…`). Tekst linku można potem zmienić. Nowe sekcje
+pojawiają się na liście wyboru dopiero po zapisaniu strony.
+
 Każdy wiersz ma dwa pola:
 
 - **Tekst linku** — to, co widnieje na liście. Pole obowiązkowe: wpis bez tekstu linku
@@ -24,7 +30,10 @@ Każdy wiersz ma dwa pola:
   - **Puste:** do nagłówka na stronie o tej samej nazwie co tekst linku.
   - **Tekst nagłówka:** do tego nagłówka. Dzięki temu wpis może mieć krótszą
     nazwę niż sekcja, na przykład „Wyposażenie” zamiast „Wyposażenie w szczegółach”.
-  - **Adres** zaczynający się od `#`, `/`, `http://`, `https://` lub `mailto:`
+  - **Identyfikator bloku**, np. `#a447d858-1bba-4a49-b620-b49c60dd67a7`: do tego
+    bloku strony. Tak ustawia go lista wyboru powyżej. Link pozostaje ważny także
+    po zmianie nazwy nagłówka.
+  - **Adres** zaczynający się od `/`, `http://`, `https://` lub `mailto:`
     : zwykłe odnośniki, do których przeglądarka przekierowuje.
 
 Przy porównaniu z nagłówkiem liczy się tekst, a nie poziom — H1 do H6

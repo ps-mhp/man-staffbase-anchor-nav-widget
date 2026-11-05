@@ -416,4 +416,31 @@ describe("AnchorNav", () => {
 
     expect(scrollToSpy).not.toHaveBeenCalled();
   });
+
+  it("springt zu einem Block per ID, auch im Shadow Root, unter die Kopfleiste", () => {
+    page();
+    fixedHeader();
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const block = document.createElement("div");
+    block.id = "a447d858-1bba-4a49-b620-b49c60dd67a7";
+    block.getBoundingClientRect = () => ({ top: 500 }) as DOMRect;
+    host.attachShadow({ mode: "open" }).appendChild(block);
+    render(<AnchorNav links={[{ id: "a", label: "News", target: `#${block.id}` }]} heading={null} self={null} />);
+
+    const link = screen.getByRole("link", { name: "News" });
+    expect(fireEvent.click(link)).toBe(false);
+
+    const [[{ top }]] = scrollToSpy.mock.calls as [[{ top: number }]];
+    expect(top).toBeLessThan(500);
+    expect(window.location.hash).toBe(`#${block.id}`);
+    expect(link).toHaveAttribute("aria-current", "true");
+  });
+
+  it("überlässt eine Block-ID dem Browser, wenn der Block fehlt", () => {
+    page();
+    render(<AnchorNav links={[{ id: "a", label: "Weg", target: "#gibt-es-nicht" }]} heading={null} self={null} />);
+    expect(fireEvent.click(screen.getByRole("link", { name: "Weg" }))).toBe(true);
+    expect(scrollToSpy).not.toHaveBeenCalled();
+  });
 });

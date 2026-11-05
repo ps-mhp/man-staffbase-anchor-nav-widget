@@ -16,6 +16,12 @@ Reihenfolge änderst du am Griff links: ziehen, oder den Griff anwählen und mit
 den Pfeiltasten nach oben und unten verschieben. **Übernehmen** schreibt die
 Liste in den Dialog, danach wie gewohnt speichern.
 
+Am schnellsten geht es über **Element der Seite hinzufügen** oben im Editor:
+Die Auswahl zeigt die Überschriften und Widgets der gespeicherten Seite
+(▣ = Widget). Ein Klick legt einen Link mit deren Namen an, das Ziel ist die
+Block-ID (`#…`). Den Linktext kannst du danach ändern. Neue Abschnitte
+erscheinen erst in der Auswahl, wenn die Seite gespeichert ist.
+
 Jede Zeile hat zwei Felder:
 
 - **Linktext** — was in der Liste steht. Pflicht: ein Eintrag ohne Linktext
@@ -24,7 +30,10 @@ Jede Zeile hat zwei Felder:
   - **Leer:** zur Überschrift auf der Seite, die genauso heißt wie der Linktext.
   - **Text einer Überschrift:** zu dieser Überschrift. So kann der Eintrag kürzer
     heißen als der Abschnitt, etwa „Ausstattung" für „Ausstattung im Detail".
-  - **Eine Adresse**, die mit `#`, `/`, `http://`, `https://` oder `mailto:`
+  - **Eine Block-ID** wie `#a447d858-1bba-4a49-b620-b49c60dd67a7`: zu diesem
+    Block der Seite. So setzt es die Auswahl oben. Der Link bleibt auch nach
+    dem Umbenennen der Überschrift gültig.
+  - **Eine Adresse**, die mit `/`, `http://`, `https://` oder `mailto:`
     beginnt: ein gewöhnlicher Verweis, dem der Browser folgt.
 
 Beim Vergleich mit der Überschrift zählt der Text, nicht die Ebene — H1 bis H6

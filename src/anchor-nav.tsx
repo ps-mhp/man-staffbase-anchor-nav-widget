@@ -11,12 +11,23 @@
  * limitations under the License.
  */
 
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { useHotStyle } from "@shared/hot-style";
 import { AnchorLink, anchorSlugs, headingText } from "./anchor-links";
-import { findHeading } from "./heading-scan";
-import { COMPACT_QUERY, REDUCED_MOTION_QUERY, useMediaQuery } from "./media-query";
+import { findById, findHeading } from "./heading-scan";
+import {
+  COMPACT_QUERY,
+  REDUCED_MOTION_QUERY,
+  useMediaQuery,
+} from "./media-query";
 import { measureChromeHeight } from "@shared/staffbase-chrome";
 import { findScrollParent } from "./scroll-ancestor";
 import { containerChromeOverlap, jumpTarget } from "./scroll-target";
@@ -99,7 +110,16 @@ function focusHeading(element: HTMLElement, signal: AbortSignal): void {
   // während die Überschrift noch den Fokus hat, darf der Lauscher nicht
   // bestehen bleiben — er entfernte sonst später ein `tabindex`, das
   // inzwischen die Wirtsseite selbst gesetzt haben kann.
-  element.addEventListener("blur", () => element.removeAttribute("tabindex"), { once: true, signal });
+  element.addEventListener("blur", () => element.removeAttribute("tabindex"), {
+    once: true,
+    signal,
+  });
+}
+
+/** Die Block-ID eines Ziels `#<id>`, sonst `null`. */
+function blockId(link: AnchorLink): string | null {
+  const target = link.target?.trim() ?? "";
+  return target.startsWith("#") && target.length > 1 ? target.slice(1) : null;
 }
 
 /** Der Hash der Adresse, dekodiert; leer, wenn keiner da ist. */
@@ -127,8 +147,16 @@ function currentHashSlug(): string {
  * passt. Die Marke zeigt deshalb den zuletzt angeklickten Eintrag und folgt
  * nicht dem Scrollen.
  */
-export function AnchorNav({ links, heading, self }: AnchorNavProps): React.ReactElement | null {
-  const liveCss = useHotStyle(anchorNavCss, "anchor-nav-widget", "styles/anchor-nav.scss");
+export function AnchorNav({
+  links,
+  heading,
+  self,
+}: AnchorNavProps): React.ReactElement | null {
+  const liveCss = useHotStyle(
+    anchorNavCss,
+    "anchor-nav-widget",
+    "styles/anchor-nav.scss",
+  );
   const compact = useMediaQuery(COMPACT_QUERY);
   const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
 
@@ -136,7 +164,11 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
     const slugs = anchorSlugs(links);
     return links.map((link, index) => {
       const slug = slugs[index];
-      return { link, slug, href: slug === null ? (link.target ?? "") : `#${slug}` };
+      return {
+        link,
+        slug,
+        href: slug === null ? (link.target ?? "") : `#${slug}`,
+      };
     });
   }, [links]);
 
@@ -144,7 +176,8 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
   const [marker, setMarker] = useState<Marker | null>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   // Ändert der Redakteur die Liste, kann der gemerkte Index ins Leere zeigen.
-  const active = activeIndex !== null && activeIndex < entries.length ? activeIndex : null;
+  const active =
+    activeIndex !== null && activeIndex < entries.length ? activeIndex : null;
 
   const titleRef = useRef<HTMLElement | null>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -195,7 +228,11 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
         // Langem zu jedem Browser, den Staffbase unterstützt — der
         // einzige Fall, in dem die Prüfung je zuschlug, war ein Test, der
         // die Methode künstlich gelöscht hatte.
-        const top = jumpTarget(element.getBoundingClientRect().top, window.scrollY, chromeHeight);
+        const top = jumpTarget(
+          element.getBoundingClientRect().top,
+          window.scrollY,
+          chromeHeight,
+        );
         window.scrollTo({ top, behavior });
         return;
       }
@@ -231,11 +268,16 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
 
     const slug = currentHashSlug();
     if (slug === "") return;
-    const index = entries.findIndex((entry) => entry.slug === slug);
+    const index = entries.findIndex(
+      (entry) => entry.slug === slug || blockId(entry.link) === slug,
+    );
     if (index === -1) return;
 
     setActiveIndex(index);
-    const element = findHeading(headingText(entries[index].link), self);
+    const link = entries[index].link;
+    const id = blockId(link);
+    const element =
+      id !== null ? findById(id) : findHeading(headingText(link), self);
     if (element !== null) scrollTo(element, false);
   }, [entries, self, scrollTo]);
 
@@ -249,7 +291,9 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
           ? itemRefs.current[active]
           : (titleRef.current ?? itemRefs.current[0]);
 
-    setMarker(anchor ? { top: anchor.offsetTop, height: anchor.offsetHeight } : null);
+    setMarker(
+      anchor ? { top: anchor.offsetTop, height: anchor.offsetHeight } : null,
+    );
   }, [active, compact, open]);
 
   useLayoutEffect(() => {
@@ -266,8 +310,30 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
     return () => window.removeEventListener("resize", measureMarker);
   }, [measureMarker]);
 
-  const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, index: number): void => {
+  const onLinkClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    index: number,
+  ): void => {
     const entry = entries[index];
+    const id = blockId(entry.link);
+    // Ein Block der Seite: der Browser fände ihn in einem Shadow Root nicht
+    // und rollte ihn unter die Kopfleiste — deshalb selbst springen.
+    if (
+      id !== null &&
+      event.button === 0 &&
+      !event.defaultPrevented &&
+      !(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+    ) {
+      const element = findById(id);
+      if (element !== null) {
+        event.preventDefault();
+        setActiveIndex(index);
+        scrollTo(element, !reducedMotion);
+        window.history.replaceState(null, "", `#${id}`);
+        if (compact) setOpen(false);
+        return;
+      }
+    }
     // Eine Adresse gehört dem Browser; nur die Marke wandert mit.
     if (entry.slug === null) {
       setActiveIndex(index);
@@ -277,7 +343,14 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
 
     // Zusatztasten und Mittelklick gehören dem Browser: „in neuem Tab öffnen"
     // soll weiter funktionieren.
-    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (
+      event.defaultPrevented ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    )
+      return;
     if (event.button !== 0) return;
 
     event.preventDefault();
@@ -288,7 +361,10 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
       // `focusAbort.current` ist spätestens nach dem Mount-Effekt gesetzt — ein
       // Klick ist erst möglich, nachdem die Navigation gerendert ist. Der
       // Rückfall ist rein defensiv.
-      focusHeading(element, (focusAbort.current ?? new AbortController()).signal);
+      focusHeading(
+        element,
+        (focusAbort.current ?? new AbortController()).signal,
+      );
       // `replaceState` und nicht `pushState`: sonst sammelt der Zurück-Knopf
       // jeden Klick im Verzeichnis.
       window.history.replaceState(null, "", `#${entry.slug}`);
@@ -300,17 +376,17 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
   const toggleLabel = heading ?? COMPACT_TOGGLE_LABEL;
 
   return (
-    <nav
-      className="man-anchor-nav"
-      aria-label={heading ?? FALLBACK_NAV_LABEL}
-    >
+    <nav className="man-anchor-nav" aria-label={heading ?? FALLBACK_NAV_LABEL}>
       <style>{liveCss}</style>
       <span className="man-anchor-nav__rail" aria-hidden="true" />
       {marker && (
         <span
           className="man-anchor-nav__marker"
           aria-hidden="true"
-          style={{ height: `${marker.height}px`, transform: `translateY(${marker.top}px)` }}
+          style={{
+            height: `${marker.height}px`,
+            transform: `translateY(${marker.top}px)`,
+          }}
         />
       )}
 
@@ -353,7 +429,9 @@ export function AnchorNav({ links, heading, self }: AnchorNavProps): React.React
               <a
                 className="man-anchor-nav__link"
                 href={entry.href}
-                {...(index === active ? { "aria-current": "true" as const } : {})}
+                {...(index === active
+                  ? { "aria-current": "true" as const }
+                  : {})}
                 onClick={(event) => onLinkClick(event, index)}
               >
                 {entry.link.label}
