@@ -143,6 +143,17 @@ export function findById(id: string, root: ParentNode = document.body): HTMLElem
   if (direct !== null) return direct;
   for (const element of walk(root)) {
     if (element.id === id) return element;
+    // Die Block-ID aus dem Seiten-JSON: Überschriften im Content Designer
+    // tragen sie nur hier, nicht als `id`. Die Attrappen-Kopien, die der
+    // Custom Block von seinen Vorfahren anlegt, tragen sie auch — ohne Lage.
+    if (element.getAttribute(BLOCK_ID_ATTRIBUTE) === id && !element.hasAttribute(ANCESTOR_COPY_ATTRIBUTE)) {
+      return element;
+    }
   }
   return null;
 }
+
+/** Wohin der Content Designer die Block-ID eines Elements schreibt. */
+const BLOCK_ID_ATTRIBUTE = "data-c13y-id";
+/** Markiert die Vorfahren-Kopien im Shadow Root eines Custom Blocks. */
+const ANCESTOR_COPY_ATTRIBUTE = "data-sb-c13y-ancestor-copy";

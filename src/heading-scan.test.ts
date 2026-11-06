@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-import { findHeading, slugify } from "./heading-scan";
+import { findById, findHeading, slugify } from "./heading-scan";
 
 /** Baut `document.body` neu auf und gibt ihn zurück. */
 function page(html: string): HTMLElement {
@@ -81,5 +81,48 @@ describe("slugify", () => {
 
   it("liefert für Text ohne verwertbare Zeichen die leere Zeichenkette", () => {
     expect(slugify("!!!")).toBe("");
+  });
+});
+
+// Die Auswahl im Editor speichert die Block-ID aus dem Seiten-JSON. Auf der
+// Seite trägt eine Überschrift sie nur als `data-c13y-id`, kein `id` (live auf
+// truck am 06.11.2026 so gesehen: der Klick setzte den Hash, gerollt wurde
+// nichts).
+describe("findById", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("findet ein Element über seine id", () => {
+    document.body.innerHTML = `<div id="a1">Block</div>`;
+    expect(findById("a1")?.textContent).toBe("Block");
+  });
+
+  it("findet eine Überschrift über data-c13y-id, auch im Shadow Root", () => {
+    const host = document.createElement("div");
+    host.attachShadow({ mode: "open" }).innerHTML = `<h2 data-c13y-id="b2">Fahrersitze</h2>`;
+    document.body.appendChild(host);
+
+    expect(findById("b2")?.textContent).toBe("Fahrersitze");
+  });
+
+  // Der Custom Block kopiert seine Vorfahren samt `data-c13y-*` als
+  // `display: contents`-Attrappen in seinen Shadow Root; die haben keine Lage.
+  it("überspringt die Attrappen-Kopien des Custom Blocks", () => {
+    const host = document.createElement("div");
+    host.attachShadow({ mode: "open" }).innerHTML = `<div data-c13y-id="c3" data-sb-c13y-ancestor-copy="">Kopie</div>`;
+    document.body.appendChild(host);
+    const echt = document.createElement("section");
+    echt.setAttribute("data-c13y-id", "c3");
+    echt.textContent = "Echt";
+    document.body.appendChild(echt);
+
+    expect(findById("c3")?.textContent).toBe("Echt");
+  });
+
+  it("liefert null, wenn nichts passt", () => {
+    document.body.innerHTML = `<h2 data-c13y-id="x">X</h2>`;
+    expect(findById("y")).toBeNull();
+    expect(findById("")).toBeNull();
   });
 });
