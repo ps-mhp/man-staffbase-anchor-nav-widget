@@ -1,4 +1,4 @@
-# Perguntas frequentes
+# Perguntas Frequentes
 
 ## O widget não mostra nada.
 
@@ -25,20 +25,26 @@ título de um segundo widget na mesma página.
 ## Nas páginas traduzidas, um clique não funciona.
 
 Os títulos da página são traduzidos, mas o texto do link e o destino não. No
-outro idioma, a entrada deixa de encontrar o seu título e a
-lista continua a mostrar os textos dos links no idioma em que foram introduzidos.
+outro idioma, a entrada deixa então de encontrar o seu título, e a
+lista continua a mostrar os textos dos links no idioma em que foram criados.
 
-## O marcador vermelho não acompanha a rolagem.
+## Quando é que o marcador vermelho muda?
 
-Isto é intencional. Fica na entrada em que se clicou por último. Antes do
-primeiro clique, fica no título — ou, se não houver título, na
-primeira entrada. Se alguém abrir a página através de uma referência com marcador de salto,
-por exemplo `…#equipamento`, fica nessa entrada.
+Ao percorrer a página: fica na secção cujo título atingiu por último o
+quarto superior do ecrã. Na parte inferior da página, onde as últimas
+secções já não sobem tanto, fica na última secção visível.
+Após um clique, permanece na entrada selecionada até voltares a percorrer a página.
+Antes da primeira secção, fica na primeira entrada. Se alguém abrir a
+página através de uma referência com marcador de salto, por exemplo `…#equipamento`, fica nessa
+entrada.
+
+As entradas com um endereço (`/…`, `https://…`) não têm secção na
+página; a marca não chega até elas ao percorrer a página.
 
 ## É possível alterar a ordem?
 
-Sim. No editor, arraste o marcador à esquerda ou selecione-o, prima Enter
-para o selecionar, utilize as setas para o deslocar e prima Enter para o colocar na posição pretendida. A lista não tem de seguir a ordem da página.
+Sim. No editor, arrasta a alça à esquerda ou seleciona a alça, pressiona Enter
+para selecionar, usa as setas para deslocar e pressiona Enter para soltar. A lista não tem de seguir a ordem da página.
 
 ## Se dois títulos tiverem o mesmo nome — para onde salta a ligação?
 
@@ -48,4 +54,4 @@ dar nomes diferentes aos títulos.
 ## Uma entrada pode remeter para outra página?
 
 Sim. Introduza como destino um endereço que comece por `/`, `http://` ou `https://`.
-Ao clicar, o utilizador será redirecionado tal como em qualquer outra ligação.
+Ao clicar, o utilizador será redirecionado para esse endereço, tal como em qualquer outra ligação.

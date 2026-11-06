@@ -28,12 +28,18 @@ Los encabezados de la página se traducen, pero el texto del enlace y el destino
 otro idioma, la entrada ya no encuentra su encabezado, y la
 lista sigue mostrando los textos de los enlaces en el idioma en el que se crearon.
 
-## El marcador rojo no sigue el desplazamiento.
+## ¿Cuándo cambia la marca roja?
 
-Esto es intencionado. Se sitúa en la entrada en la que se ha hecho clic por última vez. Antes del
-primer clic, se sitúa en el título o, si no hay ningún título introducido, en la
-primera entrada. Si alguien abre la página a través de un enlace con marcador de salto,
-por ejemplo, `…#equipamiento`, se sitúa en esa entrada.
+Al desplazarse: se sitúa en la sección cuyo título haya alcanzado en último lugar el
+cuarto superior de la pantalla. En la parte inferior de la página, donde las últimas
+secciones ya no se desplazan tanto hacia arriba, se sitúa en la última visible.
+Tras un clic, permanece en la entrada seleccionada hasta que vuelvas a desplazarte.
+Antes del primer apartado, se sitúa en la primera entrada. Si alguien abre la
+página a través de un enlace con marca de salto, por ejemplo `…#equipamiento`, se sitúa en
+esa entrada.
+
+Las entradas con una dirección (`/…`, `https://…`) no tienen ningún apartado en la
+página; el marcador no llega a ellas al desplazarse.
 
 ## ¿Se puede cambiar el orden?
 

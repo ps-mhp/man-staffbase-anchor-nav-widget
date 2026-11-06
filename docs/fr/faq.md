@@ -28,12 +28,18 @@ Les titres de la page sont traduits, mais pas le texte du lien ni la destination
 autre langue, l’entrée ne retrouve alors plus son titre, et la
 liste continue d’afficher les textes des liens dans la langue dans laquelle ils ont été gérés.
 
-## Le marqueur rouge ne suit pas le défilement.
+## Quand le marqueur rouge change-t-il de position ?
 
-C’est voulu. Elle se trouve sur l’entrée sur laquelle on a cliqué en dernier. Avant le
-premier clic, elle se trouve sur le titre — ou, si aucun titre n’est renseigné, sur la
-première entrée. Si quelqu’un ouvre la page via un lien avec un repère de saut,
-par exemple `…#équipement`, elle se trouve sur cette entrée.
+Lors du défilement : elle se positionne sur la section dont le titre a atteint en dernier le
+quart supérieur de l’écran. Tout en bas de la page, là où les dernières
+sections ne remontent plus aussi haut, elle se positionne sur la dernière section visible.
+Après un clic, elle reste sur l’entrée sélectionnée jusqu’à ce que tu recommences à faire défiler la page.
+Avant la première section, elle se trouve sur la première entrée. Si quelqu’un ouvre la
+page via un lien avec un repère de saut, par exemple `…#équipement`, elle se trouve sur
+cette entrée.
+
+Les entrées comportant une adresse (`/…`, `https://…`) n’ont pas de section sur la
+page ; le repère ne s’y rend pas lors du défilement.
 
 ## Peut-on modifier l’ordre ?
 

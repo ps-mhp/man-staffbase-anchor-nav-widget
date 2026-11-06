@@ -17,7 +17,7 @@
 ## Quando si modifica la pagina
 
 L’elenco non si aggiorna automaticamente. Chi aggiunge o
-elimina una sezione, deve aggiornare l’elenco. I link dalla selezione (ID blocco) rimangono validi quando
+elimina una sezione, deve aggiornare l’elenco. I link provenienti dalla selezione (ID blocco) rimangono validi quando
 si rinomina un titolo; i link sul testo no.
 
 ## Sul telefono

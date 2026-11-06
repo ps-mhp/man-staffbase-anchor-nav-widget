@@ -13,14 +13,14 @@ De items in de lijst. In de Studio staat hier een editor die je
 via **Links bewerken** kunt openen. Links staan de links, rechts de velden van het
 geselecteerde item; een klik in de lijst selecteert een ander item. **Link
 toevoegen** maakt een nieuwe aan en selecteert deze, de prullenbak verwijdert
-deze. Je kunt de volgorde wijzigen met het handvat aan de linkerkant: slepen, of het handvat selecteren,
+deze. Je kunt de volgorde wijzigen met de greep aan de linkerkant: slepen, of de greep selecteren,
 met Enter vastpakken, met de pijltjestoetsen naar de nieuwe positie verplaatsen en met
 Enter neerzetten. **Toepassen** schrijft de lijst naar het dialoogvenster, daarna zoals
 gewoon opslaan.
 
 Het snelst gaat het via **Element aan de pagina toevoegen** bovenaan in de editor:
 De selectie toont de kopteksten en widgets van de opgeslagen pagina
-(▣ = widget) en kan door te typen worden gefilterd. Eén klik maakt een link aan met de naam ervan; de bestemming is de
+(▣ = widget) en kan door te typen worden gefilterd. Eén klik maakt een link aan met de naam van het item; de bestemming is de
 blok-ID (`#…`). Je kunt de linktekst daarna wijzigen. Nieuwe secties
 verschijnen pas in de selectie als de pagina is opgeslagen.
 

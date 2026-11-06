@@ -2,7 +2,7 @@
 
 ## Titolo
 
-Il titolo sopra l'elenco, ad esempio "In sintesi". Se lasciato vuoto,
+Il titolo sopra l'elenco, ad esempio “In sintesi”. Lasciandolo vuoto
 viene nascosto; l'elenco rimane visibile.
 
 Il titolo viene tradotto insieme alla pagina.
@@ -40,7 +40,7 @@ Ogni link ha due campi:
 
 Nel confronto con il titolo conta il testo, non il livello — da H1 a H6
 sono tutti destinazioni valide. Gli spazi multipli non hanno importanza,
-mentre la distinzione tra maiuscole e minuscole sì. Se ci sono più titoli con lo stesso testo,
+mentre la distinzione tra maiuscole e minuscole sì. Se ci sono più titoli con lo stesso nome,
 la voce salta al primo.
 
 Se l’editor non dovesse apparire, in quel punto sarà presente un campo di testo con l’elenco in formato

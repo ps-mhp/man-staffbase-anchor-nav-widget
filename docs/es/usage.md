@@ -4,7 +4,7 @@
    El widget solo salta a los títulos que hay en la página.
 2. **Insertar el bloque.** En el editor, selecciona «Navegación por enlaces»; lo mejor es colocarlo en una
    columna estrecha junto al texto o encima del primer apartado.
-3. **Introduce el título** — o déjalo en blanco. Si lo dejas en blanco, solo aparecerá la lista, sin
+3. **Introduce el título**, o déjalo en blanco. Si lo dejas en blanco, solo aparecerá la lista, sin
    título encima.
 4. **Crea los enlaces.** Guarda la página una vez y, a continuación, en el cuadro de diálogo **Editar enlaces
   **, en **Añadir elemento a la página**, selecciona para cada sección el

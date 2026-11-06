@@ -3,7 +3,7 @@
 ## Widżet nic nie wyświetla.
 
 Nie ma jeszcze żadnego wpisu z tekstem linku. W Studio otwórz okno dialogowe, za pomocą
-**Edytuj linki** utwórz wpisy, zatwierdź zmiany i zapisz. Pusty
+**Edytuj linki** utwórz wpisy, zatwierdź i zapisz. Pusty
 widżet nie wyświetla niczego — ani pustego pola, ani tytułu.
 
 ## Na liście brakuje wpisu.
@@ -25,14 +25,20 @@ tytuł drugiego widżetu na tej samej stronie.
 
 Nagłówki strony są tłumaczone, natomiast tekst linku i miejsce docelowe nie. W
 innym języku wpis nie odnajduje już swojego nagłówka, a
-lista nadal wyświetla teksty linków w języku, w którym zostały wprowadzone.
+lista nadal wyświetla teksty linków w języku, w którym zostały one wprowadzone.
 
-## Czerwony znacznik nie podąża za przewijaniem.
+## Kiedy zmienia się czerwony znacznik?
 
-Jest to zamierzone. Znajduje się przy ostatnio klikniętej pozycji. Przed
-pierwszym kliknięciem znajduje się przy tytule — lub, jeśli nie wprowadzono tytułu, przy
-pierwszej pozycji. Jeśli ktoś otworzy stronę poprzez odnośnik z znacznikiem,
-na przykład `…#wyposażenie`, znacznik znajduje się przy tej pozycji.
+Podczas przewijania: znajduje się przy sekcji, której nagłówek jako ostatni
+osiągnął górną ćwiartkę ekranu. Na samym dole strony, gdzie ostatnie
+sekcje nie przewijają się już tak wysoko, znajduje się przy ostatniej widocznej sekcji.
+Po kliknięciu pozostaje przy wybranym wpisie, dopóki nie zaczniesz ponownie przewijać.
+Przed pierwszą sekcją znacznik znajduje się przy pierwszym wpisie. Jeśli ktoś otworzy
+stronę poprzez odnośnik z znacznikiem skoku, na przykład `…#wyposażenie`, znacznik znajduje się przy
+tym wpisie.
+
+Wpisy zawierające adres (`/…`, `https://…`) nie mają sekcji na
+stronie; podczas przewijania znacznik nie dociera do nich.
 
 ## Czy można zmienić kolejność?
 

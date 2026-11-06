@@ -2,7 +2,7 @@
 
 1. **Structurer la page.** Insérer des titres au début de chaque section.
    Le widget ne permet d'accéder qu'aux titres présents sur la page.
-2. **Insérer le bloc.** Dans l’éditeur, sélectionnez « Navigation par ancres » — de préférence dans une
+2. **Insérer le bloc.** Dans l'éditeur, sélectionnez « Navigation par ancres » — de préférence dans une
    colonne étroite à côté du texte ou au-dessus de la première section.
 3. **Saisir le titre** — ou laisser le champ vide. Si le champ est vide, cela signifie : uniquement la liste, sans
    titre au-dessus.

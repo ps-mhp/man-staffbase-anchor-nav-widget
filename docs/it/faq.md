@@ -28,19 +28,25 @@ I titoli della pagina vengono tradotti, mentre il testo del link e la destinazio
 altra lingua, la voce non trova più il proprio titolo e l’
 elenco continua a mostrare i testi dei link nella lingua in cui sono stati inseriti.
 
-## L’indicatore rosso non segue lo scorrimento.
+## Quando cambia l’indicatore rosso?
 
-È intenzionale. Si trova sulla voce su cui è stato cliccato per ultima. Prima del
-primo clic si trova sul titolo — oppure, se non è stato inserito alcun titolo, sulla
-prima voce. Se qualcuno apre la pagina tramite un collegamento con un'etichetta di salto,
-ad esempio `…#attrezzatura`, si trova su quella voce.
+Durante lo scorrimento: si posiziona sulla sezione il cui titolo ha raggiunto per ultimo il
+quarto superiore dello schermo. In fondo alla pagina, dove le ultime
+sezioni non si spostano più così in alto, si posiziona sull’ultima visibile.
+Dopo un clic, rimane sulla voce selezionata finché non scorri di nuovo.
+Prima della prima sezione, si posiziona sulla prima voce. Se qualcuno apre la
+pagina tramite un collegamento con un'ancora, ad esempio `…#attrezzatura`, si posiziona su
+questa voce.
+
+Le voci con un indirizzo (`/…`, `https://…`) non hanno una sezione nella
+pagina; il segnalibro non li raggiunge durante lo scorrimento.
 
 ## È possibile modificare l’ordine?
 
-Sì. Nell’editor, trascinare la maniglia a sinistra oppure selezionarla, premere Invio
-per selezionarla, spostarla con i tasti freccia e premere Invio per posizionarla. L’elenco non deve necessariamente seguire l’ordine della pagina.
+Sì. Nell’editor, trascina la maniglia a sinistra oppure seleziona la maniglia, premi Invio
+per selezionarla, spostala con i tasti freccia e premi Invio per rilasciarla. L’elenco non deve necessariamente seguire l’ordine della pagina.
 
-## Due titoli hanno lo stesso nome: dove porta il collegamento?
+## Due titoli hanno lo stesso nome — dove porta il collegamento?
 
 Al primo presente nella pagina. Se si desidera che porti al secondo, l’unica soluzione è
 assegnare nomi diversi ai titoli.

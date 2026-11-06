@@ -1,23 +1,21 @@
 # Navigation par ancres
 
 Ce widget affiche une liste de liens que vous gérez vous-même. Un clic
-vous permet d'accéder directement au titre correspondant sur la page ; un marqueur rouge indique quelle
-entrée a été cliquée en dernier.
+vous permet d'accéder directement au titre correspondant sur la page ; un marqueur rouge indique
+la section que vous êtes en train de lire et se déplace au fur et à mesure que vous faites défiler la page.
 
-La liste ne se crée pas toute seule. C’est vous qui définissez, dans la boîte de dialogue des paramètres, quelles
+La liste ne se crée pas automatiquement. C’est vous qui définissez, dans la boîte de dialogue des paramètres, quelles
 entrées sont disponibles, comment elles s’appellent et dans quel ordre elles apparaissent. Le
-widget n’effectue une recherche sur la page que lorsqu’un utilisateur clique sur une entrée — lors du
-chargement de la page, il n’effectue aucune opération en arrière-plan.
+widget ne recherche les sections que lorsque l’utilisateur fait défiler la page ou clique sur une entrée
+— il n’effectue aucune opération en arrière-plan lors du chargement de la page.
 
 ## À quoi cela sert-il ?
 
-Les pages longues avec une structure claire — un modèle de véhicule et ses équipements,
-une directive et ses sections. Sur les pages courtes, cela ne vaut pas la peine.
+Aux longues pages clairement structurées — un modèle de voiture avec ses équipements,
+une directive avec ses sections. Cela ne vaut pas la peine pour les pages courtes.
 
 ## Ce qu’il ne fait pas
 
-- **Il ne trouve pas les titres de lui-même.** Chaque entrée est créée manuellement.
+- **Il ne détecte pas automatiquement les titres.** Chaque entrée est créée manuellement.
   Si une section est ajoutée à la page, elle doit également figurer dans la liste.
-- **Ne suit pas le défilement.** Le curseur ne suit pas le défilement, mais reste sur la
-  dernière entrée cliquée.
-- **Pas de hiérarchie imbriquée.** La liste est plate, ce n’est pas une arborescence.
+- **Pas d’imbrication.** La liste est plate, ce n’est pas une arborescence.

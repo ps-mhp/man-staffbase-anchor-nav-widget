@@ -39,11 +39,11 @@ Chaque lien comporte deux champs :
     : un lien classique que le navigateur suit.
 
 Lors de la comparaison avec le titre, c’est le texte qui compte, pas le niveau — H1 à H6
-sont tous des cibles au même titre. Les espaces multiples n’ont pas d’importance,
+sont tous des cibles au même titre. Les espaces multiples n’ont aucune importance,
 contrairement à la distinction entre majuscules et minuscules. S’il existe plusieurs titres identiques,
 l’entrée renvoie vers le premier.
 
-Si l’éditeur n’apparaît pas, un champ de texte s’affiche avec la liste au format
+Si l'éditeur n'apparaît pas, un champ de texte s'affiche avec la liste au format
 JSON, par exemple :
 
 ```json

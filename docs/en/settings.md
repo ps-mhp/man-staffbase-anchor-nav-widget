@@ -15,7 +15,7 @@ selected entry are on the right; clicking in the list selects a different one. *
 creates a new one and selects it; the trash can removes
 it. You can change the order using the handle on the left: drag it, or select the handle,
 press Enter to grab it, use the arrow keys to move it to the new position, and press
-Enter to drop it. **Apply** writes the list to the dialog; then save as
+Enter to drop it. **Apply** copies the list to the dialog; then save as
 usual.
 
 The fastest way is to use **Add Page Element** at the top of the editor:
@@ -30,8 +30,8 @@ Each link has two fields:
   will not be displayed.
 - **Target** — where the entry jumps to.
   - **Blank:** to the heading on the page with the same name as the link text.
-  - **Text of a heading:** to that heading. This allows the entry to have a shorter
-    name than the section, such as “Features” for “Features in Detail.”
+  - **Text of a heading:** to that heading. This allows the entry to be shorter
+    than the section title, such as “Features” for “Features in Detail.”
   - **A block ID** such as `#a447d858-1bba-4a49-b620-b49c60dd67a7`: to this
     block on the page. This sets the selection at the top. The link remains valid even after
     the heading is renamed.

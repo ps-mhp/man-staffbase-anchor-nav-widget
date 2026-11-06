@@ -28,21 +28,27 @@ De koppen van de pagina worden vertaald, de linktekst en de bestemming niet. In 
 andere taal vindt het item zijn kop dan niet meer terug, en de
 lijst toont nog steeds de linkteksten in de taal waarin ze zijn onderhouden.
 
-## De rode markering volgt het scrollen niet.
+## Wanneer verandert de rode markering?
 
-Dat is de bedoeling. Het staat bij het item dat als laatste is aangeklikt. Vóór de
-eerste klik staat het bij de titel — of, als er geen titel is ingevoerd, bij het
-eerste item. Als iemand de pagina opent via een link met een sprongmarkering,
-bijvoorbeeld `…#uitrusting`, staat het bij dit item.
+Tijdens het scrollen: het staat bij de paragraaf waarvan de kop als laatste het bovenste
+kwart van het scherm heeft bereikt. Helemaal onderaan de pagina, waar de laatste
+paragrafen niet meer zo ver omhoog scrollen, staat het bij de laatste zichtbare paragraaf.
+Na een klik blijft het bij het geselecteerde item staan, totdat je weer gaat scrollen.
+Vóór de eerste paragraaf staat het bij het eerste item. Als iemand de
+pagina opent via een link met een sprongmarkering, bijvoorbeeld `…#uitrusting`, staat het bij
+dit item.
+
+Items met een adres (`/…`, `https://…`) hebben geen paragraaf op de
+pagina; de markering komt er tijdens het scrollen niet bij.
 
 ## Kan de volgorde worden gewijzigd?
 
 Ja. Sleep in de editor aan het handvat aan de linkerkant, of selecteer het handvat, druk op Enter
 om het op te nemen, verplaats het met de pijltjestoetsen en druk op Enter om het neer te zetten. De lijst hoeft niet de volgorde van de pagina te volgen.
 
-## Twee kopteksten hebben dezelfde naam — waar springt de link naartoe?
+## Twee kopteksten hebben dezelfde naam — waar gaat de link naartoe?
 
-Naar de eerste op de pagina. Als je naar de tweede wilt springen, helpt alleen het
+Naar de eerste op de pagina. Als je naar de tweede wilt gaan, helpt alleen het
 geven van verschillende namen aan de kopteksten.
 
 ## Kan een vermelding naar een andere pagina verwijzen?

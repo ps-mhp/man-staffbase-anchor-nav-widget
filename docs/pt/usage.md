@@ -3,7 +3,7 @@
 1. **Estruturar a página.** Colocar títulos no início de cada secção.
    O widget só salta para os títulos que existem na página.
 2. **Inserir o bloco.** No editor, selecione «Navegação por âncoras» — de preferência numa
-   coluna estreita ao lado do texto ou acima da primeira secção.
+   coluna estreita ao lado do texto ou acima do primeiro parágrafo.
 3. **Introduzir o título** — ou deixar em branco. Em branco significa: apenas a lista, sem
    título acima.
 4. **Criar os links.** Guarde a página uma vez e, em seguida, na caixa de diálogo **Editar
@@ -17,8 +17,8 @@
 ## Ao alterar a página
 
 A lista não acompanha a página automaticamente. Quem adicionar ou
-eliminar uma secção deve ajustar a lista. Os links da seleção (ID do bloco) permanecem válidos ao
-renomear um título; os links sobre o texto, não.
+eliminar uma secção deve ajustar a lista. As ligações a partir da seleção (ID do bloco) permanecem válidas ao
+renomear um título; as ligações através do texto não.
 
 ## No telemóvel
 

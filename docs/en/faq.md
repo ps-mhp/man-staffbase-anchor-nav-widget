@@ -8,10 +8,10 @@ widget won't display anything—not even an empty box or a title.
 
 ## An entry is missing from the list.
 
-It’s missing the link text. In the Editor, the line “Without link text,
+It is missing the link text. In the editor, the line “Without link text,
 this entry will not be displayed” appears.
 
-## Clicking doesn’t take me anywhere.
+## Clicking does not take me anywhere.
 
 A heading with exactly that text does not exist on the page. The system compares
 it to the target, or—if the target is empty—to the link text. A typo,
@@ -28,12 +28,18 @@ The page’s headings are translated, but the link text and destination are not.
 other language, the entry can no longer find its heading, and the
 list continues to display the link texts in the language in which they were maintained.
 
-## The red marker does not follow scrolling.
+## When does the red marker change?
 
-This is intentional. It remains on the entry that was last clicked. Before the
-first click, it is on the title—or, if no title has been entered, on the
-first entry. If someone opens the page via a link with a jump marker,
-such as `…#equipment`, it remains on that entry.
+When scrolling: It is positioned at the section whose heading most recently reached the top
+quarter of the screen. At the very bottom of the page, where the last
+sections no longer scroll that far up, it is positioned at the last visible section.
+After a click, it remains at the selected entry until you scroll again.
+Before the first section, it is positioned on the first entry. If someone opens the
+page via a link with an anchor, such as `…#equipment`, it is positioned on
+that entry.
+
+Entries with a URL (`/…`, `https://…`) do not have a section on the
+page; the bookmark does not reach them when scrolling.
 
 ## Can the order be changed?
 

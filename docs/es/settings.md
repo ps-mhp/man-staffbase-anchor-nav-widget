@@ -12,7 +12,7 @@ El título se traduce junto con la página.
 Las entradas de la lista. En Studio hay aquí un editor que se
 abre mediante **Editar enlaces**. A la izquierda están los enlaces, a la derecha los campos de la
 entrada seleccionada; al hacer clic en la lista se selecciona otra. **Añadir enlace**
-crea uno nuevo y lo selecciona; la papelera lo elimina
+crea uno nuevo y lo selecciona, mientras que la papelera lo elimina
 . Para cambiar el orden, utiliza el controlador de la izquierda: arrastra o selecciona el controlador,
 fíjalo con Intro, colócalo en la nueva posición con las teclas de flecha y
 súbelo con Intro. **Aplicar** copia la lista en el cuadro de diálogo; a continuación,

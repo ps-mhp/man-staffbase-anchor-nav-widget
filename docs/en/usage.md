@@ -1,7 +1,7 @@
 # Step by Step
 
 1. **Organize the page.** Place headings where each section begins.
-   The widget only jumps to headings that exist on the page.
+   The widget only jumps to headings that are present on the page.
 2. **Insert the block.** In the editor, select “Anchor Navigation”—preferably in a
    narrow column next to the text or above the first section.
 3. **Enter the title**—or leave it blank. Leaving it blank means: just the list, no
@@ -18,7 +18,7 @@
 
 The list does not automatically update with the page. If you add or
 delete a section, adjust the list accordingly. Links from the selection (block ID) remain valid when
-a heading is renamed; links via the text do not.
+renaming a heading; links via the text do not.
 
 ## On a phone
 

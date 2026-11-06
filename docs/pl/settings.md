@@ -38,8 +38,8 @@ Każdy link ma dwa pola:
   - **Adres** zaczynający się od `/`, `http://`, `https://` lub `mailto:`
     : zwykły odnośnik, podąża za którym przeglądarka.
 
-Przy porównywaniu z nagłówkiem liczy się tekst, a nie poziom — H1 do H6
-są traktowane na równi. Wielokrotne spacje nie mają znaczenia,
+Podczas porównywania z nagłówkiem liczy się tekst, a nie poziom — H1 do H6
+są traktowane na równi jako cele. Wielokrotne spacje nie mają znaczenia,
 za to wielkość liter ma znaczenie. Jeśli istnieje kilka nagłówków o tej samej treści,
 wpis przechodzi do pierwszego z nich.
 
