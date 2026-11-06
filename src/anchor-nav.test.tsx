@@ -326,6 +326,63 @@ describe("AnchorNav", () => {
     expect(document.querySelector(".man-anchor-nav__track .man-anchor-nav__rail")).not.toBeNull();
   });
 
+  // Die Marke folgt dem Scrollen: aktiv ist der Abschnitt, der zuletzt das
+  // Band oben im Fenster erreicht hat — auch nachdem ein tieferer Eintrag
+  // angeklickt und danach wieder hochgescrollt wurde.
+  describe("beim Scrollen", () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+      jest.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+        callback(0);
+        return 1;
+      });
+    });
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    const scroll = (): void => {
+      act(() => {
+        document.dispatchEvent(new Event("scroll"));
+      });
+    };
+    const setTop = (element: HTMLElement, top: number): void => {
+      element.getBoundingClientRect = () => ({ top }) as DOMRect;
+    };
+
+    it("markiert den Abschnitt, der gerade oben steht", () => {
+      const { links, elements } = page("Eins", "Zwei");
+      render(<AnchorNav links={links} heading={null} self={null} />);
+
+      setTop(elements[0], -500);
+      setTop(elements[1], 50);
+      scroll();
+      expect(screen.getByRole("link", { name: "Zwei" })).toHaveAttribute("aria-current", "true");
+
+      setTop(elements[0], 50);
+      setTop(elements[1], 900);
+      scroll();
+      expect(screen.getByRole("link", { name: "Eins" })).toHaveAttribute("aria-current", "true");
+    });
+
+    it("gibt den angeklickten Eintrag frei, sobald danach wieder gescrollt wird", () => {
+      const { links, elements } = page("Eins", "Zwei");
+      render(<AnchorNav links={links} heading={null} self={null} />);
+
+      fireEvent.click(screen.getByRole("link", { name: "Zwei" }));
+      setTop(elements[0], 50);
+      setTop(elements[1], 900);
+      scroll();
+      expect(screen.getByRole("link", { name: "Zwei" })).toHaveAttribute("aria-current", "true");
+
+      act(() => {
+        jest.advanceTimersByTime(500);
+      });
+      scroll();
+      expect(screen.getByRole("link", { name: "Eins" })).toHaveAttribute("aria-current", "true");
+    });
+  });
+
   it("setzt die Marke auf den angeklickten Eintrag", () => {
     render(<AnchorNav links={page("Eins", "Zwei").links} heading={null} self={null} />);
     const zweitesItem = document.querySelectorAll(".man-anchor-nav__item")[1] as HTMLElement;

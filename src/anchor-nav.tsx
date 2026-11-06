@@ -31,6 +31,7 @@ import {
 import { measureChromeHeight } from "@shared/staffbase-chrome";
 import { findScrollParent } from "./scroll-ancestor";
 import { containerChromeOverlap, jumpTarget } from "./scroll-target";
+import { useScrollSpy } from "./use-scroll-spy";
 import anchorNavCss from "./styles/anchor-nav.scss";
 
 /** Der Name der Navigation, wenn der Redakteur keinen Titel eingetragen hat. */
@@ -141,11 +142,11 @@ function currentHashSlug(): string {
  * Ohne Einträge gibt es nichts aus: eine leere Schiene mit Titel wäre ein
  * sichtbarer Defekt, kein Hinweis.
  *
- * Auf der Seite außerhalb des Widgets passiert nichts von selbst: kein
- * Durchlauf, kein Beobachter, kein Timer. Gesucht wird nur auf Klick — und
- * einmal beim Laden, wenn die Adresse einen Hash trägt, der zu einem Eintrag
- * passt. Die Marke zeigt deshalb den zuletzt angeklickten Eintrag und folgt
- * nicht dem Scrollen.
+ * Beim Laden passiert auf der Seite nichts — außer einem Sprung, wenn die
+ * Adresse einen Hash trägt, der zu einem Eintrag passt. Die Marke folgt dem
+ * Scrollen (`use-scroll-spy.ts`); ihre Ziele sucht sie erst beim ersten
+ * Bildlauf. Nach einem Klick hält sie den gewählten Eintrag, bis wieder
+ * gescrollt wird.
  */
 export function AnchorNav({
   links,
@@ -212,6 +213,24 @@ export function AnchorNav({
 
   const listVisible = !compact || open;
 
+  // Die Ziele der Einträge, wie der Klick sie fände. Läuft erst beim ersten
+  // Bildlauf und danach nur, wenn ein Ziel verschwunden ist.
+  const resolveTargets = useCallback(
+    (): (HTMLElement | null)[] =>
+      entries.map((entry) => {
+        const id = blockId(entry.link);
+        if (id !== null) return findById(id);
+        if (entry.slug === null) return null;
+        return findHeading(headingText(entry.link), self);
+      }),
+    [entries, self],
+  );
+  const { hold: holdSpy } = useScrollSpy({
+    resolve: resolveTargets,
+    self,
+    onActive: setActiveIndex,
+  });
+
   const scrollTo = useCallback(
     (element: HTMLElement, smooth: boolean): void => {
       const behavior = smooth ? "smooth" : "auto";
@@ -274,12 +293,13 @@ export function AnchorNav({
     if (index === -1) return;
 
     setActiveIndex(index);
+    holdSpy();
     const link = entries[index].link;
     const id = blockId(link);
     const element =
       id !== null ? findById(id) : findHeading(headingText(link), self);
     if (element !== null) scrollTo(element, false);
-  }, [entries, self, scrollTo]);
+  }, [entries, self, scrollTo, holdSpy]);
 
   // Die Lage des Segments. `useLayoutEffect`, damit es nach einem Wechsel
   // nicht erst eine Bildfolge lang an der alten Stelle steht.
@@ -330,6 +350,7 @@ export function AnchorNav({
       if (element !== null) {
         event.preventDefault();
         setActiveIndex(index);
+        holdSpy();
         scrollTo(element, !reducedMotion);
         window.history.replaceState(null, "", `#${id}`);
         if (compact) setOpen(false);
@@ -359,6 +380,7 @@ export function AnchorNav({
     setActiveIndex(index);
     const element = findHeading(headingText(entry.link), self);
     if (element !== null) {
+      holdSpy();
       scrollTo(element, !reducedMotion);
       // `focusAbort.current` ist spätestens nach dem Mount-Effekt gesetzt — ein
       // Klick ist erst möglich, nachdem die Navigation gerendert ist. Der

@@ -28,12 +28,18 @@ Die Überschriften der Seite werden übersetzt, Linktext und Ziel nicht. In der
 anderen Sprache findet der Eintrag seine Überschrift dann nicht mehr, und die
 Liste zeigt weiter die Linktexte in der Sprache, in der sie gepflegt wurden.
 
-## Die rote Marke folgt dem Scrollen nicht.
+## Wann wechselt die rote Marke?
 
-Das ist Absicht. Sie steht beim Eintrag, der zuletzt angeklickt wurde. Vor dem
-ersten Klick steht sie beim Titel — oder, wenn kein Titel eingetragen ist, beim
-ersten Eintrag. Öffnet jemand die Seite über einen Verweis mit Sprungmarke,
-etwa `…#ausstattung`, steht sie bei diesem Eintrag.
+Beim Scrollen: Sie steht beim Abschnitt, dessen Überschrift zuletzt das obere
+Viertel des Bildschirms erreicht hat. Ganz unten auf der Seite, wo die letzten
+Abschnitte nicht mehr so weit hochrollen, steht sie beim letzten sichtbaren.
+Nach einem Klick bleibt sie beim gewählten Eintrag, bis du wieder scrollst.
+Vor dem ersten Abschnitt steht sie beim ersten Eintrag. Öffnet jemand die
+Seite über einen Verweis mit Sprungmarke, etwa `…#ausstattung`, steht sie bei
+diesem Eintrag.
+
+Einträge mit einer Adresse (`/…`, `https://…`) haben keinen Abschnitt auf der
+Seite; die Marke kommt beim Scrollen nicht zu ihnen.
 
 ## Lässt sich die Reihenfolge ändern?
 
