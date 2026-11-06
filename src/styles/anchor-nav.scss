@@ -108,10 +108,19 @@
   transform: rotate(180deg);
 }
 
+/* Das man-theme nummeriert jede `ol` im Seiteninhalt: im App-Slot über
+   `::marker`, im Designer über `::before`, beide mit dem Zähler `man-ol`, und
+   setzt Einzug, Abstände und Schrift der Einträge mit `!important`. Ohne
+   Gegenwehr stand vor jedem Eintrag eine Zahl. Die Liste ist Navigation, kein
+   Fließtext; deshalb hier alles zurück, mit der Spezifität, die die Regeln
+   des Themes schlägt. */
 .man-anchor-nav__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  @include man-outshine-host {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    counter-reset: none !important;
+  }
 }
 
 /* Der Abstand steht am Eintrag und nicht als `gap` an der Liste: das Segment
@@ -119,6 +128,18 @@
    es genau den Block, zu dem der Eintrag gehört. */
 .man-anchor-nav__item {
   padding: man("space-2") 0;
+
+  @include man-outshine-host {
+    margin: 0 !important;
+    counter-increment: none !important;
+    font: inherit !important;
+    color: inherit !important;
+
+    &::marker,
+    &::before {
+      content: none !important;
+    }
+  }
 }
 
 /* Der erste Eintrag unter dem Titel bekommt zusätzlich Luft nach oben. */
