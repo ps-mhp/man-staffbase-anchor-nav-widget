@@ -24,9 +24,7 @@
  * unangetastet. */
 
 .man-anchor-nav {
-  position: relative;
   box-sizing: border-box;
-  padding-left: man("space-4");
   color: man("text");
   @include man-type("body");
 
@@ -37,8 +35,21 @@
   }
 }
 
-/* Die durchgehende Haarlinie. Ein eigenes Element und kein `border-left` am
-   `nav`: das Segment liegt darüber und muss dieselbe Spur treffen. */
+/* Die Spur: Linie, Segment und Liste. Der Titel steht linksbündig darüber und
+   gehört nicht zur Linie. Positioniert, damit `offsetTop` der Einträge — die
+   Lage des Segments — von hier aus zählt. */
+.man-anchor-nav__track {
+  position: relative;
+  padding-left: man("space-4");
+}
+
+.man-anchor-nav__title + .man-anchor-nav__track,
+.man-anchor-nav__toggle + .man-anchor-nav__track {
+  margin-top: man("space-2");
+}
+
+/* Die durchgehende Haarlinie. Ein eigenes Element und kein `border-left` an
+   der Spur: das Segment liegt darüber und muss dieselbe Spur treffen. */
 .man-anchor-nav__rail {
   position: absolute;
   top: 0;
@@ -140,12 +151,6 @@
       content: none !important;
     }
   }
-}
-
-/* Der erste Eintrag unter dem Titel bekommt zusätzlich Luft nach oben. */
-.man-anchor-nav__title + .man-anchor-nav__list .man-anchor-nav__item:first-child,
-.man-anchor-nav__toggle + .man-anchor-nav__list .man-anchor-nav__item:first-child {
-  padding-top: man("space-4");
 }
 
 .man-anchor-nav__link {

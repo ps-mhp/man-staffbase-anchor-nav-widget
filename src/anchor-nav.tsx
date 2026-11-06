@@ -283,13 +283,15 @@ export function AnchorNav({
 
   // Die Lage des Segments. `useLayoutEffect`, damit es nach einem Wechsel
   // nicht erst eine Bildfolge lang an der alten Stelle steht.
+  // Die Marke läuft nur neben der Liste; der Titel steht über der Linie.
+  // Ohne aktiven Eintrag sitzt sie am ersten.
   const measureMarker = useCallback((): void => {
     const anchor =
       compact && !open
-        ? titleRef.current
+        ? null
         : active !== null
           ? itemRefs.current[active]
-          : (titleRef.current ?? itemRefs.current[0]);
+          : itemRefs.current[0];
 
     setMarker(
       anchor ? { top: anchor.offsetTop, height: anchor.offsetHeight } : null,
@@ -378,17 +380,6 @@ export function AnchorNav({
   return (
     <nav className="man-anchor-nav" aria-label={heading ?? FALLBACK_NAV_LABEL}>
       <style>{liveCss}</style>
-      <span className="man-anchor-nav__rail" aria-hidden="true" />
-      {marker && (
-        <span
-          className="man-anchor-nav__marker"
-          aria-hidden="true"
-          style={{
-            height: `${marker.height}px`,
-            transform: `translateY(${marker.top}px)`,
-          }}
-        />
-      )}
 
       {compact ? (
         <button
@@ -417,6 +408,18 @@ export function AnchorNav({
       )}
 
       {listVisible && (
+        <div className="man-anchor-nav__track">
+        <span className="man-anchor-nav__rail" aria-hidden="true" />
+        {marker && (
+          <span
+            className="man-anchor-nav__marker"
+            aria-hidden="true"
+            style={{
+              height: `${marker.height}px`,
+              transform: `translateY(${marker.top}px)`,
+            }}
+          />
+        )}
         <ol className="man-anchor-nav__list">
           {entries.map((entry, index) => (
             <li
@@ -439,6 +442,7 @@ export function AnchorNav({
             </li>
           ))}
         </ol>
+        </div>
       )}
     </nav>
   );

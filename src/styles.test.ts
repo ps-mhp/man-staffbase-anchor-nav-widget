@@ -46,6 +46,14 @@ describe("Stylesheet gegen die Listenregeln des Themes", () => {
     expect(body).toMatch(/color:\s*inherit\s*!important/);
   });
 
+  // Der Titel steht linksbündig über der Linie; den Einzug hat die Spur.
+  it("rückt nur die Spur ein, nicht den Titel", () => {
+    expect(ruleBody("\\.man-anchor-nav")).not.toMatch(/padding-left/);
+    const track = ruleBody("\\.man-anchor-nav__track");
+    expect(track).toMatch(/position:\s*relative/);
+    expect(track).toMatch(/padding-left:/);
+  });
+
   it.each(["::marker", "::before"])("leert %s der Einträge", (pseudo) => {
     const body = ruleBody(`${OUTSHINE("man-anchor-nav__item")}${pseudo}`);
     expect(body).toMatch(/content:\s*none\s*!important/);

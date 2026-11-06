@@ -284,6 +284,48 @@ describe("AnchorNav", () => {
     expect(marke.style.transform).toBe("translateY(42px)");
   });
 
+  // Der Titel steht über der Linie, nicht an ihr: Linie, Marke und Liste
+  // teilen sich eine eigene Spur.
+  it("legt Linie und Marke neben die Liste, den Titel darüber", () => {
+    render(<AnchorNav links={page("Eins", "Zwei").links} heading="Auf einen Blick" self={null} />);
+
+    const track = document.querySelector(".man-anchor-nav__track") as HTMLElement;
+    expect(track).not.toBeNull();
+    expect(track.querySelector(".man-anchor-nav__rail")).not.toBeNull();
+    expect(track.querySelector(".man-anchor-nav__marker")).not.toBeNull();
+    expect(track.querySelector(".man-anchor-nav__list")).not.toBeNull();
+    expect(track.contains(screen.getByText("Auf einen Blick"))).toBe(false);
+  });
+
+  it("setzt die Marke ohne aktiven Eintrag auf den ersten, nicht auf den Titel", () => {
+    render(<AnchorNav links={page("Eins", "Zwei").links} heading="Auf einen Blick" self={null} />);
+    const titel = screen.getByText("Auf einen Blick");
+    Object.defineProperty(titel, "offsetTop", { configurable: true, value: 0 });
+    Object.defineProperty(titel, "offsetHeight", { configurable: true, value: 30 });
+    const erstesItem = document.querySelector(".man-anchor-nav__item") as HTMLElement;
+    Object.defineProperty(erstesItem, "offsetTop", { configurable: true, value: 12 });
+    Object.defineProperty(erstesItem, "offsetHeight", { configurable: true, value: 20 });
+
+    act(() => {
+      window.dispatchEvent(new Event("resize"));
+    });
+
+    const marke = document.querySelector(".man-anchor-nav__marker") as HTMLElement;
+    expect(marke.style.transform).toBe("translateY(12px)");
+    expect(marke.style.height).toBe("20px");
+  });
+
+  it("zeigt zugeklappt weder Linie noch Marke", () => {
+    setMedia(COMPACT_QUERY);
+    render(<AnchorNav links={page("Eins").links} heading="Auf einen Blick" self={null} />);
+
+    expect(document.querySelector(".man-anchor-nav__rail")).toBeNull();
+    expect(document.querySelector(".man-anchor-nav__marker")).toBeNull();
+
+    fireEvent.click(screen.getByRole("button", { name: /Auf einen Blick/ }));
+    expect(document.querySelector(".man-anchor-nav__track .man-anchor-nav__rail")).not.toBeNull();
+  });
+
   it("setzt die Marke auf den angeklickten Eintrag", () => {
     render(<AnchorNav links={page("Eins", "Zwei").links} heading={null} self={null} />);
     const zweitesItem = document.querySelectorAll(".man-anchor-nav__item")[1] as HTMLElement;
