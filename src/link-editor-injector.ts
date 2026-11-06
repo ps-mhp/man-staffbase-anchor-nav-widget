@@ -46,14 +46,11 @@ export function startLinkEditorInjector(root: ParentNode = document): () => void
     parse: (raw) => parseAnchorLinks(raw, { keepUnlabelled: true }),
     serialize: serializeAnchorLinks,
     // Der Editor zeichnet seinen eigenen Rahmen.
-    panelStyle: { padding: "0px", overflow: "hidden" },
-    // Im Shadow Root: die Regeln des Studios für `input` und `button` sollen
-    // den Editor nicht erreichen.
-    isolated: true,
+    panelClassName: "p-0 overflow-hidden",
     render: ({ value, onChange, onSave, onClose, dirty }) =>
       React.createElement(
         React.Suspense,
-        { fallback: React.createElement("p", { style: { padding: "16px" } }, "Editor wird geladen …") },
+        { fallback: React.createElement("p", { className: "p-4" }, "Editor wird geladen …") },
         React.createElement(LazyLinkEditor, { value, onChange, onSave, onClose, dirty, loadOutline: loadStudioOutline }),
       ),
   });

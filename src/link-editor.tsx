@@ -16,7 +16,7 @@
  *
  * Links die Liste (ziehen oder per Tastatur umordnen), rechts die Felder des
  * gewählten Eintrags, oben die Auswahl aus den Elementen der Seite. Er läuft
- * im Shadow Root von `@shared/config-modal` (`isolated`) und wird erst im
+ * im Shadow Root von `@shared/config-modal` und wird erst im
  * Studio nachgeladen; Übergeben, Rückfrage und Wiederöffnen erledigt der
  * Dialog.
  */
