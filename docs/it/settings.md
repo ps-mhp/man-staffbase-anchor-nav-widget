@@ -1,53 +1,92 @@
 # Impostazioni
 
+Tutto viene gestito nella finestra **Modifica link**. Si apre automaticamente in Studio
+non appena si accede alla finestra di dialogo delle impostazioni del blocco; per chiuderla
+basta cliccare sul pulsante **Modifica link**. In alto si trovano **Applica**,
+**Annulla**, Annulla/Ripeti, la guida e il selettore **Editor ·
+Desktop · Tablet · Mobile**. **Applica** inserisce titoli e link nella
+finestra di dialogo; successivamente, salva come di consueto.
+
+La finestra presenta tre colonne: a sinistra i **link**, al centro il
+link selezionato e la selezione dalla pagina, a destra la **navigazione** con il titolo.
+
 ## Titolo
 
-Il titolo sopra l'elenco, ad esempio “In sintesi”. Lasciandolo vuoto
-viene nascosto; l'elenco rimane visibile.
+A destra sotto **Navigazione**: l’intestazione sopra l’elenco, ad esempio «In
+questa pagina». Lasciando il campo vuoto, l’intestazione viene nascosta; l’elenco rimane.
 
 Il titolo viene tradotto insieme alla pagina.
 
 ## Link
 
-Le voci dell'elenco. In Studio, in questa posizione è presente un editor che si
-apre tramite **Modifica link**. A sinistra ci sono i link, a destra i campi della
-voce selezionata; cliccando nell’elenco se ne seleziona un’altra. **Aggiungi link**
-ne crea uno nuovo e lo seleziona, mentre il cestino lo rimuove
-. Puoi modificare l’ordine utilizzando la maniglia a sinistra: trascina, oppure seleziona la maniglia,
-conferma con Invio, sposta nella nuova posizione con i tasti freccia e
-conferma con Invio. **Applica** inserisce l’elenco nella finestra di dialogo, dopodiché
-salva come di consueto.
+La colonna di sinistra mostra tutti i link nell’ordine della navigazione. Ogni riga
+indica il testo del link e, sotto, la destinazione a cui rimanda – ad esempio «Intestazione
+«Appuntamenti»», «Widget: Galleria file», «#contatti» o «Vuoto – titolo omonimo
+». Cliccandoci sopra si seleziona un link per modificarlo.
 
-Il modo più veloce è utilizzare **Aggiungi elemento alla pagina** nella parte superiore dell’editor:
-la selezione mostra i titoli e i widget della pagina salvata
-(▣ = widget) e può essere filtrata digitando. Un clic crea un link con il nome corrispondente; la destinazione è l’
-ID del blocco (`#…`). Il testo del link può essere modificato in seguito. Le nuove sezioni
-appaiono nella selezione solo dopo che la pagina è stata salvata.
+- **Nuovo link** crea un link vuoto, lo seleziona e posiziona il cursore nel
+  testo del link.
+- Puoi modificare l’ordine utilizzando il cursore a sinistra: trascinalo, oppure seleziona il cursore,
+  fai Invio per prenderlo, spostalo nella nuova posizione con i tasti freccia e fai
+  Invio per rilasciarlo. Oppure usa le frecce **Link in alto** / **Link in basso**
+  sopra il modulo.
+- Lì si trovano anche **Duplica link** e **Elimina link**.
 
-Ogni link ha due campi:
+### Testo del link e destinazione
 
-- **Testo del link** — ciò che compare nell’elenco. Obbligatorio: una voce senza testo del link
-  non viene visualizzata.
-- **Destinazione** — dove porta la voce.
-  - **Vuoto:** al titolo della pagina che ha lo stesso nome del testo del link.
-  - **Testo di un titolo:** a quel titolo. In questo modo la voce può avere un nome più breve
-    rispetto alla sezione, ad esempio «Dotazione» per «Dotazione in dettaglio».
+Al centro, sopra il modulo, compare «Link 2 di 5» e il tipo di destinazione
+(«Destinazione in questa pagina» o «Riferimento a un indirizzo»).
+
+- **Testo del link** – ciò che compare nell’elenco. Obbligatorio: senza testo del link non è possibile
+  salvare la finestra; lo stato in alto indicherà quindi il link in questione.
+- **Destinazione** – dove porta la voce.
+  - **Vuoto:** al titolo della pagina che ha lo stesso nome del
+    testo del link. Il campo lo mostra come segnaposto.
+  - **Testo di un titolo:** a quel titolo. In questo modo la voce
+    può avere un nome più breve rispetto alla sezione, ad esempio «Dotazione» per «Dotazione in
+    dettaglio».
   - **Un ID blocco** come `#a447d858-1bba-4a49-b620-b49c60dd67a7`: a questo
-    blocco della pagina. In questo modo si imposta la selezione in alto. Il link rimane valido anche dopo
+    blocco della pagina. In questo modo si imposta la selezione in basso. Il link rimane valido anche dopo
     la ridenominazione del titolo.
   - **Un indirizzo** che inizia con `/`, `http://`, `https://` o `mailto:`
     : un normale collegamento seguito dal browser.
 
-Nel confronto con il titolo conta il testo, non il livello — da H1 a H6
-sono tutti destinazioni valide. Gli spazi multipli non hanno importanza,
-mentre la distinzione tra maiuscole e minuscole sì. Se ci sono più titoli con lo stesso nome,
-la voce salta al primo.
+Nel confronto con il titolo conta il testo, non il livello: da H1 a H6
+sono tutti destinazioni equivalenti. Gli spazi multipli non hanno alcuna rilevanza,
+mentre la distinzione tra maiuscole e minuscole sì. Se sono presenti più titoli identici,
+la voce passa al primo.
 
-Se l’editor non dovesse apparire, in quel punto sarà presente un campo di testo con l’elenco in formato
-JSON, ad esempio:
+### Aggiungere un elemento alla pagina
+
+Il modo più veloce è utilizzare **Cerca titolo o widget** sotto il
+modulo: l’elenco mostra i titoli (con il livello, ad esempio «H3 sotto
+«Appuntamenti»») e i widget della pagina salvata e può essere filtrato digitando
+toccando. Un clic crea un nuovo link con il nome corrispondente; la destinazione
+è l’ID del blocco (`#…`). Il testo del link può essere modificato in seguito. Ciò che è già
+collegato appare bloccato nell’elenco con la dicitura «già collegato». Le nuove
+sezioni compaiono solo dopo che la pagina è stata salvata.
+
+## Anteprima
+
+**Desktop**, **tablet** e **dispositivi mobili** mostrano, al posto del modulo, la
+navigazione adattata alla larghezza del dispositivo, così come appare nella pagina; i link senza testo
+lì mancano, proprio come nella pagina. Su **dispositivo mobile** è ridotta a un pulsante
+. L’elenco e il titolo rimangono comunque utilizzabili accanto ad esso. Nell’anteprima
+non si verifica alcun salto e la pagina dello Studio rimane inalterata.
+
+## Formato salvato
+
+Titolo e link sono raggruppati nell’attributo `anchor-nav-config`. I blocchi più vecchi
+li contengono ancora nei campi `heading` e `links`; la pagina legge
+il nuovo campo per ogni voce e, in caso contrario, quello vecchio, quindi appaiono invariati.
+Alla prima apertura, la finestra riprende i valori precedenti; solo dopo aver cliccato su **Applica**
+li salva nel nuovo campo. I campi precedenti sono nascosti nella finestra di dialogo.
+
+Se la finestra non dovesse apparire, in quel punto è presente un campo di testo con il codice grezzo,
+ad esempio:
 
 ```json
-[{ "label": "Dotazioni", "target": "Dotazioni in dettaglio" }]
+{ "heading": "In sintesi", "links": [{ "id": "a", "label": "Dotazioni", "target": "Dotazioni in dettaglio" }] }
 ```
 
-`label` è il testo del link, `target` la destinazione (facoltativa).
+`label` è il testo del link, `target` la destinazione (opzionale).

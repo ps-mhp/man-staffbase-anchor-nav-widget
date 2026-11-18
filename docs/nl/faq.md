@@ -2,21 +2,31 @@
 
 ## De widget geeft niets weer.
 
-Er is nog geen item met linktekst. Open het dialoogvenster in Studio, maak via
-**Links bewerken** items aan, pas de instellingen toe en sla ze op. Een lege
-widget geeft niets weer — zelfs geen leeg vak en geen titel.
+Er is nog geen vermelding met linktekst. Open het dialoogvenster in Studio, maak in het
+venster **Links bewerken** vermeldingen aan, pas ze toe en sla ze op. Een
+lege widget geeft niets weer — zelfs geen leeg vakje en geen titel.
 
 ## Er ontbreekt een vermelding in de lijst.
 
-De linktekst ontbreekt. In de editor staat dan onder de regel „Zonder linktekst wordt
-deze vermelding niet weergegeven.”
+De linktekst ontbreekt. Een link zonder linktekst kan nu niet meer
+worden overgenomen: het venster geeft de melding „Link 2: linktekst ontbreekt“ weer en markeert deze in de
+lijst. Oudere blokken kunnen nog dergelijke vermeldingen bevatten; ze staan in het venster
+in de lijst vermeld als „Zonder linktekst”.
 
-## Een klik leidt niet naar de juiste pagina.
+## Verandert het openen van het venster een ouder blok?
 
-De kop met precies deze tekst komt niet voor op de pagina. Er wordt vergeleken
-met de bestemming, of — als de bestemming leeg is — met de linktekst. Een typefout,
-een verschil in hoofd- en kleine letters of een inmiddels hernoemde
-kop is al voldoende. Kopieer de tekst van de kop en plak deze in de bestemming
+Nee. Oudere blokken bevatten titels en links nog steeds in de velden `heading` en
+`links`. Het venster neemt deze over bij het openen; zolang je niets wijzigt,
+wordt er niets overgenomen en blijft het blok zoals het is. Pas
+**Toepassen** schrijft titels en links naar het nieuwe veld `anchor-nav-config` – met
+hetzelfde resultaat op de pagina.
+
+## Een klik leidt niet naar de juiste plek.
+
+De koptekst met precies deze tekst komt niet voor op de pagina. Er wordt
+vergeleken met de bestemming, of — als de bestemming leeg is — met de linktekst. Een typefout,
+een ander gebruik van hoofdletters en kleine letters of een inmiddels hernoemde
+kop. Kopieer de tekst van de kop en plak deze in de bestemming
 .
 
 Koppen in een anker-navigatie tellen nooit als bestemming — ook niet de
@@ -43,13 +53,15 @@ pagina; de markering komt er tijdens het scrollen niet bij.
 
 ## Kan de volgorde worden gewijzigd?
 
-Ja. Sleep in de editor aan het handvat aan de linkerkant, of selecteer het handvat, druk op Enter
-om het op te nemen, verplaats het met de pijltjestoetsen en druk op Enter om het neer te zetten. De lijst hoeft niet de volgorde van de pagina te volgen.
+Ja. Sleep in het venster aan de greep aan de linkerkant, of selecteer de greep, druk op Enter
+om te selecteren, verplaats met de pijltjestoetsen en druk op Enter om neer te zetten. Of gebruik de
+pijltjes **Link naar boven** / **Link naar beneden** boven het formulier. De lijst hoeft
+niet de volgorde van de pagina te volgen.
 
-## Twee kopteksten hebben dezelfde naam — waar gaat de link naartoe?
+## Twee kopteksten hebben dezelfde naam — waar springt de link naartoe?
 
-Naar de eerste op de pagina. Als je naar de tweede wilt gaan, helpt alleen het
-geven van verschillende namen aan de kopteksten.
+Naar de eerste op de pagina. Als je naar de tweede wilt springen, helpt alleen het
+de kopteksten een andere naam te geven.
 
 ## Kan een vermelding naar een andere pagina verwijzen?
 

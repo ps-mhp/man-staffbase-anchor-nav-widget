@@ -4,10 +4,12 @@ De widget toont een lijst met links die je zelf bijhoudt. Met één klik
 ga je naar de bijbehorende kop op de pagina; een rood vinkje geeft aan in
 welk gedeelte je op dat moment leest, en beweegt mee terwijl je scrolt.
 
-De lijst ontstaat niet vanzelf. Je bepaalt in het instellingenvenster welke
-items er zijn, hoe ze heten en in welke volgorde ze staan. De
-widget zoekt pas naar de secties als iemand scrolt of op een item
-klikt — tijdens het laden van de pagina doet hij niets op de achtergrond.
+De lijst ontstaat niet vanzelf. In het venster **Links bewerken**
+bepaal je welke items er zijn, hoe ze heten en in welke volgorde ze
+staan – het snelst door kopteksten en widgets van de pagina uit een
+zoeklijst te selecteren. De
+widget zoekt de secties pas als iemand scrolt of op een item
+klikt — tijdens het laden van de pagina doet het niets op de achtergrond.
 
 ## Waarvoor het bedoeld is
 

@@ -2,24 +2,34 @@
 
 ## The widget isn't displaying anything.
 
-There are no entries with link text yet. Open the dialog in Studio, use
-**Edit Links** to create entries, apply the changes, and save. An empty
-widget won't display anything—not even an empty box or a title.
+There are no entries with link text yet. Open the dialog in Studio, create entries in the
+**Edit Links** window, apply the changes, and save. An
+empty widget doesn't display anything—not even an empty box or a title.
 
 ## An entry is missing from the list.
 
-It is missing the link text. In the editor, the line “Without link text,
-this entry will not be displayed” appears.
+It is missing the link text. A link without link text can no longer be
+applied: the window displays the message “Link 2: Link text missing” and highlights it in the
+list. Older blocks may still contain such entries; they appear in the window
+in the list as “No link text.”
 
-## Clicking does not take me anywhere.
+## Does opening the window change an older block?
 
-A heading with exactly that text does not exist on the page. The system compares
+No. Older blocks still contain titles and links in the `heading` and
+`links`. The window imports them upon opening; as long as you don’t change anything,
+nothing is imported, and the block remains as it is. Only
+**Apply** writes titles and links to the new `anchor-nav-config` field—with
+the same result on the page.
+
+## A click doesn’t work.
+
+There is no heading on the page with exactly this text. The system compares
 it to the target, or—if the target is empty—to the link text. A typo,
 a difference in capitalization, or a heading that has since been renamed
-is enough. Copy the text from the heading and paste it into the target
+heading are enough. Copy the text from the heading and paste it into the target
 field.
 
-Headings in anchor navigation never count as targets—not even the
+Headings in an anchor navigation never count as targets—not even the
 title of a second widget on the same page.
 
 ## A click doesn’t work on translated pages.
@@ -43,15 +53,17 @@ page; the bookmark does not reach them when scrolling.
 
 ## Can the order be changed?
 
-Yes. In the editor, drag the handle on the left, or select the handle, press Enter
-to select it, use the arrow keys to move it, and press Enter to drop it. The list does not have to follow the order of the page.
+Yes. Drag the handle in the window on the left, or select the handle, press Enter
+to pick it up, use the arrow keys to move it, and press Enter to drop it. Or use the
+**Link Up** / **Link Down** arrows above the form. The list does
+not have to follow the order on the page.
 
 ## Two headings have the same name—where does the link go?
 
 To the first one on the page. If you want it to go to the second one, the only solution is to
-name the headings differently.
+give the headings different names.
 
 ## Can an entry link to another page?
 
-Yes. Enter a URL as the destination that begins with `/`, `http://`, or `https://`.
-Clicking it will take you there just like any other link.
+Yes. Enter an address as the destination that begins with `/`, `http://`, or `https://`.
+Clicking it works just like any other link.

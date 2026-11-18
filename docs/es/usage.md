@@ -4,15 +4,19 @@
    El widget solo salta a los títulos que hay en la página.
 2. **Insertar el bloque.** En el editor, selecciona «Navegación por enlaces»; lo mejor es colocarlo en una
    columna estrecha junto al texto o encima del primer apartado.
-3. **Introduce el título**, o déjalo en blanco. Si lo dejas en blanco, solo aparecerá la lista, sin
-   título encima.
-4. **Crea los enlaces.** Guarda la página una vez y, a continuación, en el cuadro de diálogo **Editar enlaces
-  **, en **Añadir elemento a la página**, selecciona para cada sección el
-  encabezado o el widget. Como alternativa, manualmente: **Añadir enlace
-  **, introduce el texto del enlace, deja el destino en blanco o introduce el texto del
-   encabezado. **Aplicar** y, a continuación, guardar.
-5. **Comprobar en la vista previa.** Haz clic una vez en cada entrada: si no se activa,
-   significa que el texto del enlace o el destino no coinciden exactamente con el encabezado.
+3. **Crear los enlaces.** Guarda la página una vez y, a continuación,
+   abre el cuadro de diálogo de configuración; aparecerá automáticamente la ventana
+   **Editar enlaces**. En **Añadir elemento a la página**, busca y selecciona, para cada sección, el título
+   o el widget. Como alternativa, hazlo manualmente: **Nuevo enlace**,
+   introduce el texto del enlace, deja el destino en blanco o introduce el texto del título
+  .
+4. **Introduce el título**: a la derecha, en **Navegación**, o déjalo en blanco.
+   Si lo dejas en blanco, solo aparecerá la lista, sin título encima.
+5. **Compruébalo en la ventana**. Las opciones **Ordenador**, **Tableta** y **Móvil** en la parte superior muestran la
+   navegación adaptada al ancho del dispositivo. A continuación, **Aplicar** y guardar la página.
+6. **Comprobar en la vista previa de la página.** Haz clic una vez en cada entrada:
+   si no se activa, significa que el texto del enlace o el destino no coinciden exactamente con el
+   título.
 
 ## Al modificar la página
 

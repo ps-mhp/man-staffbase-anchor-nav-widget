@@ -2,24 +2,34 @@
 
 ## Il widget non visualizza nulla.
 
-Non c'è ancora nessuna voce con testo del link. Aprire la finestra di dialogo in Studio, creare le voci tramite
-**Modifica link**, applicare le modifiche e salvare. Un widget vuoto
-non visualizza nulla — nemmeno un riquadro vuoto né un titolo.
+Non c’è ancora nessuna voce con testo del link. Aprire la finestra di dialogo in Studio, nella
+finestra **Modifica link** creare le voci, confermare e salvare. Un
+widget vuoto non visualizza nulla — nemmeno un riquadro vuoto né un titolo.
 
 ## Manca una voce nell’elenco.
 
-Manca il testo del link. Nell’editor, sotto la riga, compare la dicitura «Senza testo del link,
-questa voce non viene visualizzata».
+Manca il testo del link. Ora non è più possibile applicare un link senza testo:
+la finestra segnala «Link 2: manca il testo del link» e lo evidenzia nell’
+elenco. I blocchi più vecchi possono ancora contenere voci di questo tipo; nella finestra
+appaiono nell’elenco come «Senza testo del link».
 
-## Cliccandoci sopra non si viene reindirizzati.
+## L’apertura della finestra modifica un blocco più vecchio?
+
+No. I blocchi più vecchi contengono ancora titoli e link nei campi `heading` e
+`links`. La finestra li acquisisce all’apertura; finché non modifichi nulla,
+non viene acquisito nulla e il blocco rimane così com’è. Solo
+**Applica** scrive titoli e link nel nuovo campo `anchor-nav-config` – con
+lo stesso risultato sulla pagina.
+
+## Un clic non porta da nessuna parte.
 
 Il titolo con esattamente questo testo non è presente nella pagina. Il confronto
-viene effettuato con la destinazione o — se la destinazione è vuota — con il testo del link. È sufficiente un errore di battitura,
-una differenza nelle maiuscole e minuscole o un titolo che nel frattempo è stato rinominato
-. Copiare il testo del titolo e incollarlo nella destinazione
+viene effettuato con la destinazione o — se la destinazione è vuota — con il testo del link. È sufficiente correggere un errore di battitura,
+modificare le maiuscole e le minuscole o un titolo che nel frattempo è stato rinominato
+. Basta copiare il testo del titolo e incollarlo nella destinazione
 .
 
-I titoli in una navigazione con ancore non contano mai come destinazione — nemmeno il
+I titoli in una navigazione ad ancore non contano mai come destinazione — nemmeno il
 titolo di un secondo widget sulla stessa pagina.
 
 ## Nelle pagine tradotte, cliccando non si viene reindirizzati.
@@ -43,15 +53,18 @@ pagina; il segnalibro non li raggiunge durante lo scorrimento.
 
 ## È possibile modificare l’ordine?
 
-Sì. Nell’editor, trascina la maniglia a sinistra oppure seleziona la maniglia, premi Invio
-per selezionarla, spostala con i tasti freccia e premi Invio per rilasciarla. L’elenco non deve necessariamente seguire l’ordine della pagina.
+Sì. Trascina la maniglia nella finestra a sinistra, oppure seleziona la maniglia, premi Invio
+per selezionarla, spostala con i tasti freccia e premi Invio per rilasciarla. Oppure utilizza le
+frecce **Link in alto** / **Link in basso** sopra il modulo. L’elenco non deve
+necessariamente seguire l’ordine della pagina.
 
-## Due titoli hanno lo stesso nome — dove porta il collegamento?
+## Due titoli hanno lo stesso nome: dove porta il collegamento?
 
 Al primo presente nella pagina. Se si desidera che porti al secondo, l’unica soluzione è
-assegnare nomi diversi ai titoli.
+assegnare nomi diversi ai
+dare nomi diversi ai titoli.
 
-## Una voce può rimandare a un’altra pagina?
+## Una voce può rimandare a un'altra pagina?
 
-Sì. Inserisci come destinazione un indirizzo che inizi con `/`, `http://` o `https://`.
-Cliccandoci sopra, si aprirà come qualsiasi altro collegamento.
+Sì. Inserire come destinazione un indirizzo che inizi con `/`, `http://` o `https://`.
+Cliccandoci sopra, si verrà reindirizzati come per qualsiasi altro collegamento.
