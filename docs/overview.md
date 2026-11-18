@@ -4,8 +4,10 @@ Das Widget zeigt eine Liste von Verweisen, die du selbst pflegst. Ein Klick
 springt zur passenden Überschrift auf der Seite; eine rote Marke zeigt, in
 welchem Abschnitt du gerade liest, und wandert beim Scrollen mit.
 
-Die Liste entsteht nicht von selbst. Du legst im Einstellungsdialog fest, welche
-Einträge es gibt, wie sie heißen und in welcher Reihenfolge sie stehen. Das
+Die Liste entsteht nicht von selbst. Du legst im Fenster **Links bearbeiten**
+fest, welche Einträge es gibt, wie sie heißen und in welcher Reihenfolge sie
+stehen – am schnellsten, indem du Überschriften und Widgets der Seite aus einer
+Suchliste wählst. Das
 Widget sucht die Abschnitte erst, wenn jemand scrollt oder einen Eintrag
 anklickt — beim Laden der Seite tut es nichts im Hintergrund.
 

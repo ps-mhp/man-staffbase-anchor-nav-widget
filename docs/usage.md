@@ -4,15 +4,19 @@
    Das Widget springt nur zu Überschriften, die es auf der Seite gibt.
 2. **Den Block einfügen.** Im Editor „Ankernavigation" wählen — am besten in eine
    schmale Spalte neben dem Text oder über den ersten Abschnitt.
-3. **Den Titel eintragen** — oder leer lassen. Leer heißt: nur die Liste, keine
-   Überschrift darüber.
-4. **Die Links anlegen.** Die Seite einmal speichern, dann im Dialog **Links
-   bearbeiten** unter **Element der Seite hinzufügen** je Abschnitt die
-   Überschrift oder das Widget wählen. Alternativ von Hand: **Link
-   hinzufügen**, Linktext eintragen, Ziel leer lassen oder den Text der
-   Überschrift eintragen. **Übernehmen**, dann speichern.
-5. **In der Vorschau prüfen.** Jeden Eintrag einmal anklicken: Springt er nicht,
-   stimmt der Text im Linktext oder Ziel nicht genau mit der Überschrift überein.
+3. **Die Links anlegen.** Die Seite einmal speichern, dann den
+   Einstellungsdialog öffnen – das Fenster **Links bearbeiten** erscheint von
+   selbst. Unter **Element der Seite hinzufügen** je Abschnitt die Überschrift
+   oder das Widget suchen und wählen. Alternativ von Hand: **Neuer Link**,
+   Linktext eintragen, Ziel leer lassen oder den Text der Überschrift
+   eintragen.
+4. **Den Titel eintragen** – rechts unter **Navigation**, oder leer lassen.
+   Leer heißt: nur die Liste, keine Überschrift darüber.
+5. **Im Fenster prüfen.** **Desktop**, **Tablet** und **Mobil** oben zeigen die
+   Navigation in Gerätebreite. Dann **Übernehmen** und die Seite speichern.
+6. **In der Vorschau der Seite prüfen.** Jeden Eintrag einmal anklicken:
+   Springt er nicht, stimmt der Text im Linktext oder Ziel nicht genau mit der
+   Überschrift überein.
 
 ## Beim Ändern der Seite
 
