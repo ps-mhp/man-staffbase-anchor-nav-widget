@@ -23,11 +23,13 @@ import { act, fireEvent, render } from "@testing-library/react";
 import Form from "@rjsf/mui";
 import validator from "@rjsf/validator-ajv8";
 
-import { modalRoot, settleModal } from "@shared/ui/config-modal.testing";
+import { modalRoot, settleModal, settleEditor, clickElement } from "@shared/ui/config-modal.testing";
 import { parseAnchorLinks } from "./anchor-links";
 import { readStoredConfig, resolveAnchorNav, serializeAnchorNavConfig } from "./anchor-nav-config";
 import { configurationSchema } from "./configuration-schema";
 import { isStudioPage, linkEditorShell, startLinkEditorInjector } from "./link-editor-injector";
+
+const EDITOR_SELECTOR = '[data-testid="link-editor"]';
 
 const mockEditorLoaded = jest.fn();
 jest.mock("./link-editor", () => {
@@ -41,21 +43,6 @@ const fieldValue = (container: HTMLElement, key = "anchor-nav-config"): string =
   container.querySelector<HTMLInputElement | HTMLTextAreaElement>(`#anchor [id="root_${key}"]`)!.value;
 
 const inModal = (selector: string): HTMLElement | null => modalRoot()?.querySelector<HTMLElement>(selector) ?? null;
-
-/** Ein Klick wie von Hilfsmitteln: react-aria nimmt ihn als Druck an. */
-async function click(element: Element | null): Promise<void> {
-  if (element === null) throw new Error("Nichts zum Klicken gefunden");
-  await act(async () => {
-    (element as HTMLElement).click();
-  });
-}
-
-/** Das Modal lädt nach, der Editor darin noch einmal: so oft warten, bis er da ist. */
-async function settleEditor(): Promise<void> {
-  for (let round = 0; round < 8 && inModal('[data-testid="link-editor"]') === null; round += 1) {
-    await settleModal();
-  }
-}
 
 /** Der eigene Dialog neben einem fremden mit gleichem Feldnamen (Infobox: `heading`). */
 function Dialogs({ formData }: { formData: Record<string, string> }): React.ReactElement {
@@ -80,11 +67,11 @@ async function open(formData: Record<string, string>): Promise<{ container: HTML
   await act(async () => {
     stop = startLinkEditorInjector(container);
   });
-  await settleEditor();
+  await settleEditor(EDITOR_SELECTOR);
   return { container, stop };
 }
 
-const apply = (): Promise<void> => click(inModal('[data-testid="config-shell-apply"]'));
+const apply = (): Promise<void> => clickElement(inModal('[data-testid="config-shell-apply"]'));
 
 describe("Nachladen", () => {
   // Muss zuerst laufen: einmal geladen, bleibt das Modul im Speicher.
@@ -192,7 +179,7 @@ describe("startLinkEditorInjector", () => {
   it("übernimmt keinen Link ohne Linktext und nennt den Fehler", async () => {
     const { container, stop } = await open({});
 
-    await click(Array.from(modalRoot()!.querySelectorAll("button")).find((b) => b.textContent === "Neuer Link") ?? null);
+    await clickElement(Array.from(modalRoot()!.querySelectorAll("button")).find((b) => b.textContent === "Neuer Link") ?? null);
     await apply();
 
     expect(fieldValue(container)).toBe("");
@@ -208,7 +195,7 @@ describe("startLinkEditorInjector", () => {
     const scrollTo = jest.spyOn(window, "scrollTo").mockImplementation(() => {});
     const { stop } = await open({ heading: "Auf einen Blick", links: LEGACY_LINKS });
 
-    await click(Array.from(modalRoot()!.querySelectorAll("button, [role='radio']")).find((b) => b.textContent === "Desktop") ?? null);
+    await clickElement(Array.from(modalRoot()!.querySelectorAll("button, [role='radio']")).find((b) => b.textContent === "Desktop") ?? null);
     await settleModal();
 
     expect(inModal('[data-testid="link-preview"]')).toHaveAttribute("inert");
