@@ -28,7 +28,7 @@ export const LINKS_ATTRIBUTE = "links";
  * ihre Werte führt: das Fenster „Links bearbeiten“ übernimmt sie beim ersten
  * Öffnen als Ausgangsstand, und solange `anchor-nav-config` einen Schlüssel
  * nicht trägt, gilt für die Seite weiter das alte Feld. Zu sehen sind sie im
- * eigenen Dialog nicht mehr (`legacy-fields.ts`).
+ * eigenen Dialog nicht mehr (`@shared/legacy-fields`).
  */
 export const LEGACY_ATTRIBUTES = [HEADING_ATTRIBUTE, LINKS_ATTRIBUTE] as const;
 
