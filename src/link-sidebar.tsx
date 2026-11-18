@@ -50,7 +50,7 @@ function listItems(
       id: link.id,
       label: isUnlabelled(link) ? UNLABELLED : link.label,
       description: invalid ? `${MISSING_LABEL} · ${info.description}` : info.description,
-      thumbnail: <Icon className="size-[18px] text-muted-foreground" aria-hidden />,
+      icon: <Icon className="size-[18px]" aria-hidden />,
       invalid,
     };
   });

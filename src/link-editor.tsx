@@ -30,6 +30,7 @@ import * as React from "react";
 import { ReactElement, useEffect, useMemo, useRef } from "react";
 import { Field } from "@man/config-ui/form/field";
 import { FormSection } from "@man/config-ui/form/form-section";
+import { Note } from "@man/config-ui/form/note";
 import { InspectorPanel } from "@man/config-ui/inspector/inspector-panel";
 import { ConfigWorkspace } from "@man/config-ui/layout/config-workspace";
 import { Input } from "@man/config-ui/primitives/input";
@@ -193,10 +194,10 @@ function NavigationInspector({
             onChange={(event) => onChange(event.target.value)}
           />
         </Field>
-        <p className="rounded-md bg-secondary px-3.5 py-3 text-[13px] leading-normal text-muted-foreground">
+        <Note>
           Die Links springen zu Überschriften und Widgets dieser Seite. Die Vorschau oben rechts zeigt die Navigation
           in Gerätebreite.
-        </p>
+        </Note>
       </div>
     </InspectorPanel>
   );
