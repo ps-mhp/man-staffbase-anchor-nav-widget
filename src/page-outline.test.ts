@@ -23,7 +23,7 @@ const page = {
         content: ["s1"],
         blocks: {
           s1: { type: "section", children: ["c1"] },
-          c1: { type: "column", children: ["nav", "tc", "news", "hero", "acc", "title"] },
+          c1: { type: "column", children: ["nav", "tc", "news", "hero", "acc", "mid", "title"] },
           nav: {
             type: "customBlock",
             config: { settings: { content: { selectedBlock: { name: "Ankernavigation", customElementName: "anchor-nav-widget" } } } },
@@ -42,6 +42,8 @@ const page = {
           head: { type: "accordionPanelHeader", children: ["small"] },
           small: { type: "smallHeading", children: ["t3"] },
           t3: { type: "text", config: { value: "Schließbar" } },
+          mid: { type: "mediumHeading", children: ["t4"] },
+          t4: { type: "text", config: { value: "Anmeldung" } },
           title: { type: "title", children: ["leer"] },
           leer: { type: "text", config: { value: "  " } },
         },
@@ -54,11 +56,29 @@ const page = {
 describe("extractOutline", () => {
   it("liefert Überschriften und Widgets in Lesereihenfolge, ohne die eigene Navigation", () => {
     expect(extractOutline(page, "de_DE")).toEqual([
-      { blockId: "h", label: "Neuigkeiten", kind: "heading", depth: 0 },
+      { blockId: "h", label: "Neuigkeiten", kind: "heading", depth: 0, level: 2 },
       { blockId: "news", label: "News", kind: "widget", depth: 0 },
       { blockId: "hero", label: "Hero-Slider", kind: "widget", depth: 0 },
       { blockId: "acc", label: "Akkordeon", kind: "widget", depth: 0 },
-      { blockId: "small", label: "Schließbar", kind: "heading", depth: 1 },
+      { blockId: "small", label: "Schließbar", kind: "heading", depth: 1, level: 4, parent: "Neuigkeiten" },
+      { blockId: "mid", label: "Anmeldung", kind: "heading", depth: 0, level: 3, parent: "Neuigkeiten" },
+    ]);
+  });
+
+  it("nennt je Überschrift die nächste höhere davor, nicht eine gleichrangige", () => {
+    const blocks = {
+      a: { type: "bigHeading", children: ["ta"] },
+      ta: { type: "text", config: { value: "Termine" } },
+      b: { type: "mediumHeading", children: ["tb"] },
+      tb: { type: "text", config: { value: "Anmeldung" } },
+      c: { type: "bigHeading", children: ["tc"] },
+      tc: { type: "text", config: { value: "Kontakt" } },
+    };
+    const outline = extractOutline({ contentDocuments: { de_DE: { content: { content: ["a", "b", "c"], blocks } } } }, null);
+    expect(outline.map(({ label, level, parent }) => ({ label, level, parent }))).toEqual([
+      { label: "Termine", level: 2, parent: undefined },
+      { label: "Anmeldung", level: 3, parent: "Termine" },
+      { label: "Kontakt", level: 2, parent: undefined },
     ]);
   });
 

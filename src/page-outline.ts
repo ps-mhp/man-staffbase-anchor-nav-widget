@@ -30,7 +30,13 @@ export interface OutlineEntry {
   kind: "heading" | "widget";
   /** Schachtelungstiefe unterhalb der Sektionen, für die Einrückung. */
   depth: number;
+  /** Nur Überschriften: die Ebene, 1 bis 4 – wie die Typoskala des Content Designers sie nennt. */
+  level?: HeadingLevel;
+  /** Nur Überschriften: der Text der nächsten vorausgehenden Überschrift einer höheren Ebene. */
+  parent?: string;
 }
+
+export type HeadingLevel = 1 | 2 | 3 | 4;
 
 interface RawBlock {
   type?: unknown;
@@ -53,7 +59,17 @@ interface RawPage {
   contentDocuments?: Record<string, RawDocument>;
 }
 
-const HEADING_TYPES = new Set(["title", "bigHeading", "smallHeading"]);
+/**
+ * Die Überschriften-Blöcke und ihre Ebene, wie die Typoskala des Content
+ * Designers sie zeigt (`content-designer-extensions`, `typo-scale/scale.ts`):
+ * `title` H1, `bigHeading` H2, `mediumHeading` H3, `smallHeading` H4.
+ */
+const HEADING_LEVELS: Readonly<Record<string, HeadingLevel>> = {
+  title: 1,
+  bigHeading: 2,
+  mediumHeading: 3,
+  smallHeading: 4,
+};
 /** Reine Gliederung: zählt nicht als Ebene und erscheint nicht in der Auswahl. */
 const LAYOUT_TYPES = new Set([
   "section",
@@ -117,16 +133,22 @@ export function extractOutline(
 
   const entries: OutlineEntry[] = [];
   const visited = new Set<string>();
+  // Die Überschriften über der aktuellen Stelle, von außen nach innen.
+  const trail: { level: HeadingLevel; label: string }[] = [];
   const visit = (id: string, depth: number): void => {
     const block = blocks[id];
     if (block === undefined || visited.has(id)) return;
     visited.add(id);
     const type = typeof block.type === "string" ? block.type : "";
 
-    if (HEADING_TYPES.has(type)) {
+    const level = HEADING_LEVELS[type];
+    if (level !== undefined) {
       const label = text(id, new Set()).replace(/\s+/g, " ").trim();
-      if (label !== "")
-        entries.push({ blockId: id, label, kind: "heading", depth });
+      if (label === "") return;
+      while (trail.length > 0 && trail[trail.length - 1].level >= level) trail.pop();
+      const parent = trail[trail.length - 1]?.label;
+      entries.push({ blockId: id, label, kind: "heading", depth, level, ...(parent === undefined ? {} : { parent }) });
+      trail.push({ level, label });
       return;
     }
 
