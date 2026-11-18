@@ -19,9 +19,13 @@ describe("blockDefinition", () => {
     expect(blockDefinition.label).toBe("Ankernavigation");
   });
 
-  it("führt genau die Attribute des Schemas", () => {
-    expect(blockDefinition.attributes).toEqual(["heading", "links"]);
-    expect(Object.keys(blockDefinition.configurationSchema?.properties ?? {})).toEqual(["heading", "links"]);
+  it("führt genau die Attribute des Schemas, das neue zuerst und die alten dahinter", () => {
+    expect(blockDefinition.attributes).toEqual(["anchor-nav-config", "heading", "links"]);
+    expect(Object.keys(blockDefinition.configurationSchema?.properties ?? {})).toEqual([
+      "anchor-nav-config",
+      "heading",
+      "links",
+    ]);
   });
 
   it("ist ein Baustein auf Blockebene", () => {

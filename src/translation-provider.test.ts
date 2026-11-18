@@ -13,7 +13,13 @@
 
 import { decodePayload, encodePayload } from "@shared/payload";
 
-import { HEADING_MARKER, anchorNavTranslationProvider as provider, readHeading } from "./translation-provider";
+import { readStoredConfig, serializeAnchorNavConfig } from "./anchor-nav-config";
+import {
+  HEADING_MARKER,
+  anchorNavConfigTranslationProvider as configProvider,
+  anchorNavTranslationProvider as provider,
+  readHeading,
+} from "./translation-provider";
 
 describe("readHeading", () => {
   it("liest einen von Hand eingetragenen Titel roh", () => {
@@ -63,5 +69,39 @@ describe("anchorNavTranslationProvider", () => {
 
   it("lässt den Titel der Ausgangssprache stehen, wenn die Antwort leer ist", () => {
     expect(provider.fromTranslated(`<p ${HEADING_MARKER}="1"></p>`, "Auf einen Blick")).toBeNull();
+  });
+});
+
+describe("anchorNavConfigTranslationProvider", () => {
+  const stored = serializeAnchorNavConfig({ heading: "Auf einen Blick", links: [{ id: "a", label: "Termine" }] });
+
+  it("hängt am Feld anchor-nav-config des eigenen Bausteins", () => {
+    expect(configProvider.ref).toEqual({ tagName: "anchor-nav-widget", attribute: "anchor-nav-config" });
+  });
+
+  it("schickt nur den Titel hinaus", () => {
+    const html = configProvider.toTranslatable(stored);
+    expect(html).toContain(HEADING_MARKER);
+    expect(html).toContain("Auf einen Blick");
+    expect(html).not.toContain("Termine");
+  });
+
+  it("schickt nichts hinaus ohne Titel im Feld – dann gilt und reist das alte", () => {
+    expect(configProvider.toTranslatable(serializeAnchorNavConfig({ links: [] }))).toBeNull();
+    expect(configProvider.toTranslatable(serializeAnchorNavConfig({ heading: "  " }))).toBeNull();
+    expect(configProvider.toTranslatable(null)).toBeNull();
+    expect(configProvider.toTranslatable("{kaputt")).toBeNull();
+  });
+
+  it("schreibt den übersetzten Titel zurück und lässt die Links, wie sie waren", () => {
+    const zurueck = configProvider.fromTranslated(`<p ${HEADING_MARKER}="1">At a glance</p>`, stored);
+    expect(readStoredConfig(zurueck)).toEqual({ heading: "At a glance", links: [{ id: "a", label: "Termine" }] });
+  });
+
+  it("lässt das Feld stehen, wenn die Antwort leer ist oder es keinen Titel trägt", () => {
+    expect(configProvider.fromTranslated(`<p ${HEADING_MARKER}="1"> </p>`, stored)).toBeNull();
+    expect(
+      configProvider.fromTranslated(`<p ${HEADING_MARKER}="1">x</p>`, serializeAnchorNavConfig({ links: [] })),
+    ).toBeNull();
   });
 });

@@ -117,19 +117,24 @@ export function parseAnchorLinks(raw: unknown, options?: ParseAnchorLinksOptions
   return links;
 }
 
+/** Ein Eintrag, wie er gespeichert wird: im alten Attribut `links` und in `anchor-nav-config`. */
+export type StoredAnchorLink = Readonly<Record<"id" | "label", string> & { target?: string }>;
+
 /**
- * Schreibt die Verweise zurück in die Form des Attributs. Feste
- * Feldreihenfolge, damit derselbe Inhalt dieselbe Zeichenkette ergibt; ein
- * leeres Ziel fällt weg.
+ * Die Verweise in der gespeicherten Form. Feste Feldreihenfolge, damit
+ * derselbe Inhalt dieselbe Zeichenkette ergibt; ein leeres Ziel fällt weg.
  */
-export function serializeAnchorLinks(links: readonly AnchorLink[]): string {
-  return JSON.stringify(
-    links.map((link) => {
-      const entry: Record<string, string> = { id: link.id, label: link.label };
-      if (link.target !== undefined && link.target.trim() !== "") entry.target = link.target;
-      return entry;
-    }),
+export function toStoredLinks(links: readonly AnchorLink[]): StoredAnchorLink[] {
+  return links.map((link) =>
+    link.target !== undefined && link.target.trim() !== ""
+      ? { id: link.id, label: link.label, target: link.target }
+      : { id: link.id, label: link.label },
   );
+}
+
+/** Schreibt die Verweise zurück in die Form des Attributs `links`. */
+export function serializeAnchorLinks(links: readonly AnchorLink[]): string {
+  return JSON.stringify(toStoredLinks(links));
 }
 
 /**

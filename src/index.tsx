@@ -22,34 +22,40 @@ import ReactDOM from "react-dom/client";
 import { BlockFactory, BlockDefinition, ExternalBlockDefinition, BaseBlock } from "widget-sdk";
 import { startWidget } from "@shared/dev-mode/start-widget";
 import { getTranslationRegistry } from "@shared/translation/registry";
-import { HEADING_ATTRIBUTE, LINKS_ATTRIBUTE, configurationSchema, uiSchema } from "./configuration-schema";
-import { ANCHOR_NAV_WIDGET_TAG, anchorNavTranslationProvider, readHeading } from "./translation-provider";
+import { resolveAnchorNav } from "./anchor-nav-config";
+import { ALL_ATTRIBUTES, configurationSchema, uiSchema } from "./configuration-schema";
+import {
+  ANCHOR_NAV_WIDGET_TAG,
+  anchorNavConfigTranslationProvider,
+  anchorNavTranslationProvider,
+} from "./translation-provider";
 import { AnchorNavWidget } from "./widget-root";
 import { isStudioPage, startLinkEditorInjector } from "./link-editor-injector";
 import icon from "../resources/anchor-nav-widget.svg";
 import pkg from "../package.json";
 
-/** Die Attribute des Widgets; gespiegelt im Konfigurationsschema. */
-const widgetAttributes: string[] = [HEADING_ATTRIBUTE, LINKS_ATTRIBUTE];
+/**
+ * Die Attribute des Widgets, wie das Schema sie führt: `anchor-nav-config`
+ * zuerst, dahinter die alten Felder, die ältere Inhalte weiter tragen.
+ */
+const widgetAttributes: string[] = ALL_ATTRIBUTES;
 
 const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
   /**
-   * <anchor-nav-widget heading="Auf einen Blick" links='[{"label":"Ausstattung"}]'></anchor-nav-widget>
+   * <anchor-nav-widget anchor-nav-config="b64:…"></anchor-nav-widget>
+   *
+   * Ältere Inhalte tragen statt `anchor-nav-config` noch `heading` und
+   * `links`; `resolveAnchorNav` liest je Schlüssel das neue Feld, sonst das
+   * alte.
    */
   return class AnchorNavWidgetBlock extends BaseBlockClass implements BaseBlock {
     private _root: ReactDOM.Root | null = null;
 
     public renderBlock(container: HTMLElement): void {
-      const attrs = this.parseAttributes<Record<string, unknown>>();
+      const { heading, links } = resolveAnchorNav(this.parseAttributes<Record<string, unknown>>());
 
       this._root ??= ReactDOM.createRoot(container);
-      this._root.render(
-        <AnchorNavWidget
-          heading={readHeading(attrs[HEADING_ATTRIBUTE])}
-          links={attrs[LINKS_ATTRIBUTE]}
-          self={container}
-        />,
-      );
+      this._root.render(<AnchorNavWidget heading={heading} links={links} self={container} />);
     }
 
     public unmountBlock(_container: HTMLElement): void {
@@ -99,6 +105,7 @@ if (typeof window.defineBlock === "function") {
     version: pkg.version,
     register: () => {
       getTranslationRegistry().register(anchorNavTranslationProvider);
+      getTranslationRegistry().register(anchorNavConfigTranslationProvider);
       window.defineBlock(externalBlockDefinition);
       // Nur im Studio: der Injector beobachtet das Dokument mit einem
       // `MutationObserver`, um den Dialog zu finden. Auf der veröffentlichten

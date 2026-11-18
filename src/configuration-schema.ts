@@ -14,22 +14,42 @@
 import { UiSchema } from "@rjsf/utils";
 import { JSONSchema7 } from "json-schema";
 
+/**
+ * Titel und Links in einem Feld — siehe `anchor-nav-config.ts`. Der Name
+ * trägt das Widget: Editoren hängen sich über `root_<Attribut>` ein, ohne
+ * das Widget zu kennen, und `heading` hat auch die Infobox.
+ */
+export const ANCHOR_NAV_CONFIG_ATTRIBUTE = "anchor-nav-config";
 export const HEADING_ATTRIBUTE = "heading";
 export const LINKS_ATTRIBUTE = "links";
 
 /**
+ * Die Felder bis 0.1.0-rc.17. Sie stehen weiter im Schema, damit der Dialog
+ * ihre Werte führt: das Fenster „Links bearbeiten“ übernimmt sie beim ersten
+ * Öffnen als Ausgangsstand, und solange `anchor-nav-config` einen Schlüssel
+ * nicht trägt, gilt für die Seite weiter das alte Feld. Zu sehen sind sie im
+ * eigenen Dialog nicht mehr (`legacy-fields.ts`).
+ */
+export const LEGACY_ATTRIBUTES = [HEADING_ATTRIBUTE, LINKS_ATTRIBUTE] as const;
+
+/**
  * Das Schema des Konfigurationsdialogs.
  *
- * `links` steht als gewöhnliches Textfeld: Staffbase rendert den Dialog
- * selbst und kennt nur die Feldtypen von RJSF. Im Studio setzt
- * `link-editor-injector.ts` den eigenen Editor an seine Stelle — eine Zeile
- * je Verweis statt JSON-Rohtext. Erscheint er einmal nicht, bleibt das
- * Textfeld als Rückfallweg.
+ * Zu sehen ist nur `anchor-nav-config`, und auch das nicht selbst: im Studio
+ * tritt an seine Stelle der Knopf zum Fenster „Links bearbeiten“
+ * (`link-editor-injector.tsx`), in dem Titel und Links gepflegt werden.
+ * Staffbase rendert den Dialog selbst und kennt nur die Feldtypen von RJSF;
+ * erscheint das Fenster einmal nicht, bleibt das Textfeld als Rohfassung.
  *
  * @see https://rjsf-team.github.io/react-jsonschema-form/docs/
  */
 export const configurationSchema: JSONSchema7 = {
   properties: {
+    [ANCHOR_NAV_CONFIG_ATTRIBUTE]: {
+      type: "string",
+      title: "Ankernavigation",
+      default: "",
+    },
     [HEADING_ATTRIBUTE]: {
       type: "string",
       title: "Titel",
@@ -43,22 +63,23 @@ export const configurationSchema: JSONSchema7 = {
   },
 };
 
+/** Alle Attribute, in der Reihenfolge des Schemas: das neue zuerst, dann die alten. */
+export const ALL_ATTRIBUTES: string[] = Object.keys(configurationSchema.properties ?? {});
+
 /**
  * @see https://rjsf-team.github.io/react-jsonschema-form/docs/api-reference/uiSchema
  */
 export const uiSchema: UiSchema = {
-  [HEADING_ATTRIBUTE]: {
+  [ANCHOR_NAV_CONFIG_ATTRIBUTE]: {
     "ui:help":
-      "Die Zeile über der Liste, etwa „Auf einen Blick“. Bleibt das Feld " +
-      "leer, steht dort nichts.",
+      "Titel und Links werden im Fenster „Links bearbeiten“ gepflegt; das " +
+      "Textfeld dahinter ist die Rohfassung.",
+  },
+  [HEADING_ATTRIBUTE]: {
+    "ui:help": "Ältere Fassung; gilt, solange im Fenster kein Titel übernommen wurde.",
   },
   [LINKS_ATTRIBUTE]: {
     "ui:widget": "textarea",
-    "ui:help":
-      "Normalerweise steht hier der Link-Editor. Erscheint er nicht, lassen " +
-      "sich die Links als JSON-Liste pflegen. Je Link sind möglich: label " +
-      "(Pflicht) und target (optional: Text einer Überschrift oder eine " +
-      'Adresse wie #…, /…, https://…). Beispiel: [{"label":"Ausstattung",' +
-      '"target":"Ausstattung im Detail"}]',
+    "ui:help": "Ältere Fassung; gilt, solange im Fenster keine Links übernommen wurden.",
   },
 };

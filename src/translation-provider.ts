@@ -11,28 +11,20 @@
  * limitations under the License.
  */
 
-import { decodePayload, encodePayload, isPayload } from "@shared/payload";
+import { encodePayload } from "@shared/payload";
 import { TranslationProvider } from "@shared/translation/carriers";
 
-import { HEADING_ATTRIBUTE } from "./configuration-schema";
+import { encodeStoredConfig, readStoredConfig } from "./anchor-nav-config";
+import { ANCHOR_NAV_CONFIG_ATTRIBUTE, HEADING_ATTRIBUTE } from "./configuration-schema";
+import { readHeading } from "./heading-text";
+
+export { readHeading };
 
 /** Muss dem Tag entsprechen, unter dem `index.tsx` das Widget anmeldet. */
 export const ANCHOR_NAV_WIDGET_TAG = "anchor-nav-widget";
 
 /** Kennzeichnet das Element mit dem Titel, in welcher Antwortform auch immer. */
 export const HEADING_MARKER = "data-mhp-anchor-nav-heading";
-
-/**
- * Der Titel, wie er gespeichert ist: von Hand eingetragen roh, nach einer
- * Übersetzung in der `b64:`-Hülle, die den Durchlauf übersteht (siehe
- * `@shared/payload`). `null`, wenn keiner eingetragen ist.
- */
-export function readHeading(raw: unknown): string | null {
-  if (typeof raw !== "string") return null;
-  const text = isPayload(raw) ? (decodePayload(raw) ?? "") : raw;
-  const trimmed = text.trim();
-  return trimmed === "" ? null : trimmed;
-}
 
 const escapeHtml = (text: string): string =>
   text
@@ -42,8 +34,21 @@ const escapeHtml = (text: string): string =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
+const toTranslatable = (heading: string | null): string | null =>
+  heading === null ? null : `<p ${HEADING_MARKER}="1">${escapeHtml(heading)}</p>`;
+
+/** Der übersetzte Titel; `null`, wenn die Antwort keinen trägt. */
+function translatedHeading(html: string): string | null {
+  const doc = new DOMParser().parseFromString(`<body>${html}</body>`, "text/html");
+  const translated = doc.body.querySelector(`[${HEADING_MARKER}]`)?.textContent?.trim() ?? "";
+  // Leer heißt verloren, nicht übersetzt — dann bleibt der Titel der Quellsprache.
+  return translated === "" ? null : translated;
+}
+
 /**
- * Wie der Titel durch Staffbases Inhaltsübersetzung reist.
+ * Wie der Titel durch Staffbases Inhaltsübersetzung reist – im Feld `heading`,
+ * wo er bis 0.1.0-rc.17 stand und bei Inhalten bleibt, deren Fenster seither
+ * nicht übernommen wurde.
  *
  * Die Einträge der Liste brauchen das nicht: sie sind die Überschriften der
  * Seite und werden mit ihr übersetzt.
@@ -53,17 +58,34 @@ export const anchorNavTranslationProvider: TranslationProvider = {
   label: "Ankernavigation",
   ref: { tagName: ANCHOR_NAV_WIDGET_TAG, attribute: HEADING_ATTRIBUTE },
 
-  toTranslatable: (stored) => {
-    const heading = readHeading(stored);
-    return heading === null ? null : `<p ${HEADING_MARKER}="1">${escapeHtml(heading)}</p>`;
-  },
+  toTranslatable: (stored) => toTranslatable(readHeading(stored)),
 
   acceptsTranslated: (html) => html.includes(HEADING_MARKER),
 
   fromTranslated: (html, _stored) => {
-    const doc = new DOMParser().parseFromString(`<body>${html}</body>`, "text/html");
-    const translated = doc.body.querySelector(`[${HEADING_MARKER}]`)?.textContent?.trim() ?? "";
-    // Leer heißt verloren, nicht übersetzt — dann bleibt der Titel der Quellsprache.
-    return translated === "" ? null : encodePayload(translated);
+    const translated = translatedHeading(html);
+    return translated === null ? null : encodePayload(translated);
+  },
+};
+
+/**
+ * Dasselbe für den Titel in `anchor-nav-config`. Trägt das Feld keinen
+ * Titel, gilt für die Seite `heading` – dann gibt es hier nichts zu tun,
+ * und der Provider oben übersetzt ihn. Die Links reisen unverändert mit.
+ */
+export const anchorNavConfigTranslationProvider: TranslationProvider = {
+  id: `${ANCHOR_NAV_WIDGET_TAG}/${ANCHOR_NAV_CONFIG_ATTRIBUTE}`,
+  label: "Ankernavigation",
+  ref: { tagName: ANCHOR_NAV_WIDGET_TAG, attribute: ANCHOR_NAV_CONFIG_ATTRIBUTE },
+
+  toTranslatable: (stored) => toTranslatable(readHeading(readStoredConfig(stored)?.heading)),
+
+  acceptsTranslated: (html) => html.includes(HEADING_MARKER),
+
+  fromTranslated: (html, stored) => {
+    const config = readStoredConfig(stored);
+    const translated = translatedHeading(html);
+    if (config?.heading === undefined || translated === null) return null;
+    return encodeStoredConfig({ ...config, heading: translated });
   },
 };
