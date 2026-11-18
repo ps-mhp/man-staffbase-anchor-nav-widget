@@ -543,3 +543,56 @@ describe("AnchorNav", () => {
     expect(scrollToSpy).not.toHaveBeenCalled();
   });
 });
+
+describe("AnchorNav als Vorschau", () => {
+  let scrollToSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    setMedia();
+    window.history.replaceState(null, "", "/studio#zwei");
+    scrollToSpy = jest.spyOn(window, "scrollTo").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    delete (window as { matchMedia?: unknown }).matchMedia;
+    jest.restoreAllMocks();
+    window.history.replaceState(null, "", "/seite");
+  });
+
+  it("springt nicht zum Hash, sucht nichts und lauscht nicht am Bildlauf", () => {
+    const { links } = page("Eins", "Zwei");
+    const find = jest.spyOn(headingScan, "findHeading");
+    const listen = jest.spyOn(document, "addEventListener");
+
+    render(<AnchorNav links={links} heading="Auf einen Blick" self={null} preview={{ compact: false }} />);
+
+    expect(scrollToSpy).not.toHaveBeenCalled();
+    expect(find).not.toHaveBeenCalled();
+    expect(listen.mock.calls.filter(([type]) => type === "scroll")).toHaveLength(0);
+    expect(screen.queryByRole("link", { current: true })).toBeNull();
+  });
+
+  it("rollt beim Klick nicht und lässt die Adresse, wie sie ist", () => {
+    const { links } = page("Eins", "Zwei");
+    render(<AnchorNav links={links} heading={null} self={null} preview={{ compact: false }} />);
+
+    const link = screen.getByRole("link", { name: "Eins" });
+    expect(fireEvent.click(link)).toBe(false);
+
+    expect(scrollToSpy).not.toHaveBeenCalled();
+    expect(window.location.hash).toBe("#zwei");
+    expect(link).toHaveAttribute("aria-current", "true");
+  });
+
+  it("nimmt die schmale Fassung vom Gerät der Vorschau, nicht vom Fenster", () => {
+    const { links } = page("Eins");
+    const { rerender } = render(<AnchorNav links={links} heading={null} self={null} preview={{ compact: true }} />);
+    expect(screen.getByRole("button", { name: COMPACT_TOGGLE_LABEL })).toBeInTheDocument();
+    expect(screen.queryByRole("link")).toBeNull();
+
+    setMedia(COMPACT_QUERY);
+    rerender(<AnchorNav links={links} heading={null} self={null} preview={{ compact: false }} />);
+    expect(screen.queryByRole("button")).toBeNull();
+    expect(screen.getByRole("link", { name: "Eins" })).toBeInTheDocument();
+  });
+});

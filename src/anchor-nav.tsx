@@ -40,12 +40,24 @@ export const FALLBACK_NAV_LABEL = "Inhaltsverzeichnis";
 /** Die Beschriftung des Knopfes auf schmalen Schirmen ohne eigenen Titel. */
 export const COMPACT_TOGGLE_LABEL = "Inhalt";
 
+/**
+ * Die Navigation als Vorschau im Studio: wie auf der Seite gezeichnet, aber
+ * ohne Wirkung auf die Seite – kein Sprung zum Hash, kein Scroll-Spy, kein
+ * Klick, der rollt oder die Adresse ändert. Die schmale Fassung kommt aus
+ * dem Gerät der Vorschau, nicht aus der Breite des Studio-Fensters.
+ */
+export interface AnchorNavPreview {
+  readonly compact: boolean;
+}
+
 export interface AnchorNavProps {
   readonly links: readonly AnchorLink[];
   /** Der Titel über der Liste, oder `null`. */
   readonly heading: string | null;
   /** Der eigene Container. Überschriften darin sind kein Sprungziel. */
   readonly self: HTMLElement | null;
+  /** Gesetzt nur in der Vorschau des Fensters „Links bearbeiten“. */
+  readonly preview?: AnchorNavPreview;
 }
 
 /** Ein Eintrag, wie die Liste ihn zeigt. */
@@ -152,13 +164,15 @@ export function AnchorNav({
   links,
   heading,
   self,
+  preview,
 }: AnchorNavProps): React.ReactElement | null {
   const liveCss = useHotStyle(
     anchorNavCss,
     "anchor-nav-widget",
     "styles/anchor-nav.scss",
   );
-  const compact = useMediaQuery(COMPACT_QUERY);
+  const compactWindow = useMediaQuery(COMPACT_QUERY);
+  const compact = preview?.compact ?? compactWindow;
   const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
 
   const entries = useMemo<Entry[]>(() => {
@@ -229,6 +243,7 @@ export function AnchorNav({
     resolve: resolveTargets,
     self,
     onActive: setActiveIndex,
+    enabled: preview === undefined,
   });
 
   const scrollTo = useCallback(
@@ -282,7 +297,7 @@ export function AnchorNav({
   // sondern eine Verzögerung. Kein zweiter Versuch: steht die Überschrift
   // noch nicht auf der Seite, bleibt es beim markierten Eintrag.
   useEffect(() => {
-    if (jumped.current || entries.length === 0) return;
+    if (preview !== undefined || jumped.current || entries.length === 0) return;
     jumped.current = true;
 
     const slug = currentHashSlug();
@@ -299,7 +314,7 @@ export function AnchorNav({
     const element =
       id !== null ? findById(id) : findHeading(headingText(link), self);
     if (element !== null) scrollTo(element, false);
-  }, [entries, self, scrollTo, holdSpy]);
+  }, [entries, self, scrollTo, holdSpy, preview]);
 
   // Die Lage des Segments. `useLayoutEffect`, damit es nach einem Wechsel
   // nicht erst eine Bildfolge lang an der alten Stelle steht.
@@ -336,6 +351,12 @@ export function AnchorNav({
     event: React.MouseEvent<HTMLAnchorElement>,
     index: number,
   ): void => {
+    // Die Vorschau rollt nichts und ändert keine Adresse; nur die Marke wandert.
+    if (preview !== undefined) {
+      event.preventDefault();
+      setActiveIndex(index);
+      return;
+    }
     const entry = entries[index];
     const id = blockId(entry.link);
     // Ein Block der Seite: der Browser fände ihn in einem Shadow Root nicht

@@ -112,6 +112,12 @@ export interface ScrollSpyOptions {
   self: HTMLElement | null;
   /** Meldet den aktiven Eintrag, nur bei einem Wechsel. */
   onActive: (index: number | null) => void;
+  /**
+   * Ob überhaupt beobachtet wird; Vorgabe ja. Nein für die Vorschau im
+   * Studio: dort gibt es keine Seite, deren Abschnitte zu verfolgen wären,
+   * und die Überschriften des Studios sind nicht gemeint.
+   */
+  enabled?: boolean;
 }
 
 export interface ScrollSpy {
@@ -128,7 +134,7 @@ interface Hold {
   timer: ReturnType<typeof setTimeout> | undefined;
 }
 
-export function useScrollSpy({ resolve, self, onActive }: ScrollSpyOptions): ScrollSpy {
+export function useScrollSpy({ resolve, self, onActive, enabled = true }: ScrollSpyOptions): ScrollSpy {
   const onActiveRef = useRef(onActive);
   onActiveRef.current = onActive;
   const holdRef = useRef<Hold>({ active: false, settled: false, timer: undefined });
@@ -152,6 +158,7 @@ export function useScrollSpy({ resolve, self, onActive }: ScrollSpyOptions): Scr
   }, [settleLater]);
 
   useEffect(() => {
+    if (!enabled) return undefined;
     let targets: readonly (HTMLElement | null)[] | null = null;
     let resolvedAt = Number.NEGATIVE_INFINITY;
     let frame: number | null = null;
@@ -231,7 +238,7 @@ export function useScrollSpy({ resolve, self, onActive }: ScrollSpyOptions): Scr
       for (const target of watched) target.removeEventListener("scroll", onScroll);
       clearTimeout(holdRef.current.timer);
     };
-  }, [resolve, self, settleLater]);
+  }, [resolve, self, settleLater, enabled]);
 
   return { hold };
 }
