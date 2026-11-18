@@ -26,11 +26,22 @@ import * as React from "react";
 import { Anchor } from "lucide-react";
 
 import { FieldModalShellOptions, startFieldModalInjector } from "@shared/config-modal";
+import { legacyFieldsFromSchema, readLegacyFields, startHiddenFields } from "@shared/legacy-fields";
 
-import { AnchorNavConfig, parseAnchorNavDraft, serializeAnchorNavConfig } from "./anchor-nav-config";
-import { ANCHOR_NAV_CONFIG_ATTRIBUTE, LEGACY_ATTRIBUTES } from "./configuration-schema";
-import { readLegacyFromDialog, startHiddenFields } from "./legacy-fields";
+import {
+  AnchorNavConfig,
+  LegacyAnchorNavValues,
+  parseAnchorNavDraft,
+  serializeAnchorNavConfig,
+} from "./anchor-nav-config";
+import { ANCHOR_NAV_CONFIG_ATTRIBUTE, LEGACY_ATTRIBUTES, configurationSchema } from "./configuration-schema";
 import { anchorNavChangesStatus, validateAnchorNav } from "./link-editor-rules";
+
+const LEGACY_FIELDS = legacyFieldsFromSchema(LEGACY_ATTRIBUTES, configurationSchema);
+
+/** Die alten Felder, wie der eigene Dialog sie gerade führt; roh, auch übersetzte `b64:`-Werte. */
+const readLegacyFromDialog = (root: ParentNode): LegacyAnchorNavValues =>
+  readLegacyFields(LEGACY_FIELDS, ANCHOR_NAV_CONFIG_ATTRIBUTE, root).values;
 
 /**
  * Der Editor kommt erst, wenn ein Dialog ihn zeigt: er baut auf
@@ -110,7 +121,7 @@ export function startLinkEditorInjector(root: ParentNode = document): () => void
       </React.Suspense>
     ),
   });
-  const stopHiding = startHiddenFields(LEGACY_ATTRIBUTES, root);
+  const stopHiding = startHiddenFields(LEGACY_ATTRIBUTES, ANCHOR_NAV_CONFIG_ATTRIBUTE, root);
   return () => {
     stopModal();
     stopHiding();
