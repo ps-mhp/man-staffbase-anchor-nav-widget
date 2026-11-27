@@ -31,7 +31,7 @@ import {
 import { measureChromeHeight } from "@shared/staffbase-chrome";
 import { findScrollParent } from "./scroll-ancestor";
 import { containerChromeOverlap, jumpTarget } from "./scroll-target";
-import { AnchorRail, RailEntry, useHasScrolled, useRailClaim } from "./anchor-rail";
+import { AnchorRail, RailEntry, useHasScrolled, useInViewport, useRailClaim } from "./anchor-rail";
 import { useMissingTargets } from "./use-missing-targets";
 import { useScrollSpy } from "./use-scroll-spy";
 import anchorNavCss from "./styles/anchor-nav.scss";
@@ -390,6 +390,9 @@ export function AnchorNav({
   );
   const railClaimed = useRailClaim(railWanted && railEntries.length > 1);
   const scrolled = useHasScrolled(railClaimed);
+  // Steht die Navigation selbst im Bild, braucht es die Leiste nicht.
+  const [navElement, setNavElement] = useState<HTMLElement | null>(null);
+  const navVisible = useInViewport(navElement, railClaimed && scrolled);
 
   const onLinkClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -466,8 +469,8 @@ export function AnchorNav({
 
   return (
     <>
-    {railClaimed && scrolled && <AnchorRail entries={railEntries} active={active} onJump={jumpTo} />}
-    <nav className="man-anchor-nav" aria-label={heading ?? FALLBACK_NAV_LABEL}>
+    {railClaimed && scrolled && !navVisible && <AnchorRail entries={railEntries} active={active} onJump={jumpTo} />}
+    <nav className="man-anchor-nav" aria-label={heading ?? FALLBACK_NAV_LABEL} ref={setNavElement}>
       <style>{liveCss}</style>
 
       {compact ? (

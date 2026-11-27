@@ -54,17 +54,22 @@ describe("AnchorRail", () => {
     scroll();
     const nav = rail();
     expect(nav).not.toBeNull();
-    const ticks = within(nav as HTMLElement).getAllByRole("button", { name: /Eins|Zwei|Drei/ });
+    const ticks = within(nav as HTMLElement).getAllByRole("button", { name: /^(Eins|Zwei|Drei)$/ });
     expect(ticks.map((tick) => tick.getAttribute("aria-label"))).toEqual(["Eins", "Zwei", "Drei"]);
     expect(within(nav as HTMLElement).getByRole("button", { name: "Vorheriger Abschnitt" })).toBeDisabled();
+    // Der Pfeil nennt, wohin er springt – auch im Tooltip daneben.
+    const down = within(nav as HTMLElement).getByRole("button", { name: "Nächster Abschnitt: Eins" });
+    expect(down.nextElementSibling).toHaveTextContent("Eins");
 
-    fireEvent.click(within(nav as HTMLElement).getByRole("button", { name: "Nächster Abschnitt" }));
+    fireEvent.click(down);
     expect(scrollTo).toHaveBeenCalled();
     expect(ticks[0]).toHaveAttribute("aria-current", "true");
     expect(window.location.hash).toBe("#eins");
 
-    fireEvent.click(within(nav as HTMLElement).getByRole("button", { name: "Nächster Abschnitt" }));
+    expect(within(nav as HTMLElement).getByRole("button", { name: "Vorheriger Abschnitt" })).toBeDisabled();
+    fireEvent.click(within(nav as HTMLElement).getByRole("button", { name: "Nächster Abschnitt: Zwei" }));
     expect(ticks[1]).toHaveAttribute("aria-current", "true");
+    expect(within(nav as HTMLElement).getByRole("button", { name: "Vorheriger Abschnitt: Eins" })).toBeEnabled();
     fireEvent.click(ticks[2]);
     expect(ticks[2]).toHaveAttribute("aria-current", "true");
     expect(within(nav as HTMLElement).getByRole("button", { name: "Nächster Abschnitt" })).toBeDisabled();
@@ -102,5 +107,45 @@ describe("rail in anchor-nav-config", () => {
     expect(readStoredConfig(serializeAnchorNavConfig({ links: [], rail: true }))).toEqual({ links: [] });
     expect(resolveAnchorNav({ "anchor-nav-config": serializeAnchorNavConfig({ rail: false }) }).rail).toBe(false);
     expect(resolveAnchorNav({}).rail).toBe(true);
+  });
+});
+
+describe("AnchorRail und die sichtbare Navigation", () => {
+  type Callback = (entries: { isIntersecting: boolean }[]) => void;
+  let observed: { callback: Callback; target: Element | null; disconnect: jest.Mock }[] = [];
+
+  beforeEach(() => {
+    observed = [];
+    (window as unknown as { IntersectionObserver: unknown }).IntersectionObserver = class {
+      private readonly entry: { callback: Callback; target: Element | null; disconnect: jest.Mock };
+      constructor(callback: Callback) {
+        this.entry = { callback, target: null, disconnect: jest.fn() };
+        observed.push(this.entry);
+      }
+      observe(target: Element): void {
+        this.entry.target = target;
+      }
+      disconnect(): void {
+        this.entry.disconnect();
+      }
+    };
+  });
+  afterEach(() => {
+    delete (window as unknown as { IntersectionObserver?: unknown }).IntersectionObserver;
+    document.body.innerHTML = "";
+  });
+
+  it("blendet die Leiste aus, solange die Navigation selbst zu sehen ist", () => {
+    render(<AnchorNav links={page("Eins", "Zwei")} heading={null} self={null} />);
+    act(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
+    expect(observed).toHaveLength(1);
+    expect(observed[0].target?.tagName).toBe("NAV");
+
+    act(() => observed[0].callback([{ isIntersecting: true }]));
+    expect(rail()).toBeNull();
+    act(() => observed[0].callback([{ isIntersecting: false }]));
+    expect(rail()).not.toBeNull();
   });
 });

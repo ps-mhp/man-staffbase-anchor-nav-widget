@@ -17,8 +17,9 @@
  * Abschnitt. Zeiger oder Fokus auf einem Strich blenden links daneben den
  * Linktext ein.
  *
- * Erscheint erst beim ersten Scrollen, nur auf Desktop und Tablet, nie im
- * Studio und nie in der Vorschau des Fensters – und je Seite nur einmal,
+ * Erscheint erst beim ersten Scrollen und nur, solange die Navigation selbst
+ * nicht zu sehen ist; nur auf Desktop und Tablet, nie im Studio und nie in
+ * der Vorschau des Fensters – und je Seite nur einmal,
  * auch wenn mehrere Ankernavigationen darauf stehen (die erste gewinnt).
  * Abschalten lässt sie sich je Block (`rail: false` in `anchor-nav-config`).
  *
@@ -79,6 +80,28 @@ export function useHasScrolled(enabled: boolean): boolean {
   return scrolled;
 }
 
+/**
+ * Ob `element` gerade im sichtbaren Bereich steht. Beobachtet erst, wenn
+ * `enabled` – also nach dem ersten Scrollen, nie beim Laden. Ohne
+ * `IntersectionObserver` gilt es als nicht sichtbar.
+ */
+export function useInViewport(element: Element | null, enabled: boolean): boolean {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (!enabled || element === null || typeof window.IntersectionObserver !== "function") {
+      setVisible(false);
+      return undefined;
+    }
+    const observer = new window.IntersectionObserver((entries) => {
+      const last = entries[entries.length - 1];
+      if (last !== undefined) setVisible(last.isIntersecting);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [element, enabled]);
+  return visible;
+}
+
 /** Ein Shadow Root am `body`, solange `enabled`. */
 function useBodyShadowRoot(enabled: boolean): ShadowRoot | null {
   const [root, setRoot] = useState<ShadowRoot | null>(null);
@@ -103,6 +126,38 @@ const Arrow = ({ up }: { up: boolean }): React.ReactElement => (
   </svg>
 );
 
+interface StepProps {
+  direction: "up" | "down";
+  /** Wohin der Pfeil springt; `undefined` sperrt ihn. */
+  target: number | undefined;
+  entries: readonly RailEntry[];
+  onJump: (index: number) => void;
+}
+
+/** Ein Pfeil; bei Zeiger oder Fokus steht links daneben, wohin er springt. */
+function Step({ direction, target, entries, onJump }: StepProps): React.ReactElement {
+  const label = entries.find((entry) => entry.index === target)?.label;
+  const name = direction === "up" ? "Vorheriger Abschnitt" : "Nächster Abschnitt";
+  return (
+    <div className="man-anchor-rail__stepper">
+      <button
+        type="button"
+        className="man-anchor-rail__step"
+        aria-label={label === undefined ? name : `${name}: ${label}`}
+        disabled={target === undefined}
+        onClick={() => target !== undefined && onJump(target)}
+      >
+        <Arrow up={direction === "up"} />
+      </button>
+      {label !== undefined && (
+        <span className="man-anchor-rail__label" aria-hidden="true">
+          {label}
+        </span>
+      )}
+    </div>
+  );
+}
+
 /** Die Nachbarn des aktiven Eintrags unter den Strichen. */
 export function railNeighbours(entries: readonly RailEntry[], active: number | null): { previous?: number; next?: number } {
   const position = active === null ? -1 : entries.findIndex((entry) => entry.index === active);
@@ -119,15 +174,7 @@ export function AnchorRail({ entries, active, onJump }: AnchorRailProps): React.
   return createPortal(
     <nav className="man-anchor-rail" aria-label="Abschnitte der Seite" data-testid="anchor-rail">
       <style>{css}</style>
-      <button
-        type="button"
-        className="man-anchor-rail__step"
-        aria-label="Vorheriger Abschnitt"
-        disabled={previous === undefined}
-        onClick={() => previous !== undefined && onJump(previous)}
-      >
-        <Arrow up />
-      </button>
+      <Step direction="up" target={previous} entries={entries} onJump={onJump} />
       <ol className="man-anchor-rail__list">
         {entries.map((entry) => (
           <li className="man-anchor-rail__item" key={entry.index}>
@@ -144,15 +191,7 @@ export function AnchorRail({ entries, active, onJump }: AnchorRailProps): React.
           </li>
         ))}
       </ol>
-      <button
-        type="button"
-        className="man-anchor-rail__step"
-        aria-label="Nächster Abschnitt"
-        disabled={next === undefined}
-        onClick={() => next !== undefined && onJump(next)}
-      >
-        <Arrow up={false} />
-      </button>
+      <Step direction="down" target={next} entries={entries} onJump={onJump} />
     </nav>,
     root,
   );
