@@ -1,6 +1,16 @@
 {
   "versions": [
     {
+      "version": "0.1.0-rc.21",
+      "date": "2026-11-27",
+      "entries": [
+        {
+          "type": "feat",
+          "text": "Live-Gliederung, Seitenaufbau per Drag & Drop, Wächter für verlinkte Überschriften"
+        }
+      ]
+    },
+    {
       "version": "0.1.0-rc.18",
       "date": "2026-11-18",
       "entries": [
@@ -99,16 +109,6 @@
         {
           "type": "fix",
           "text": "Ebene und Herkunft am Element der Seite bestimmen"
-        }
-      ]
-    },
-    {
-      "version": "0.1.0-rc.5",
-      "date": "2026-11-05",
-      "entries": [
-        {
-          "type": "feat",
-          "text": "Ueberschriften im Studio erfassen statt im Frontend scannen"
         }
       ]
     }

@@ -2,27 +2,29 @@
 
 1. **Estruturar a página.** Colocar títulos no início de cada secção.
    O widget só salta para os títulos que existem na página.
-2. **Inserir o bloco.** No editor, selecione «Navegação por âncoras» — de preferência numa
+2. **Inserir o bloco.** No editor, selecionar «Navegação por âncoras» — de preferência numa
    coluna estreita ao lado do texto ou acima do primeiro parágrafo.
-3. **Criar os links.** Guarde a página e, em seguida, abra a
-   caixa de diálogo de definições — a janela **Editar links** surge
-   automaticamente. Em **Adicionar elemento à página**, para cada secção, procure e selecione o título
-   ou o widget. Em alternativa, manualmente: **Novo link**,
-   introduza o texto do link, deixe o destino em branco ou introduza o texto do título
-  .
-4. **Introduzir o título** – à direita, em **Navegação**, ou deixar em branco.
+3. **Criar os links.** Abrir a caixa de diálogo de configurações — a janela
+   **Editar links** surge automaticamente. Para cada secção, arraste o título
+   ou o widget da **Estrutura da página** à direita para a lista, ou
+   procure e selecione através de **Novo link**. Mesmo os títulos ainda não guardados
+   já estão disponíveis para seleção. Em alternativa, manualmente: **Novo link** →
+   **Link vazio**, introduzir o texto do link, deixar o destino em branco ou introduzir o texto do
+   título.
+4. **Introduzir o título** — à direita, em **Navegação**, ou deixar em branco.
    Em branco significa: apenas a lista, sem título acima.
 5. **Verificar na janela.** **Desktop**, **Tablet** e **Móvel**, na parte superior, mostram a
-   navegação ajustada à largura do dispositivo. Em seguida, **Aplicar** e guardar a página.
-6. **Verificar na pré-visualização da página.** Clique uma vez em cada entrada:
-   se não saltar, significa que o texto do link ou o destino não corresponde exatamente ao
+   navegação adaptada à largura do dispositivo. Em seguida, clicar em **Aplicar** e guardar a página.
+6. **Verifique na pré-visualização da página.** Clique uma vez em cada entrada:
+   se não for direcionado para a página, significa que o texto do link ou o destino não corresponde exatamente ao
    título.
 
 ## Ao alterar a página
 
-A lista não acompanha a página automaticamente. Quem adicionar ou
-eliminar uma secção deve ajustar a lista. Os links da seleção (ID do bloco) permanecem válidos ao
-renomear um título; os links sobre o texto, não.
+As novas secções não aparecem automaticamente na lista. Se um
+título com link for eliminado ou renomeado, o widget no Studio pergunta se o
+link deve ser removido ou atualizado. Um link cujo destino falte
+não aparece na página.
 
 ## No telemóvel
 

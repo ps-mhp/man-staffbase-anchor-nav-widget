@@ -8,12 +8,15 @@ Desktop · Tablet · Móvel**. **Aplicar** insere o título e os links na
 caixa de diálogo; depois, guarda como habitualmente.
 
 A janela tem três colunas: à esquerda, os **Links**; no centro, o
-link selecionado e a seleção da página; à direita, a **Navegação** com o título.
+link selecionado; à direita, a **Navegação** com o título e a **Estrutura da página**.
+
+Os elementos da página são atualizados em tempo real a partir do editor – incluindo os títulos que
+ainda não foram guardados – e acompanham todas as alterações.
 
 ## Título
 
-À direita, em **Navegação**: o título acima da lista, por exemplo, «Nesta
-página». Se deixar em branco, o título é ocultado; a lista permanece.
+À direita, em **Navegação**, na parte superior: o título acima da lista, por exemplo, «Nesta
+página». Se deixares em branco, ela fica oculta; a lista permanece.
 
 O título é traduzido juntamente com a página.
 
@@ -21,20 +24,25 @@ O título é traduzido juntamente com a página.
 
 A coluna da esquerda mostra todos os links pela ordem da navegação. Cada linha
 indica o texto do link e, abaixo, para onde este remete – por exemplo, «Título
-«Agenda»», «Widget: Galeria de ficheiros», «#contacto» ou «Em branco – título com o mesmo nome
+«Agenda»», «Widget: Galeria de ficheiros», «#contacto» ou «Vazio – título com o mesmo nome
 ». Um clique seleciona um link para edição.
 
-- **Novo link** cria um link vazio, seleciona-o e coloca o cursor no
-  texto do link.
-- Pode alterar a ordem utilizando o controlador à esquerda: arraste-o ou selecione-o,
-  confirme com Enter, mova-o para a nova posição com as setas e
-  confirme com Enter. Ou utilize as setas **Link para cima** / **Link para baixo**
+- **Novo link** abre um menu: no topo, **Link vazio** (cria um
+  link vazio e coloca o cursor no texto do link); abaixo, a pesquisa
+  pelos títulos e widgets da página (ver abaixo).
+- Um **«!»** no final da linha significa que o destino já não existe
+  na página (título eliminado ou renomeado). Na página, o link
+  fica oculto até selecionares um novo destino ou o eliminares – o formulário
+  oferece a opção **Remover link** para esse efeito.
+- Podes alterar a ordem utilizando o manípulo à esquerda: arrasta ou seleciona o manípulo,
+  confirma com Enter, move-o para a nova posição com as setas e
+  confirma com Enter. Ou utiliza as setas **Link para cima** / **Link para baixo**
   acima do formulário.
-- **Duplicar link** e **Apagar link** também se encontram aí.
+- As opções **Duplicar link** e **Apagar link** também se encontram aí.
 
 ### Texto do link e destino
 
-No centro, por cima do formulário, aparece «Link 2 de 5» e o tipo de destino
+No centro, acima do formulário, aparece «Link 2 de 5» e o tipo de destino
 («Destino nesta página» ou «Referência a um endereço»).
 
 - **Texto do link** – o que consta na lista. Obrigatório: sem texto do link, a
@@ -46,33 +54,53 @@ No centro, por cima do formulário, aparece «Link 2 de 5» e o tipo de destino
     pode ter um nome mais curto do que a secção, por exemplo, «Equipamento» em vez de «Equipamento em
     detalhe».
   - **Um ID de bloco** como `#a447d858-1bba-4a49-b620-b49c60dd67a7`: para este
-    bloco da página. Desta forma, define a seleção na parte inferior. A ligação permanece válida mesmo após
-    a renomeação do título.
+    bloco da página. É assim que a seleção e a estrutura da página o definem. O link
+    permanece válido mesmo após a renomeação do título.
   - **Um endereço** que comece por `/`, `http://`, `https://` ou `mailto:`
-    : uma ligação normal que o navegador segue.
+    : uma referência normal que o navegador segue.
 
 Na comparação com o título, o que conta é o texto, não o nível – H1 a H6
 são todos destinos válidos. Os espaços múltiplos não têm importância,
-mas as maiúsculas e minúsculas sim. Se houver vários títulos com o mesmo nome,
+mas as maiúsculas e minúsculas sim. Se houver vários títulos com o mesmo texto,
 a entrada salta para o primeiro.
 
-### Adicionar um elemento à página
+### Criar um link para um título ou widget da página
 
-A forma mais rápida é através da opção **Procurar título ou widget**, situada por baixo do
-formulário: a lista apresenta os títulos (com o nível, por exemplo, «H3 em
-«Agenda»») e os widgets da página guardada, e pode ser filtrada
-toques. Um clique cria um novo link com o nome do elemento, sendo o destino
-o ID do bloco (`#…`). Podes alterar o texto do link posteriormente. O que já
-estiver ligado aparece bloqueado na lista com a indicação «já ligado». Novas
-secções só aparecem depois de a página ser guardada.
+Existem duas formas, ambas criam um link com o nome do elemento; o destino é
+o seu ID de bloco (`#…`); podes alterar o texto do link posteriormente:
+
+- **Novo link** → **Procurar título ou widget**: a lista mostra os
+  títulos (com o nível, por exemplo, «H3 em “Agenda”») e os widgets da
+  página com o seu nome e característica (por exemplo, «Principais concorrentes · Caixa USP») e
+  pode ser filtrada ao digitar – inclusive pelo tipo de widget.
+- **Estrutura da página** à direita: a estrutura da página apresentada como uma árvore recuada.
+  Arraste um elemento para a lista à esquerda – ele fica onde o largares –
+  ou clica nele, e ele vai para o final.
+
+O que já está ligado tem uma marca de verificação ou «já ligado»; uma segunda
+tentativa seleciona o link existente, em vez de o duplicar.
+
+## Quando a página muda
+
+Mesmo com a janela fechada, o widget no Studio mantém-se atento aos seus destinos:
+
+- **Título com link eliminado:** pergunta se o link também deve ser
+  navegação. Se o mantiveres, ele exibe um
+  «!» na janela e desaparece da página.
+- **Título com link renomeado:** Assim que o cursor sair do título,
+  pergunta se o link deve ser atualizado. O novo texto do link
+  é preenchido automaticamente com o texto do título e pode ser alterado diretamente.
+
+A resposta altera o bloco como qualquer outra edição: é possível reverter a ação, que
+entra em vigor ao guardar a página.
 
 ## Pré-visualização
 
 **Desktop**, **Tablet** e **Móvel** mostram, em vez do formulário, a
-navegação ajustada à largura do dispositivo, tal como a página a apresenta; os links sem texto de link
-não aparecem aí, tal como na página. No **telemóvel**, esta fica reduzida a um botão
+navegação ajustada à largura do dispositivo, tal como a página a apresenta; as ligações sem texto de ligação
+ou sem destino na página não aparecem ali, tal como na página. No **telemóvel**, esta fica reduzida a um botão
 . A lista e o título permanecem operacionais ao lado. Na pré-visualização
-nada salta e a página do Studio permanece inalterada.
+, nada salta e a página do Studio permanece inalterada.
 
 ## Formato guardado
 

@@ -32,24 +32,32 @@ field.
 Headings in an anchor navigation never count as targets—not even the
 title of a second widget on the same page.
 
-## A click doesn’t work on translated pages.
+## A link is missing from the page.
 
-The page’s headings are translated, but the link text and destination are not. In the
-other language, the entry can no longer find its heading, and the
-list continues to display the link texts in the language in which they were maintained.
+Its target no longer exists on the page: the heading or widget
+has been deleted, or—for in-text links—the heading has a different name.
+In the **Edit Links** window, the link is marked with a “!”. Select a new target
+or remove the link.
 
-## When does the red marker change?
+## Links are missing on translated pages.
 
-When scrolling: It is positioned at the section whose heading most recently reached the top
+The page’s headings are translated, but the link text and destination are not. A
+link within the text can no longer find its corresponding heading in the other language
+and is hidden there. Links to a block ID (from the selection or the
+page layout) are not tied to the heading text.
+
+## When does the red marker move?
+
+When scrolling: It stays at the section whose heading most recently reached the top
 quarter of the screen. At the very bottom of the page, where the last
-sections no longer scroll that far up, it is positioned at the last visible section.
-After a click, it remains at the selected entry until you scroll again.
-Before the first section, it is positioned on the first entry. If someone opens the
-page via a link with an anchor, such as `…#equipment`, it is positioned on
+sections no longer scroll up that far, it remains at the last visible section.
+After a click, it stays at the selected entry until you scroll again.
+Before the first section, it remains at the first entry. If someone opens the
+page via a link with an anchor, such as `…#equipment`, it is positioned at
 that entry.
 
-Entries with a URL (`/…`, `https://…`) do not have a section on the
-page; the bookmark does not reach them when scrolling.
+Entries with a URL (`/…`, `https://…`) do not correspond to a section on the
+page; the marker does not move to them when scrolling.
 
 ## Can the order be changed?
 
@@ -61,9 +69,9 @@ not have to follow the order on the page.
 ## Two headings have the same name—where does the link go?
 
 To the first one on the page. If you want it to go to the second one, the only solution is to
-give the headings different names.
+name the headings differently.
 
 ## Can an entry link to another page?
 
-Yes. Enter an address as the destination that begins with `/`, `http://`, or `https://`.
-Clicking it works just like any other link.
+Yes. Enter a URL as the destination that begins with `/`, `http://`, or `https://`.
+Clicking it will take you there just like any other link.

@@ -5,7 +5,7 @@ przenosi cię do odpowiedniego nagłówka na stronie; czerwona kropka wskazuje, 
 której sekcji aktualnie czytasz, i przesuwa się wraz z przewijaniem strony.
 
 Lista nie tworzy się sama. W oknie **Edytuj linki**
-określasz, jakie pozycje mają się znaleźć, jak mają się nazywać i w jakiej kolejności mają
+określasz, jakie pozycje mają się znaleźć, jak się nazywają i w jakiej kolejności mają
 być wyświetlane – najszybciej, wybierając nagłówki i widżety strony z
 listy wyszukiwania. Widżet
 Widżet wyszukuje sekcje dopiero wtedy, gdy ktoś przewija stronę lub klika na wpis
@@ -20,4 +20,4 @@ wytyczne wraz z poszczególnymi sekcjami. Na krótkich stronach nie ma to sensu.
 
 - **Nie wyszukuje nagłówków samodzielnie.** Każda pozycja jest dodawana ręcznie.
   Jeśli na stronie pojawi się nowy rozdział, należy go również dodać do listy.
-- **Nie obsługuje zagnieżdżania.** Lista ma strukturę płaską, nie jest drzewem.
+- **Nie obsługuje zagnieżdżania.** Lista ma strukturę płaską, a nie drzewiastą.

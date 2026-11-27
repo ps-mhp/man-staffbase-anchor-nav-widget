@@ -20,4 +20,4 @@ a guideline with its sections. It’s not worth it for short pages.
 
 - **It doesn’t find headings on its own.** Each entry is created manually.
   If a new section is added to the page, it’s added to the list as well.
-- **It doesn’t nest.** The list is flat, not a tree.
+- **It doesn’t support nesting.** The list is flat, not a tree.

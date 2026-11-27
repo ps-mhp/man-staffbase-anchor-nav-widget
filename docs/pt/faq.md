@@ -32,33 +32,41 @@ basta. Copie o texto do título e insira-o no destino
 Os títulos numa navegação por âncora nunca contam como destino — nem mesmo o
 título de um segundo widget na mesma página.
 
-## Nas páginas traduzidas, um clique não funciona.
+## Falta um link na página.
 
-Os títulos da página são traduzidos, mas o texto do link e o destino não. No
-outro idioma, a entrada deixa de encontrar o seu título e a
-lista continua a mostrar os textos dos links no idioma em que foram criados.
+O seu destino já não existe na página: o título ou o widget
+foi eliminado ou — no caso de ligações sobre o texto — o título tem agora um nome diferente.
+Na janela **Editar ligações**, a ligação apresenta um «!». Selecione um novo destino
+ou remova a ligação.
 
-## Quando é que o marcador vermelho muda?
+## Faltam links nas páginas traduzidas.
+
+Os títulos da página são traduzidos, mas o texto do link e o destino não. Um
+link sobre o texto já não encontra o seu título na outra língua
+e é ocultado nessa versão. Os links para um ID de bloco (da seleção ou da
+estrutura da página) não estão associados ao texto do título.
+
+## Quando é que o marcador vermelho muda de posição?
 
 Ao percorrer a página: fica na secção cujo título atingiu por último o
 quarto superior do ecrã. Na parte inferior da página, onde as últimas
-secções já não sobem tanto, fica na última secção visível.
+secções já não aparecem tão acima, fica na última secção visível.
 Após um clique, permanece na entrada selecionada até voltares a percorrer a página.
 Antes da primeira secção, fica na primeira entrada. Se alguém abrir a
-página através de uma referência com marca de salto, por exemplo `…#equipamento`, fica nessa
-entrada.
+página através de uma ligação com marcador de salto, por exemplo `…#equipamento`, fica
+nesta entrada.
 
-As entradas com um endereço (`/…`, `https://…`) não têm secção na
-página; a marca não chega até elas ao percorrer a página.
+As entradas com um endereço (`/…`, `https://…`) não têm qualquer secção na
+página; o marcador não chega até elas ao percorrer a página.
 
 ## É possível alterar a ordem?
 
-Sim. Arraste a alça à esquerda na janela, ou selecione a alça, prima Enter
-para selecionar, utilize as setas para deslocar e prima Enter para soltar. Ou utilize as
+Sim. Na janela, arrasta a alça à esquerda ou seleciona a alça, pressiona Enter
+para selecionar, utiliza as setas para deslocar e pressiona Enter para soltar. Ou através das
 setas **Link para cima** / **Link para baixo** acima do formulário. A lista não tem
 de seguir a ordem da página.
 
-## Se dois títulos tiverem o mesmo nome — para onde salta a referência?
+## Se dois títulos tiverem o mesmo nome — para onde salta a ligação?
 
 Para o primeiro na página. Se quiser que salte para o segundo, a única solução é
 dar nomes diferentes aos títulos.
@@ -66,4 +74,4 @@ dar nomes diferentes aos títulos.
 ## Uma entrada pode remeter para outra página?
 
 Sim. Introduza como destino um endereço que comece por `/`, `http://` ou `https://`.
-Ao clicar, o utilizador será redirecionado tal como em qualquer outro link.
+Ao clicar, o utilizador será redirecionado tal como em qualquer outra ligação.
