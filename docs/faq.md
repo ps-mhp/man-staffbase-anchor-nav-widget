@@ -32,11 +32,19 @@ einsetzen.
 Überschriften in einer Ankernavigation zählen nie als Ziel — auch nicht der
 Titel eines zweiten Widgets auf derselben Seite.
 
-## Auf übersetzten Seiten springt ein Klick nicht.
+## Ein Link fehlt auf der Seite.
 
-Die Überschriften der Seite werden übersetzt, Linktext und Ziel nicht. In der
-anderen Sprache findet der Eintrag seine Überschrift dann nicht mehr, und die
-Liste zeigt weiter die Linktexte in der Sprache, in der sie gepflegt wurden.
+Sein Ziel gibt es auf der Seite nicht mehr: die Überschrift oder das Widget
+wurde gelöscht, oder – bei Links über den Text – die Überschrift heißt anders.
+Im Fenster **Links bearbeiten** trägt der Link ein „!“. Ein neues Ziel wählen
+oder den Link entfernen.
+
+## Auf übersetzten Seiten fehlen Links.
+
+Die Überschriften der Seite werden übersetzt, Linktext und Ziel nicht. Ein
+Link über den Text findet seine Überschrift in der anderen Sprache nicht mehr
+und wird dort ausgeblendet. Links auf eine Block-ID (aus der Auswahl oder dem
+Seitenaufbau) hängen nicht am Text der Überschrift.
 
 ## Wann wechselt die rote Marke?
 
