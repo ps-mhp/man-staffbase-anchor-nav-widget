@@ -25,10 +25,12 @@ Der Titel wird mit der Seite übersetzt.
 ## Navigation am Bildschirmrand
 
 Rechts unter **Navigation**, Vorgabe an. Auf Desktop und Tablet erscheint
-beim ersten Scrollen rechts am Bildschirmrand eine kleine Navigation: ein
-Strich je Abschnitt, der aktuelle in Rot. Zeigt man auf einen Strich, steht
-links daneben der Linktext; ein Klick springt hin, die Pfeile darüber und
-darunter springen zum vorigen bzw. nächsten Abschnitt. Auf dem Telefon, im
+beim Scrollen rechts am Bildschirmrand eine kleine Navigation – aber nur,
+solange die Ankernavigation selbst nicht im Bild ist. Ein Strich je
+Abschnitt, der aktuelle in Rot. Zeigt man auf einen Strich, steht links
+daneben der Linktext; ein Klick springt hin. Die Pfeile darüber und darunter
+springen zum vorigen bzw. nächsten Abschnitt und nennen beim Zeigen ebenfalls
+dessen Titel. Auf dem Telefon, im
 Studio und in der Vorschau des Fensters erscheint sie nicht. Stehen mehrere
 Ankernavigationen auf einer Seite, zeigt nur die erste sie.
 
