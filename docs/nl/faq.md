@@ -34,7 +34,7 @@ titel van een tweede widget op dezelfde pagina.
 
 ## Er ontbreekt een link op de pagina.
 
-De bestemming is niet meer aanwezig op de pagina: de kop of de widget
+De bestemming is niet meer op de pagina te vinden: de kop of de widget
 is verwijderd, of – bij links boven de tekst – de kop heeft een andere naam gekregen.
 In het venster **Links bewerken** staat er een „!“ achter de link. Kies een nieuwe bestemming
 of verwijder de link.
@@ -46,7 +46,7 @@ link via de tekst vindt zijn kop in de andere taal niet meer
 en wordt daar verborgen. Links naar een blok-ID (uit het
 paginaplan) zijn niet gekoppeld aan de tekst van de kop.
 
-## Wanneer verandert de rode markering?
+## Wanneer verandert de rode markering van plaats?
 
 Tijdens het scrollen: deze staat bij de paragraaf waarvan de kop als laatste het bovenste
 kwart van het scherm heeft bereikt. Helemaal onderaan de pagina, waar de laatste

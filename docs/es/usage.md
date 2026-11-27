@@ -9,7 +9,7 @@
    sección, haz clic en el cuadro del título o del widget y modifica el
    texto del enlace en el cuadro. Incluso los títulos que aún no se hayan guardado
    ya están disponibles para su selección. Como alternativa, de forma manual: **Enlace vacío**, introduce el texto del enlace
-  , deja el destino en blanco o introduce el texto del encabezado.
+  , deja el destino en blanco o introduce el texto del título.
 4. **Introduce el título**: a la derecha, en **Navegación**, o déjalo en blanco.
    Dejar en blanco significa: solo la lista, sin título encima. Allí también se puede
    desactivar la **navegación en el borde de la pantalla** para esta página.

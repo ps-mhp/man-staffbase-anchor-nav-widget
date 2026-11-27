@@ -14,8 +14,8 @@
    Lasciare vuoto significa: solo l’elenco, senza titolo sopra. Qui è anche possibile
    disattivare la **navigazione sul bordo dello schermo** per questa pagina.
 5. **Verificare nella finestra.** **Desktop**, **Tablet** e **Mobile** in alto mostrano la
-   la navigazione adattata alla larghezza del dispositivo. Quindi **Applica** e salva la pagina.
-6. **Verifica nell’anteprima della pagina.** Clicca una volta su ogni voce:
+   la navigazione adattata alla larghezza del dispositivo. Quindi cliccare su **Applica** e salvare la pagina.
+6. **Verificare nell’anteprima della pagina.** Cliccare una volta su ogni voce:
    se non si apre, significa che il testo del link o la destinazione non corrispondono esattamente al
    titolo.
 

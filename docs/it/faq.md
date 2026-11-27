@@ -36,7 +36,7 @@ titolo di un secondo widget sulla stessa pagina.
 
 La sua destinazione non esiste più sulla pagina: il titolo o il widget
 è stato eliminato oppure — nel caso di link sul testo — il titolo ha un nome diverso.
-Nella finestra **Modifica link**, il link presenta un “!”. Selezionare una nuova destinazione
+Nella finestra **Modifica link**, il link presenta un «!». Selezionare una nuova destinazione
 o rimuovere il link.
 
 ## Mancano dei link nelle pagine tradotte.

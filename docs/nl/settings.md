@@ -1,7 +1,7 @@
 # Instellingen
 
 Alles wordt beheerd in het venster **Links bewerken**. Dit venster wordt automatisch geopend in Studio
-zodra je het instellingenvenster van het blok opent; je kunt het weer sluiten
+zodra je het instellingenvenster van het blok opent; je kunt het sluiten
 door op de knop **Links bewerken** te klikken. Bovenaan staan **Toepassen**,
 **Annuleren**, Ongedaan maken/Opnieuw, de Help en de schakelaar **Editor ·
 Desktop · Tablet · Mobiel**. **Toepassen** voert titels en links in het
@@ -18,17 +18,19 @@ nog niet zijn opgeslagen – en volgen elke wijziging.
 ## Titel
 
 Rechts onder **Navigatie**: de kop boven de lijst, bijvoorbeeld „Op
-deze pagina“. Als je dit veld leeg laat, wordt de titel verborgen; de lijst blijft staan.
+deze pagina“. Als je het leeg laat, wordt het verborgen; de lijst blijft staan.
 
 De titel wordt samen met de pagina vertaald.
 
 ## Navigatie aan de rand van het scherm
 
 Rechts onder **Navigatie**, standaard ingeschakeld. Op desktop en tablet verschijnt
-bij het eerste scrollen rechts aan de rand van het scherm een kleine navigatie: een
-streepje per sectie, waarbij de huidige in het rood is. Als je met de muis over een streepje gaat, verschijnt
-links ervan de linktekst; met een klik ga je ernaartoe, de pijltjes erboven en
-eronder springen naar de vorige respectievelijk volgende sectie. Op de telefoon, in de
+tijdens het scrollen rechts aan de rand van het scherm een kleine navigatiebalk – maar alleen
+zolang de anker-navigatie zelf niet in beeld is. Eén streepje per
+paragraaf, de huidige in het rood. Als je met de muis over een streepje gaat, verschijnt links
+ervan de linktekst; met een klik spring je ernaartoe. De pijltjes erboven en eronder
+springen naar de vorige respectievelijk volgende paragraaf en geven bij het aanwijzen ook
+de titel ervan weer. Op de telefoon, in de
 Studio en in het voorbeeldvenster verschijnt deze navigatie niet. Als er meerdere
 ankernavigaties op een pagina staan, wordt deze alleen bij de eerste weergegeven.
 
@@ -44,10 +46,10 @@ koptekst“. Met een klik selecteer je een link om deze te bewerken.
 - Een **„!“** aan het einde van de regel betekent: de bestemming bestaat niet
   meer op de pagina (kop verwijderd of hernoemd). Op de pagina wordt de link
   verborgen totdat je een nieuwe bestemming kiest of de link verwijdert – het formulier
-  biedt hiervoor de optie **Link verwijderen**.
+  biedt hiervoor de optie **Link verwijderen** aan.
 - Je kunt de volgorde wijzigen met het handvat aan de linkerkant: versleep het, of selecteer het handvat,
   pak het vast met Enter, verplaats het met de pijltjestoetsen naar de nieuwe positie en
-  plaats het met Enter. Of gebruik de pijltjes **Link omhoog** / **Link omlaag**
+  plaats het met Enter. Of gebruik de pijltjes **Link naar boven** / **Link naar beneden**
   boven het formulier.
 - **Link dupliceren** en **Link verwijderen** staan daar ook.
 
@@ -129,4 +131,4 @@ bijvoorbeeld:
 { "heading": "In één oogopslag", "links": [{ "id": "a", "label": "Uitrusting", "target": "Uitrusting in detail" }] }
 ```
 
-`label` is de linktekst, `target` de bestemming (optioneel).
+`label` is de linktekst, `target` is de bestemming (optioneel).

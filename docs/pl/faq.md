@@ -17,15 +17,15 @@ są one wyświetlane na liście jako „Bez tekstu linku”.
 
 Nie. Starsze bloki nadal zawierają tytuły i linki w polach `heading` i
 `links`. Okno pobiera je po otwarciu; dopóki niczego nie zmienisz,
-nic nie zostanie zapisane, a blok pozostaje bez zmian. Dopiero
+nic nie zostanie zapisane, a blok pozostanie bez zmian. Dopiero
 **Zapisz** zapisuje tytuły i linki w nowym polu `anchor-nav-config` – z
 tym samym efektem na stronie.
 
 ## Kliknięcie nie powoduje przejścia.
 
 Na stronie nie ma nagłówka o dokładnie takim samym tekście. Porównanie
-odbywa się z docelowym elementem lub — jeśli jest on pusty — z tekstem linku. Wystarczy
-jedna literówka, inna wielkość liter lub zmieniona w międzyczasie nazwa
+odbywa się z celem lub — jeśli cel jest pusty — z tekstem linku. Wystarczy literówka,
+inna wielkość liter lub zmieniona w międzyczasie nazwa
 nagłówek. Skopiuj tekst z nagłówka i wklej go w polu docelowym
 .
 
@@ -42,7 +42,7 @@ lub usuń link.
 ## Na przetłumaczonych stronach brakuje linków.
 
 Nagłówki strony są tłumaczone, ale tekst linku i miejsce docelowe nie. Link
-umieszczony w tekście nie znajduje już swojego nagłówka w innym języku
+oparty na tekście nie znajduje już swojego nagłówka w innym języku
 i jest tam ukrywany. Linki do identyfikatora bloku (z
 mapy strony) nie są powiązane z tekstem nagłówka.
 

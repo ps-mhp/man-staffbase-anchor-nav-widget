@@ -13,48 +13,50 @@ con le impostazioni valide per l’intera navigazione: titolo e barra di navigaz
 margini dello schermo.
 
 Gli elementi della pagina provengono in tempo reale dall’editor – compresi i titoli che
-non sono ancora stati salvati – e si aggiornano ad ogni modifica.
+non sono ancora stati salvati – e seguono ogni modifica.
 
 ## Titolo
 
 A destra sotto **Navigazione**: il titolo sopra l’elenco, ad esempio «In
-questa pagina». Lasciandolo vuoto, viene nascosto; l’elenco rimane.
+questa pagina». Se lasciato vuoto, viene nascosto; l’elenco rimane.
 
 Il titolo viene tradotto insieme alla pagina.
 
 ## Navigazione sul bordo dello schermo
 
 A destra sotto **Navigazione**, impostazione predefinita attiva. Su desktop e tablet,
-al primo scorrimento, sul bordo destro dello schermo appare una piccola barra di navigazione: una
-linea per ogni sezione, quella corrente in rosso. Passando il mouse su una linea,
-a sinistra di essa compare il testo del link; cliccandoci sopra si passa a quella sezione, le frecce sopra e
-sotto portano rispettivamente alla sezione precedente o successiva. Sul telefono, in
-Studio e nell’anteprima della finestra non viene visualizzata. Se in una pagina sono presenti più
-navigazioni con ancore, solo la prima le mostra.
+durante lo scorrimento, appare una piccola barra di navigazione sul bordo destro dello schermo – ma solo
+finché la navigazione con ancore non è visibile. Una linea per ogni
+sezione, quella corrente in rosso. Passando il mouse su una linea, a sinistra
+compare il testo del link; cliccandoci sopra si passa a quella sezione. Le frecce sopra e sotto
+portano rispettivamente alla sezione precedente o successiva e, al passaggio del mouse, mostrano anch’esse
+il relativo titolo. Sul telefono, in
+modalità Studio e nell’anteprima della finestra, questa barra non appare. Se in una pagina sono presenti più
+navigazioni con ancore, solo la prima la mostra.
 
 ## Link
 
-La colonna di sinistra mostra tutti i link nell’ordine della navigazione. Ogni riga
+La colonna di sinistra mostra tutti i link nell’ordine di navigazione. Ogni riga
 indica il testo del link e, sotto, la destinazione a cui rimanda – ad esempio «Titolo
-«Appuntamenti»», «Widget: Galleria file», «#contatto» o «Vuoto – titolo omonimo
+“Appuntamenti”», «Widget: Galleria file», «#contatti» o «Vuoto – intestazione con lo stesso nome
 ». Cliccandoci sopra si seleziona un link per modificarlo.
 
 - **Nuovo link** apre al centro la **mappa del sito** (vedi sotto). Senza
   link, la finestra si apre direttamente su di essa.
-- Un **«!»** alla fine della riga significa che la destinazione non è più presente
+- Un **«!»** alla fine della riga significa che la destinazione non esiste più
   nella pagina (titolo cancellato o rinominato). Nella pagina il link
-  rimane nascosto finché non selezioni una nuova destinazione o lo rimuovi – il modulo
-  offre a tal fine l’opzione **Rimuovi link**.
+  viene nascosto finché non selezioni una nuova destinazione o lo rimuovi – il modulo
+  offre l’opzione **Rimuovi link** a tale scopo.
 - Puoi modificare l’ordine utilizzando la maniglia a sinistra: trascina, oppure seleziona la maniglia,
-  conferma con Invio, sposta nella nuova posizione con i tasti freccia e
-  conferma con Invio. Oppure utilizza le frecce **Link su** / **Link giù**
+  fissala con Invio, spostala nella nuova posizione con i tasti freccia e
+  rilasciala con Invio. Oppure usa le frecce **Link in alto** / **Sposta link in basso**
   sopra il modulo.
-- Lì sono disponibili anche **Duplica link** e **Elimina link**.
+- Lì sono presenti anche **Duplica link** e **Elimina link**.
 
 ### Testo del link e destinazione
 
-Al centro, sopra il modulo, è indicato «Link 2 di 5» e il tipo di destinazione
-(«Destinazione in questa pagina» o «Riferimento a un indirizzo»).
+Al centro, sopra il modulo, compare «Link 2 di 5» e il tipo di destinazione
+(“Destinazione in questa pagina” o “Riferimento a un indirizzo”).
 
 - **Testo del link** – ciò che compare nell’elenco. Obbligatorio: senza testo del link non è possibile
   salvare la finestra; lo stato in alto indicherà quindi il link in questione.
@@ -109,7 +111,7 @@ diventa effettiva solo dopo aver salvato la pagina.
 ## Anteprima
 
 **Desktop**, **tablet** e **dispositivi mobili** mostrano, al posto del modulo, la
-navigazione a larghezza dello schermo, così come appare nella pagina; i link senza testo
+navigazione a larghezza del dispositivo, così come appare nella pagina; i link senza testo
 o senza destinazione nella pagina risultano mancanti anche lì, proprio come nella pagina. Su **dispositivo mobile** è ridotta a un pulsante
 . L’elenco e il titolo rimangono comunque utilizzabili. Nell’anteprima
 non si verifica alcun salto e la pagina dello Studio rimane inalterata.

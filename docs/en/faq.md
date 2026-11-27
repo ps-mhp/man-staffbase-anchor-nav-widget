@@ -50,9 +50,9 @@ site map) are not tied to the heading text.
 
 When scrolling: It stays on the section whose heading most recently reached the top
 quarter of the screen. At the very bottom of the page, where the last
-sections no longer scroll up that far, it stays on the last visible section.
-After a click, it stays on the selected entry until you scroll again.
-Before the first section, it stays on the first entry. If someone opens the
+sections no longer scroll up that far, it stays with the last visible section.
+After a click, it stays with the selected entry until you scroll again.
+Before the first section, it stays with the first entry. If someone opens the
 page via a link with an anchor, such as `…#equipment`, it is positioned at
 that entry.
 
@@ -61,7 +61,7 @@ page; the marker does not move to them when scrolling.
 
 ## Can the order be changed?
 
-Yes. Drag the handle in the window on the left, or select the handle, press Enter
+Yes. Drag the handle on the left in the window, or select the handle, press Enter
 to pick it up, use the arrow keys to move it, and press Enter to drop it. Or use the
 **Link Up** / **Link Down** arrows above the form. The list does
 not have to follow the order on the page.

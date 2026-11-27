@@ -13,8 +13,8 @@ widget ne recherche les sections que lorsque quelqu’un fait défiler la page o
 
 ## À quoi cela sert-il ?
 
-Les pages longues avec une structure claire — un modèle de voiture et ses équipements,
-une directive et ses sections. Cela ne vaut pas la peine sur les pages courtes.
+Aux pages longues présentant une structure claire — un modèle de voiture avec ses équipements,
+une directive avec ses sections. Cela ne vaut pas la peine sur les pages courtes.
 
 ## Ce qu’il ne fait pas
 

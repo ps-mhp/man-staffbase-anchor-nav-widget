@@ -49,10 +49,10 @@ mapa de la página) no dependen del texto del título.
 ## ¿Cuándo cambia la marca roja?
 
 Al desplazarte: se sitúa en la sección cuyo título haya alcanzado en último lugar el
-cuarto superior de la pantalla. En la parte inferior de la página, donde los últimos
-apartados ya no se desplazan tanto hacia arriba, se sitúa en el último visible.
+cuarto superior de la pantalla. En la parte inferior de la página, donde las últimas
+secciones ya no se desplazan tanto hacia arriba, se sitúa en la última visible.
 Tras hacer clic, permanece en la entrada seleccionada hasta que vuelvas a desplazarte.
-Antes del primer apartado, se sitúa en la primera entrada. Si alguien abre la
+Antes de la primera sección, se sitúa en la primera entrada. Si alguien abre la
 página a través de un enlace con marca de salto, como `…#equipamiento`, se sitúa en
 esa entrada.
 
@@ -62,7 +62,7 @@ página; el marcador no llega a ellas al desplazarse.
 ## ¿Se puede cambiar el orden?
 
 Sí. Arrastra el controlador de la ventana hacia la izquierda, o selecciona el controlador, pulsa Intro
-para seleccionarlo, muévelo con las teclas de flecha y pulsa Intro para soltarlo. O bien utiliza las
+para seleccionarlo, muévelo con las teclas de flecha y pulsa Intro para colocarlo. O bien mediante las
 flechas **Enlace hacia arriba** / **Enlace hacia abajo** situadas encima del formulario. La lista no tiene
 por qué seguir el orden de la página.
 

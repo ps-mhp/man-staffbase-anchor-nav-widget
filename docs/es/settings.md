@@ -17,44 +17,46 @@ aún no se han guardado— y se actualizan con cada cambio.
 
 ## Título
 
-A la derecha, en **Navegación**: el encabezado situado encima de la lista, por ejemplo, «En
+A la derecha, en **Navegación**: el encabezado que aparece sobre la lista, por ejemplo, «En
 esta página». Si se deja en blanco, se oculta; la lista permanece.
 
 El título se traduce junto con la página.
 
 ## Navegación en el borde de la pantalla
 
-A la derecha, debajo de **Navegación**, está activada por defecto. En ordenadores de sobremesa y tabletas,
-al desplazarse por primera vez, aparece una pequeña barra de navegación a la derecha del borde de la pantalla: una
-línea por sección, la actual en rojo. Al pasar el cursor por una línea, aparece
-a la izquierda el texto del enlace; al hacer clic, se salta a esa sección, y las flechas de arriba y
-de abajo permiten saltar a la sección anterior o siguiente, respectivamente. En el teléfono, en el
-estudio y en la vista previa de la ventana no aparece. Si hay varias
-navegaciones por anclajes en una página, solo la primera las muestra.
+A la derecha, debajo de **Navegación**, activada por defecto. En ordenadores de sobremesa y tabletas,
+al desplazarse por la página, aparece una pequeña barra de navegación a la derecha del borde de la pantalla, pero solo
+mientras la propia navegación por anclajes no esté visible. Una línea por
+sección, la actual en rojo. Al pasar el cursor por una línea, aparece a la izquierda
+del lado el texto del enlace; al hacer clic, se salta a esa sección. Las flechas situadas encima y debajo
+permiten saltar a la sección anterior o siguiente y, al pasar el cursor por encima, también
+muestran su título. En el teléfono, en el
+estudio y en la vista previa de la ventana, no aparece. Si hay varias
+navegaciones por anclajes en una página, solo la primera la muestra.
 
 ## Enlaces
 
 La columna de la izquierda muestra todos los enlaces en el orden de la navegación. Cada línea
 indica el texto del enlace y, debajo, a dónde lleva: por ejemplo, «Título
 «Citas»», «Widget: Galería de archivos», «#contacto» o «Vacío — título del mismo nombre
-». Al hacer clic se selecciona un enlace para editarlo.
+». Al hacer clic, se selecciona un enlace para editarlo.
 
-- **Nuevo enlace** abre en el centro el **mapa del sitio** (véase más abajo). Si no hay
-  enlaces, la ventana se abre directamente en él.
+- **Nuevo enlace** abre en el centro el **mapa del sitio** (véase más abajo). Sin
+  enlaces, la ventana comienza directamente con él.
 - Un **«!»** al final de la línea significa que el destino ya no existe
-  en la página (el título se ha eliminado o renombrado). En la página, el enlace
-  queda oculto hasta que selecciones un nuevo destino o lo elimines; para ello, el formulario
-  ofrece la opción **Eliminar enlace**.
-- Para cambiar el orden, utiliza el controlador de la izquierda: arrástralo o selecciónalo,
+  en la página (encabezado eliminado o renombrado). En la página, el enlace
+  queda oculto hasta que selecciones un nuevo destino o lo elimines; el formulario
+  ofrece la opción **Eliminar enlace** para ello.
+- Puedes cambiar el orden con el controlador de la izquierda: arrastra, o selecciona el controlador,
   fíjalo con Intro, muévelo a la nueva posición con las teclas de flecha y
-  suéltalo con Intro. O bien utiliza las flechas **Enlace arriba** / **Enlace abajo**
+  suéltalo con Intro. O bien con las flechas **Enlace hacia arriba** / **Enlace hacia abajo**
   situadas encima del formulario.
-- Las opciones **Duplicar enlace** y **Eliminar enlace** también se encuentran ahí.
+- Las opciones **Duplicar enlace** y **Eliminar enlace** también se encuentran allí.
 
 ### Texto del enlace y destino
 
 En el centro, encima del formulario, aparece «Enlace 2 de 5» y el tipo de destino
-(«Destino de salto en esta página» o «Enlace a una dirección»).
+(«Destino de salto en esta página» o «Referencia a una dirección»).
 
 - **Texto del enlace**: lo que aparece en la lista. Obligatorio: sin texto de enlace,
   no se puede guardar la ventana; el estado que aparece arriba indicará entonces el enlace en cuestión.
@@ -96,8 +98,8 @@ y el texto o el widget. Los recuadros con enlaces aparecen en azul.
 
 Incluso con la ventana cerrada, el widget de Studio supervisa sus destinos:
 
-- **Título enlazado eliminado:** te pregunta si también quieres eliminar el enlace de la
-  navegación. Si lo mantienes, aparecerá un
+- **Título enlazado eliminado:** te pregunta si el enlace también debe
+  eliminarse de la navegación. Si lo mantienes, aparecerá un
   «!» en la ventana y desaparecerá de la página.
 - **Título enlazado renombrado:** en cuanto el cursor
   sale del título, te pregunta si quieres actualizar el enlace. El nuevo texto del enlace

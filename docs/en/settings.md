@@ -24,36 +24,38 @@ The title is translated along with the page.
 
 ## Navigation at the Edge of the Screen
 
-On the right under **Navigation**, enabled by default. On desktop and tablet,
-when you first scroll, a small navigation bar appears on the right edge of the screen: one
-line per section, with the current one in red. When you hover over a line,
-the link text appears to the left of it; a click takes you there, and the arrows above and
-below jump to the previous or next section, respectively. On a phone, in
-the Studio, and in the window preview, it does not appear. If there are multiple
+On the right under **Navigation**, enabled by default. On desktops and tablets,
+a small navigation bar appears on the right edge of the screen when scrolling—but only
+as long as the anchor navigation itself is not visible. One line per
+section, with the current one in red. When you hover over a line, the link text appears
+to the left of it; clicking takes you there. The arrows above and below
+jump to the previous or next section and also display
+their titles when you hover over them. On a phone, in
+Studio, and in the window preview, it does not appear. If there are multiple
 anchor navigation bars on a page, only the first one displays it.
 
 ## Links
 
 The left column shows all links in the order of the navigation. Each row
 lists the link text and, below it, where it leads—for example, “Heading
-‘Dates’,” “Widget: File Gallery,” “#contact,” or “Empty—heading of the same name
+‘Dates’,” “Widget: File Gallery,” “#contact,” or “Blank—heading of the same name
 .” Clicking selects a link for editing.
 
 - **New Link** opens the **Site Map** in the center (see below). Without
   any links, the window opens directly to it.
-- A **“!”** at the end of the line means: the destination no longer exists
-  on the page (heading deleted or renamed). On the page, the link is
-  hidden until you select a new destination or remove it—the form
-  offers a **Remove Link** option for this.
+- A **“!”** at the end of the line means: the destination no longer exists on the page
+  (heading deleted or renamed). On the page, the link
+  is hidden until you select a new destination or remove it—the form
+  offers **Remove Link** for this purpose.
 - You can change the order using the handle on the left: drag it, or select the handle,
-  press Enter to grab it, use the arrow keys to move it to the new position, and press
-  Enter to drop it. Or use the **Move Link Up** / **Move Link Down** arrows
+  press Enter to pick it up, use the arrow keys to move it to the new position, and press
+  Enter to drop it. Or use the **Move Link Up** / **Move Link Down**
   above the form.
 - **Duplicate Link** and **Delete Link** are also available there.
 
 ### Link Text and Destination
 
-In the middle, above the form, it says “Link 2 of 5” and the type of destination
+In the center, above the form, it says “Link 2 of 5” and the type of destination
 (“Jump to a location on this page” or “Link to an address”) is displayed.
 
 - **Link text** – what appears in the list. Required: without link text, the
@@ -72,14 +74,14 @@ In the middle, above the form, it says “Link 2 of 5” and the type of destina
 
 When comparing to the heading, the text matters, not the level—H1 through H6
 are all valid targets. Multiple spaces do not matter,
-but case sensitivity does. If there are multiple headings with the same text,
+but uppercase and lowercase letters do. If there are multiple headings with the same text,
 the entry jumps to the first one.
 
 ### Site Map
 
 The site map displays the page’s headings and widgets as boxes—
 arranged as in the draft: sections one below the other, columns side by side in
-their respective widths. Each box lists the type (such as “H2” or “Widget · USP Box”)
+their respective widths. Each box specifies the type (such as “H2” or “Widget · USP Box”)
 and the text or widget. Linked boxes are blue.
 
 - **Clicking on a box** creates a link using its text (the target is the
@@ -119,10 +121,10 @@ nothing jumps, and the Studio page remains unaffected.
 Titles and links are grouped together in the `anchor-nav-config` attribute. Older
 blocks still contain them in the `heading` and `links` fields; the page reads
 the new field if specified, and the old one otherwise, so they appear unchanged.
-When the window is first opened, it uses the old values; only **Apply**
-writes them to the new field. The old fields are hidden in the dialog.
+When the window is first opened, it uses the old values; only after clicking **Apply**
+are they written to the new field. The old fields are hidden in the dialog.
 
-If the window does not appear, a text field containing the raw version appears there,
+If the window does not appear, a text field containing the raw data will be displayed there,
 for example:
 
 ```json

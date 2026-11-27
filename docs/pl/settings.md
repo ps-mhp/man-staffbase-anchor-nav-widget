@@ -1,6 +1,6 @@
 # Ustawienia
 
-Wszystko konfiguruje się w oknie **Edytuj linki**. Otwiera się ono w Studio
+Wszystkie ustawienia wprowadza się w oknie **Edytuj linki**. Otwiera się ono w Studio
 automatycznie po wywołaniu okna dialogowego ustawień bloku; aby je zamknąć,
 należy kliknąć przycisk **Edytuj linki**. U góry znajdują się przyciski **Zastosuj**,
 **Anuluj**, Cofnij/Powtórz, pomoc oraz przełącznik **Edytor ·
@@ -12,7 +12,7 @@ link – lub po kliknięciu **Nowy link** **Mapa strony** – a po prawej **Nawi
 z elementami wspólnymi dla całej nawigacji: tytuł i nawigacja na
 krawędzi ekranu.
 
-Elementy strony są pobierane na bieżąco z edytora – w tym nagłówki, które
+Elementy strony pochodzą na żywo z edytora – w tym nagłówki, które
 nie zostały jeszcze zapisane – i aktualizują się po każdej zmianie.
 
 ## Tytuł
@@ -25,35 +25,37 @@ Tytuł jest tłumaczony wraz ze stroną.
 ## Nawigacja na krawędzi ekranu
 
 Po prawej stronie pod **Nawigacją**, domyślnie włączona. Na komputerze stacjonarnym i tablecie
-przy pierwszym przewinięciu po prawej krawędzi ekranu pojawia się mała nawigacja: jedna
-kreska dla każdej sekcji, przy czym aktualna jest zaznaczona na czerwono. Po najechaniu kursorem na kreskę
-po lewej stronie pojawia się tekst linku; kliknięcie powoduje przejście do tej sekcji, a strzałki powyżej i
-poniżej pozwalają przejść odpowiednio do poprzedniej lub następnej sekcji. Na telefonie, w
+podczas przewijania po prawej krawędzi ekranu pojawia się mała nawigacja – ale tylko
+dopóki sama nawigacja kotwicowa nie jest widoczna. Jedna kreska na
+sekcję, bieżąca zaznaczona na czerwono. Po najechaniu kursorem na kreskę po lewej
+stronie pojawia się tekst linku; kliknięcie powoduje przejście do tej sekcji. Strzałki powyżej i poniżej
+przenoszą do poprzedniej lub następnej sekcji, a po najechaniu kursorem również
+wyświetlają jej tytuł. Na telefonie, w
 Studio oraz w podglądzie okna nie jest ona wyświetlana. Jeśli na stronie znajduje się kilka
-elementów nawigacji kotwicowej, wyświetla się tylko ten pierwszy.
+nawigacji z kotwicami, wyświetla ją tylko pierwsza z nich.
 
 ## Linki
 
-W lewej kolumnie wyświetlane są wszystkie linki w kolejności zgodnej z nawigacją. Każdy wiersz
-zawiera tekst linku, a poniżej informację, dokąd prowadzi – na przykład „Nagłówek
+Lewa kolumna wyświetla wszystkie linki w kolejności nawigacji. Każdy wiersz
+zawiera tekst linku, a poniżej – miejsce, do którego prowadzi – na przykład „Nagłówek
 „Terminy””, „Widżet: Galeria plików”, „#kontakt” lub „Puste – nagłówek o tej samej
 nazwie”. Kliknięcie zaznacza link do edycji.
 
-- **Nowy link** otwiera pośrodku **mapę strony** (patrz poniżej). Bez
-  linków okno otwiera się od razu z tą mapą.
-- Symbol **„!”** na końcu wiersza oznacza, że miejsce docelowe nie istnieje już
-  na stronie (nagłówek został usunięty lub przemianowany). Na stronie link jest
-  ukryty, dopóki nie wybierzesz nowego miejsca docelowego lub go nie usuniesz – formularz
+- **Nowy link** otwiera pośrodku **plan strony** (patrz poniżej). Bez
+  linków okno otwiera się od razu z tym planem.
+- Znak **„!”** na końcu wiersza oznacza, że miejsce docelowe nie istnieje już
+  na stronie (nagłówek został usunięty lub przemianowany). Na stronie link
+  zostanie ukryty, dopóki nie wybierzesz nowego miejsca docelowego lub nie usuniesz go – formularz
   oferuje w tym celu opcję **Usuń link**.
 - Kolejność można zmienić za pomocą uchwytu po lewej stronie: przeciągnij lub zaznacz uchwyt,
   zaznacz klawiszem Enter, przenieś w nowe miejsce za pomocą klawiszy strzałek i
-  umieść klawiszem Enter. Można też użyć strzałek **Link w górę** / **Link w dół**
+  umieść klawiszem Enter. Lub za pomocą strzałek **Link w górę** / **Przesuń link w dół**
   nad formularzem.
 - Znajdują się tam również opcje **Duplikuj link** i **Usuń link**.
 
 ### Tekst linku i miejsce docelowe
 
-Pośrodku, nad formularzem, widnieje napis „Link 2 z 5” oraz rodzaj miejsca docelowego
+Na środku, nad formularzem, widnieje napis „Link 2 z 5” oraz rodzaj miejsca docelowego
 („Miejsce docelowe na tej stronie” lub „Odnośnik do adresu”).
 
 - **Tekst linku** – to, co widnieje na liście. Obowiązkowe: bez tekstu linku nie można
@@ -78,7 +80,7 @@ wpis przechodzi do pierwszego z nich.
 ### Mapa strony
 
 Mapa strony pokazuje nagłówki i widżety strony w postaci pól –
-ułożonych tak jak w szkicu: sekcje jedna pod drugą, kolumny obok siebie zgodnie z
+ułożonych tak jak w szablonie: sekcje jedna pod drugą, kolumny obok siebie zgodnie z
 ich szerokością. Każdy blok zawiera nazwę typu (np. „H2” lub „Widżet · Pole USP”)
 oraz tekst lub widżet. Bloki z linkami są zaznaczone na niebiesko.
 
@@ -111,12 +113,12 @@ stają się skuteczne po zapisaniu strony.
 **Komputer stacjonarny**, **tablet** i **urządzenie mobilne** wyświetlają zamiast formularza
 nawigację dostosowaną do szerokości urządzenia, tak jak pokazuje ją strona; linki bez tekstu linku
 lub bez adresu docelowego na stronie są tam pominięte, tak samo jak na stronie. Na **urządzeniu mobilnym** jest ona zwinięta do postaci przycisku.
-Lista i tytuł pozostają obok niej dostępne do obsługi. W podglądzie
+Lista i tytuł pozostają obok niej dostępne. W podglądzie
 nic się nie przesuwa, a strona studia pozostaje niezmieniona.
 
 ## Zapisana forma
 
-Tytuł i linki znajdują się razem w atrybucie `anchor-nav-config`. Starsze
+Tytuły i linki znajdują się razem w atrybucie `anchor-nav-config`. Starsze
 bloki nadal zawierają je w polach `heading` i `links`; strona odczytuje
 nowe pole, jeśli jest podane, a w przeciwnym razie stare, więc wyglądają one na niezmienione.
 Przy pierwszym otwarciu okno przejmuje stare wartości, dopiero po kliknięciu **Zastosuj**

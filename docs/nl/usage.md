@@ -17,7 +17,7 @@
    navigatie op apparaatbreedte. Klik vervolgens op **Toepassen** en sla de pagina op.
 6. **Controleer in het voorbeeld van de pagina.** Klik één keer op elk item:
    Als het niet springt, komt de tekst in de linktekst of de bestemming niet precies overeen met de
-   kop.
+   koptekst.
 
 ## Bij het wijzigen van de pagina
 
@@ -28,5 +28,5 @@ verschijnt niet op de pagina.
 
 ## Op de telefoon
 
-Daar is de lijst ingeklapt en toont alleen de titel met een pijltje. Een tik
-klapt de lijst open. Op schermen met een breedte vanaf 768 pixels staat de lijst altijd open.
+Daar is de lijst ingeklapt en toont alleen de titel met een pijl. Een tik
+klapt deze uit. Op schermen met een breedte vanaf 768 pixels staat deze altijd open.

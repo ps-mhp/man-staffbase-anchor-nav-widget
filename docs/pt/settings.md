@@ -7,8 +7,8 @@ basta clicar no botão **Editar links**. Na parte superior encontram-se **Aplica
 Desktop · Tablet · Móvel**. **Aplicar** insere o título e os links na
 caixa de diálogo; depois, guarda como habitualmente.
 
-A janela tem três colunas: à esquerda, os **Links**; no centro, o link selecionado
-– ou, após clicar em **Novo link**, o **Mapa do site**; à direita, a **Navegação**
+A janela tem três colunas: à esquerda, os **Links**; no meio, o
+link selecionado – ou, após clicar em **Novo link**, o **Mapa do site**; à direita, a **Navegação**
 com o que se aplica a toda a navegação: título e navegação na
 margem do ecrã.
 
@@ -18,38 +18,40 @@ ainda não foram guardados – e acompanham todas as alterações.
 ## Título
 
 À direita, em **Navegação**: o título acima da lista, por exemplo, «Nesta
-página». Se deixares em branco, ela fica oculta; a lista permanece.
+página». Se deixares em branco, ela é ocultada; a lista permanece.
 
 O título é traduzido juntamente com a página.
 
 ## Navegação na margem do ecrã
 
-À direita, em **Navegação**, a predefinição está ativada. No computador e no tablet,
-ao percorrer a página pela primeira vez, aparece uma pequena barra de navegação à direita, na margem do ecrã: uma
-traço por secção, sendo a atual a vermelho. Ao passar o cursor sobre um traço, aparece
-à esquerda o texto do link; um clique leva-o para lá, e as setas acima e
-abaixo levam à secção anterior ou seguinte, respetivamente. No telemóvel, no
-estúdio e na pré-visualização da janela, esta não aparece. Se houver várias
+À direita, em **Navegação**, predefinida como ativada. No computador e no tablet,
+ao percorrer a página, aparece uma pequena barra de navegação à direita da margem do ecrã – mas apenas
+enquanto a própria navegação por âncoras não estiver visível. Uma linha por
+secção, com a secção atual a vermelho. Ao passar o cursor sobre uma linha, aparece à esquerda
+ao lado o texto do link; um clique leva-o para lá. As setas acima e abaixo
+levam à secção anterior ou seguinte e, ao passar o cursor por cima, também
+indicam o respetivo título. No telemóvel, no
+Studio e na pré-visualização da janela, esta barra não aparece. Se houver várias
 navegações por âncoras numa página, apenas a primeira as exibe.
 
 ## Links
 
-A coluna da esquerda mostra todos os links pela ordem da navegação. Cada linha
-indica o texto do link e, abaixo, para onde este remete – por exemplo, «Título
+A coluna da esquerda mostra todos os links pela ordem de navegação. Cada linha
+indica o texto do link e, logo abaixo, para onde este direciona – por exemplo, «Título
 «Agenda»», «Widget: Galeria de ficheiros», «#contacto» ou «Vazio – título com o mesmo nome
 ». Um clique seleciona um link para edição.
 
-- **Novo link** abre o **mapa do site** no centro (ver abaixo). Sem
-  links, a janela começa diretamente com ele.
+- **Novo link** abre o **mapa da página** no centro (ver abaixo). Sem
+  links, a janela começa diretamente com isso.
 - Um **«!»** no final da linha significa que o destino já não existe
   na página (título eliminado ou renomeado). Na página, o link
   fica oculto até selecionares um novo destino ou o removeres – o formulário
   oferece a opção **Remover link** para esse efeito.
-- Pode alterar a ordem utilizando o controlador à esquerda: arraste-o ou selecione-o,
-  confirme com Enter, desloque-o para a nova posição com as setas e
-  confirme com Enter. Ou utilize as setas **Link para cima** / **Link para baixo**
+- Podes alterar a ordem utilizando o manípulo à esquerda: arrasta ou seleciona o manípulo,
+  seleciona com a tecla Enter, move-o para a nova posição com as setas e
+  coloca-o no lugar com a tecla Enter. Ou utiliza as setas **Link para cima** / **Link para baixo**
   acima do formulário.
-- As opções **Duplicar link** e **Apagar link** também se encontram aí.
+- **Duplicar link** e **Apagar link** também se encontram aí.
 
 ### Texto do link e destino
 
@@ -65,8 +67,8 @@ No centro, acima do formulário, aparece «Link 2 de 5» e o tipo de destino
     pode ter um nome mais curto do que a secção, por exemplo, «Equipamento» em vez de «Equipamento em
     detalhe».
   - **Um ID de bloco** como `#a447d858-1bba-4a49-b620-b49c60dd67a7`: para este
-    bloco da página. É assim que o mapa da página o define. O link
-    permanece válido mesmo após a redenominação do título.
+    bloco da página. É assim que o mapa da página o define. A ligação
+    permanece válida mesmo após a redenominação do título.
   - **Um endereço** que comece por `/`, `http://`, `https://` ou `mailto:`
     : uma referência normal que o navegador segue.
 
@@ -80,11 +82,11 @@ a entrada salta para o primeiro.
 O mapa da página mostra os títulos e os widgets da página como caixas –
 organizadas tal como no esboço: secções umas abaixo das outras, colunas lado a lado na
 sua largura. Cada caixa indica o tipo (por exemplo, «H2» ou «Widget · Caixa USP»)
-e o texto ou o widget. As caixas com hiperligações aparecem a azul.
+e o texto ou o widget. As caixas com ligações aparecem a azul.
 
-- **Ao clicar numa caixa**, é criada uma hiperligação com o texto da mesma (o destino é o
+- **Ao clicar numa caixa**, é criada uma ligação com o texto da mesma (o destino é o
   ID do bloco `#…`) e abre o texto do link no bloco para edição; a tecla Enter
-  confirma. Clicar num bloco que já tenha um link abre o seu
+  confirma. Clicar num bloco já com link abre o seu
   texto de link.
 - O ícone no canto superior direito do bloco azul remove o link.
 - As caixas também podem ser arrastadas para a lista à esquerda – o link fica onde

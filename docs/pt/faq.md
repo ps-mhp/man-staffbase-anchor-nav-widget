@@ -24,7 +24,7 @@ o mesmo resultado na página.
 ## Um clique não funciona.
 
 O título com exatamente este texto não existe na página. A comparação
-é feita com o destino ou — se o destino estiver vazio — com o texto do link. Basta um erro de digitação,
+é feita com o destino ou — se o destino estiver vazio — com o texto do link. Basta um erro ortográfico,
 uma diferença nas maiúsculas e minúsculas ou um título que tenha sido renomeado
 basta. Copie o texto do título e insira-o no destino
 .
@@ -74,4 +74,4 @@ dar nomes diferentes aos títulos.
 ## Uma entrada pode remeter para outra página?
 
 Sim. Introduza como destino um endereço que comece por `/`, `http://` ou `https://`.
-Ao clicar, o utilizador será redirecionado tal como em qualquer outra ligação.
+Ao clicar, o utilizador será redirecionado tal como em qualquer outro link.
