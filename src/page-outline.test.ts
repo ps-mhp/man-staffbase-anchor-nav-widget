@@ -57,9 +57,9 @@ describe("extractOutline", () => {
   it("liefert Überschriften und Widgets in Lesereihenfolge, ohne die eigene Navigation", () => {
     expect(extractOutline(page, "de_DE")).toEqual([
       { blockId: "h", label: "Neuigkeiten", kind: "heading", depth: 0, level: 2 },
-      { blockId: "news", label: "News", kind: "widget", depth: 0 },
-      { blockId: "hero", label: "Hero-Slider", kind: "widget", depth: 0 },
-      { blockId: "acc", label: "Akkordeon", kind: "widget", depth: 0 },
+      { blockId: "news", label: "News", kind: "widget", depth: 0, widget: "News", parent: "Neuigkeiten" },
+      { blockId: "hero", label: "Hero-Slider", kind: "widget", depth: 0, widget: "Hero-Slider", parent: "Neuigkeiten" },
+      { blockId: "acc", label: "Akkordeon", kind: "widget", depth: 0, widget: "Akkordeon", parent: "Neuigkeiten" },
       { blockId: "small", label: "Schließbar", kind: "heading", depth: 1, level: 4, parent: "Neuigkeiten" },
       { blockId: "mid", label: "Anmeldung", kind: "heading", depth: 0, level: 3, parent: "Neuigkeiten" },
     ]);

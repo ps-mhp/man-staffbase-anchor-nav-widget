@@ -17,6 +17,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { AnchorLink } from "./anchor-links";
 import { AnchorNav, COMPACT_TOGGLE_LABEL, FALLBACK_NAV_LABEL } from "./anchor-nav";
 import * as headingScan from "./heading-scan";
+import { DOM_CHECK_DELAY_MS } from "./use-missing-targets";
 import { COMPACT_QUERY, REDUCED_MOTION_QUERY } from "./media-query";
 
 /** Verweise auf Überschriften, die zugleich als H2 im Dokument stehen. */
@@ -95,7 +96,7 @@ describe("AnchorNav", () => {
     expect(screen.getByRole("navigation")).toHaveAccessibleName(FALLBACK_NAV_LABEL);
   });
 
-  it("rührt die Seite beim Laden nicht an: kein Durchlauf, kein Beobachter, kein Timer", async () => {
+  it("rührt die Seite beim Laden kaum an: eine Suche nach den Zielen kurz danach, kein Beobachter", async () => {
     const { links } = page("Eins", "Zwei");
     const find = jest.spyOn(headingScan, "findHeading");
     const observe = jest.spyOn(MutationObserver.prototype, "observe");
@@ -104,17 +105,51 @@ describe("AnchorNav", () => {
     jest.useFakeTimers();
     try {
       render(<AnchorNav links={links} heading="Auf einen Blick" self={null} />);
-      expect(jest.getTimerCount()).toBe(0);
+      expect(find).not.toHaveBeenCalled();
+      expect(jest.getTimerCount()).toBe(1);
+      await act(async () => {
+        jest.advanceTimersByTime(DOM_CHECK_DELAY_MS);
+      });
+      // Genau ein Gang je Ziel – und danach nie wieder.
+      expect(find).toHaveBeenCalledTimes(2);
       await act(async () => {
         jest.advanceTimersByTime(60_000);
       });
-      expect(find).not.toHaveBeenCalled();
+      expect(find).toHaveBeenCalledTimes(2);
       expect(observe).not.toHaveBeenCalled();
       expect(resizeObserver).not.toHaveBeenCalled();
       expect(scrollToSpy).not.toHaveBeenCalled();
+      expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Eins", "Zwei"]);
     } finally {
       jest.useRealTimers();
       delete (window as unknown as { ResizeObserver?: unknown }).ResizeObserver;
+    }
+  });
+
+  it("blendet nach der Suche Links aus, deren Überschrift oder Block fehlt – Adressen und eigene Anker bleiben", async () => {
+    const { links } = page("Eins");
+    jest.useFakeTimers();
+    try {
+      render(
+        <AnchorNav
+          links={[
+            ...links,
+            { id: "weg", label: "Gelöscht" },
+            { id: "block", label: "Alter Block", target: "#0f0f0f0f-1111-4222-8333-944455556666" },
+            { id: "anker", label: "Anker", target: "#kontakt" },
+            { id: "url", label: "Portal", target: "https://man.eu" },
+          ]}
+          heading={null}
+          self={null}
+        />,
+      );
+      expect(screen.getAllByRole("link")).toHaveLength(5);
+      await act(async () => {
+        jest.advanceTimersByTime(DOM_CHECK_DELAY_MS);
+      });
+      expect(screen.getAllByRole("link").map((link) => link.textContent)).toEqual(["Eins", "Anker", "Portal"]);
+    } finally {
+      jest.useRealTimers();
     }
   });
 

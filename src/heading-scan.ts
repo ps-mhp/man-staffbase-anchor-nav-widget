@@ -11,6 +11,8 @@
  * limitations under the License.
  */
 
+import { baseBlockId } from "./block-id";
+
 const UMLAUTS: Record<string, string> = { "ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss" };
 
 /**
@@ -141,12 +143,15 @@ export function findById(id: string, root: ParentNode = document.body): HTMLElem
   if (id === "") return null;
   const direct = document.getElementById(id);
   if (direct !== null) return direct;
+  const base = baseBlockId(id);
   for (const element of walk(root)) {
     if (element.id === id) return element;
     // Die Block-ID aus dem Seiten-JSON: Überschriften im Content Designer
     // tragen sie nur hier, nicht als `id`. Die Attrappen-Kopien, die der
     // Custom Block von seinen Vorfahren anlegt, tragen sie auch — ohne Lage.
-    if (element.getAttribute(BLOCK_ID_ATTRIBUTE) === id && !element.hasAttribute(ANCESTOR_COPY_ATTRIBUTE)) {
+    // Verglichen ohne Stufen-Präfix: die Stufe der Typoskala steht mit in der ID.
+    const blockId = element.getAttribute(BLOCK_ID_ATTRIBUTE);
+    if (blockId !== null && baseBlockId(blockId) === base && !element.hasAttribute(ANCESTOR_COPY_ATTRIBUTE)) {
       return element;
     }
   }

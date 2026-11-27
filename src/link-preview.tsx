@@ -34,9 +34,20 @@ import { AnchorNavConfig } from "./anchor-nav-config";
 import { AnchorNav } from "./anchor-nav";
 import { readHeading } from "./heading-text";
 
-export function LinkPreview({ config }: { config: AnchorNavConfig }): ReactElement {
+const NOTHING_HIDDEN: ReadonlySet<string> = new Set();
+
+export interface LinkPreviewProps {
+  config: AnchorNavConfig;
+  /** Links, deren Ziel auf der Seite fehlt: wie auf der Seite ausgeblendet. */
+  hidden?: ReadonlySet<string>;
+}
+
+export function LinkPreview({ config, hidden = NOTHING_HIDDEN }: LinkPreviewProps): ReactElement {
   const { view } = useConfigShell();
-  const links = useMemo(() => parseAnchorLinks(toStoredLinks(config.links ?? [])), [config.links]);
+  const links = useMemo(
+    () => parseAnchorLinks(toStoredLinks(config.links ?? [])).filter((link) => !hidden.has(link.id)),
+    [config.links, hidden],
+  );
   return (
     <div inert className="p-8" data-testid="link-preview">
       {links.length === 0 ? (

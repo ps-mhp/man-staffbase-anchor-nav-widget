@@ -12,12 +12,16 @@
  */
 
 /**
- * Das Fenster „Links bearbeiten“ im Rahmen von `@man/config-ui`, wie im
- * Screen: links die Liste der Links, in der Mitte der gewählte Link (Kopf
- * mit „Link 2 von 5“, Zielart und Aktionen, darunter Linktext und Ziel) und
- * die Auswahl aus der Seite, rechts „Navigation“ mit dem Titel. In den
- * Geräteansichten steht statt der Mitte die echte Navigation in
- * Gerätebreite; Liste und Titel bleiben bedienbar.
+ * Das Fenster „Links bearbeiten“ im Rahmen von `@man/config-ui`: links die
+ * Liste der Links mit „Neuer Link“ (leerer Link oder Suche über die Seite),
+ * in der Mitte der gewählte Link (Kopf mit „Link 2 von 5“, Zielart und
+ * Aktionen, darunter Linktext und Ziel), rechts der Seitenaufbau zum
+ * Hineinziehen und der Titel der Navigation. In den Geräteansichten steht
+ * statt der Mitte die echte Navigation in Gerätebreite.
+ *
+ * Die Seite kommt im Studio live aus dem Editor (auch Ungespeichertes) und
+ * folgt jeder Änderung dort; ein Link, dessen Ziel fehlt, trägt in der Liste
+ * ein „!“ und fehlt in der Vorschau wie auf der Seite.
  *
  * Er schreibt nichts selbst zurück und zeichnet keine Knöpfe zum Übernehmen
  * oder Abbrechen: Kopf, Status, Rückgängig, Prüfung und Rückfrage kommen aus
@@ -33,29 +37,43 @@ import { FormSection } from "@man/config-ui/form/form-section";
 import { Note } from "@man/config-ui/form/note";
 import { InspectorPanel } from "@man/config-ui/inspector/inspector-panel";
 import { ConfigWorkspace } from "@man/config-ui/layout/config-workspace";
+import { Button } from "@man/config-ui/primitives/button";
 import { Input } from "@man/config-ui/primitives/input";
 import { useConfigShell } from "@man/config-ui/shell/shell-context";
 import { ItemActions } from "@man/config-ui/sidebar/item-actions";
+import { ExternalDrop } from "@man/config-ui/sidebar/item-list";
 
+import { AddLinkMenu } from "./add-link-menu";
 import { AnchorLink } from "./anchor-links";
 import { AnchorNavConfig } from "./anchor-nav-config";
-import { describeTarget, linkedChecker, outlineIndex, targetKindText } from "./link-describe";
+import { baseBlockId } from "./block-id";
+import {
+  describeTarget,
+  isTargetMissing,
+  linkedChecker,
+  outlineIndex,
+  targetBlockId,
+  targetKindText,
+} from "./link-describe";
 import { MISSING_LABEL, isUnlabelled } from "./link-editor-rules";
+import { useLinkEditorPresence } from "./link-editor-presence";
 import { LinkPreview } from "./link-preview";
 import { LinkSidebar } from "./link-sidebar";
-import { OutlinePicker } from "./outline-picker";
-import { OutlineEntry, loadStudioOutline } from "./page-outline";
+import { OutlineSource, studioOutlineSource } from "./outline-source";
+import { OutlineEntry } from "./page-outline";
+import { OUTLINE_DRAG_TYPE, PageStructure } from "./page-structure";
 import { OutlineState, outlineEntries, useOutline } from "./use-outline";
 import { LinkList, useLinkList } from "./use-link-list";
+import { normalizeText } from "./heading-scan";
 
 export interface LinkEditorProps {
   value: AnchorNavConfig;
   onChange: (value: AnchorNavConfig) => void;
   /**
-   * Lädt die Elemente der Seite für die Auswahl; Vorgabe ist die Seite, die
-   * das Studio gerade bearbeitet. `null` als Lader: nur Eingabe von Hand.
+   * Woher die Elemente der Seite kommen; Vorgabe ist der offene Editor des
+   * Studios, sonst die gespeicherte Seite. `null`: nur Eingabe von Hand.
    */
-  loadOutline?: (() => Promise<OutlineEntry[] | null>) | null;
+  outlineSource?: OutlineSource | null;
 }
 
 const NO_LINKS: AnchorLink[] = [];
@@ -69,14 +87,31 @@ const TITLE_HINT = "Steht über den Links. Leer lassen, wenn keine Überschrift 
 const targetPlaceholder = (label: string): string =>
   label.trim() === "" ? "Leer = Überschrift mit dem Linktext" : `Leer = Überschrift „${label.trim()}“`;
 
+/** Ein neuer Link auf ein Element der Seite: sein Text, seine Block-ID ohne Stufe. */
+export const linkToEntry = (entry: OutlineEntry): Omit<AnchorLink, "id"> => ({
+  label: entry.label,
+  target: `#${baseBlockId(entry.blockId)}`,
+});
+
+/** Der vorhandene Link auf dieses Element, falls es einen gibt. */
+function linkOfEntry(links: readonly AnchorLink[], entry: OutlineEntry): AnchorLink | undefined {
+  const base = baseBlockId(entry.blockId);
+  return links.find((link) => {
+    const blockId = targetBlockId(link);
+    if (blockId !== null) return baseBlockId(blockId) === base;
+    return entry.kind === "heading" && normalizeText(link.target ?? link.label) === normalizeText(entry.label);
+  });
+}
+
 interface LinkFormProps {
   list: LinkList;
   link: AnchorLink;
   outline: ReadonlyMap<string, OutlineEntry>;
+  missing: boolean;
 }
 
 /** Kopf und Felder des gewählten Links. */
-function LinkForm({ list, link, outline }: LinkFormProps): ReactElement {
+function LinkForm({ list, link, outline, missing }: LinkFormProps): ReactElement {
   const { issuesVisible } = useConfigShell();
   const labelRef = useRef<HTMLInputElement>(null);
   const { focusRequest, clearFocusRequest } = list;
@@ -89,7 +124,7 @@ function LinkForm({ list, link, outline }: LinkFormProps): ReactElement {
   }, [focusRequest, clearFocusRequest, link.id]);
 
   const total = list.links.length;
-  const missing = issuesVisible && isUnlabelled(link);
+  const unlabelled = issuesVisible && isUnlabelled(link);
 
   return (
     <>
@@ -109,11 +144,24 @@ function LinkForm({ list, link, outline }: LinkFormProps): ReactElement {
           onDelete={list.remove}
         />
       </div>
+      {missing && (
+        <div className="flex flex-col gap-3" data-testid="link-missing">
+          <Note tone="warning">
+            Das Ziel gibt es auf der Seite nicht mehr – die Überschrift oder das Widget wurde gelöscht oder umbenannt.
+            In der Navigation wird der Link ausgeblendet. Ziel neu wählen oder den Link entfernen.
+          </Note>
+          <div>
+            <Button variant="outline" size="sm" onClick={list.remove} data-testid="link-missing-remove">
+              Link entfernen
+            </Button>
+          </div>
+        </div>
+      )}
       <FormSection title="Link">
         <Field
           label="Linktext"
           required
-          error={missing ? `${MISSING_LABEL} – ohne ihn erscheint der Link nicht in der Navigation.` : undefined}
+          error={unlabelled ? `${MISSING_LABEL} – ohne ihn erscheint der Link nicht in der Navigation.` : undefined}
         >
           <Input
             ref={labelRef}
@@ -142,47 +190,45 @@ function LinkForm({ list, link, outline }: LinkFormProps): ReactElement {
 
 interface LinkMainProps {
   list: LinkList;
-  outline: OutlineState | null;
   index: ReadonlyMap<string, OutlineEntry>;
+  outlineReady: boolean;
 }
 
-/** Die Mitte: der gewählte Link auf Lesebreite (720 px), darunter die Auswahl aus der Seite. */
-function LinkMain({ list, outline, index }: LinkMainProps): ReactElement {
-  const isLinked = useMemo(() => linkedChecker(list.links), [list.links]);
+/** Die Mitte: der gewählte Link auf Lesebreite (720 px). */
+function LinkMain({ list, index, outlineReady }: LinkMainProps): ReactElement {
   const { selected } = list;
   return (
     <div className="px-10 pt-6 pb-12 max-lg:px-6">
       <div className="flex max-w-[720px] flex-col gap-8">
         {selected === undefined ? (
           <p className="text-sm text-muted-foreground" data-testid="link-empty">
-            Noch kein Link. Lege links über <strong>Neuer Link</strong> einen an oder wähle unten ein Element der
-            Seite.
+            Noch kein Link. Lege links über <strong>Neuer Link</strong> einen an – leer oder als Überschrift bzw.
+            Widget der Seite – oder ziehe ein Element aus dem <strong>Seitenaufbau</strong> rechts in die Liste.
           </p>
         ) : (
-          <LinkForm key={selected.id} list={list} link={selected} outline={index} />
-        )}
-        {outline !== null && (
-          <FormSection title="Element der Seite hinzufügen" aside="legt einen neuen Link an">
-            <OutlinePicker
-              outline={outline}
-              isLinked={isLinked}
-              onPick={(entry) => list.append({ label: entry.label, target: `#${entry.blockId}` })}
-            />
-          </FormSection>
+          <LinkForm
+            key={selected.id}
+            list={list}
+            link={selected}
+            outline={index}
+            missing={outlineReady && isTargetMissing(selected, index)}
+          />
         )}
       </div>
     </div>
   );
 }
 
-/** Rechts: was für die ganze Navigation gilt. */
-function NavigationInspector({
-  heading,
-  onChange,
-}: {
+interface NavigationInspectorProps {
   heading: string;
   onChange: (heading: string) => void;
-}): ReactElement {
+  outline: OutlineState | null;
+  isLinked: (entry: OutlineEntry) => boolean;
+  onPick: (entry: OutlineEntry) => void;
+}
+
+/** Rechts: der Titel der Navigation und darunter der Seitenaufbau zum Hineinziehen. */
+function NavigationInspector({ heading, onChange, outline, isLinked, onPick }: NavigationInspectorProps): ReactElement {
   return (
     <InspectorPanel title="Navigation">
       <div className="flex flex-col gap-6">
@@ -194,19 +240,60 @@ function NavigationInspector({
             onChange={(event) => onChange(event.target.value)}
           />
         </Field>
-        <Note>
-          Die Links springen zu Überschriften und Widgets dieser Seite. Die Vorschau oben rechts zeigt die Navigation
-          in Gerätebreite.
-        </Note>
+        {outline === null ? (
+          <Note>
+            Die Links springen zu Überschriften und Widgets dieser Seite. Die Vorschau oben rechts zeigt die Navigation
+            in Gerätebreite.
+          </Note>
+        ) : (
+          <FormSection title="Seitenaufbau">
+            <PageStructure outline={outline} isLinked={isLinked} onPick={onPick} />
+          </FormSection>
+        )}
       </div>
     </InspectorPanel>
   );
 }
 
-export function LinkEditor({ value, onChange, loadOutline = loadStudioOutline }: LinkEditorProps): ReactElement {
+export function LinkEditor({ value, onChange, outlineSource }: LinkEditorProps): ReactElement {
+  useLinkEditorPresence();
   const list = useLinkList(value.links ?? NO_LINKS, (links) => onChange({ ...value, links }));
-  const outline = useOutline(loadOutline ?? undefined);
+  // Einmal je Fenster: eine neue Quelle bei jedem Rendern hieße jedes Mal neu laden.
+  const source = useMemo(() => (outlineSource === undefined ? studioOutlineSource() : outlineSource), [outlineSource]);
+  const outline = useOutline(source);
   const index = useMemo(() => outlineIndex(outlineEntries(outline)), [outline]);
+  const isLinked = useMemo(() => linkedChecker(list.links), [list.links]);
+  const outlineReady = outline?.status === "ready";
+
+  // Schon verlinkt: den vorhandenen Link wählen statt ihn zu verdoppeln.
+  const addEntry = (entry: OutlineEntry): void => {
+    const existing = linkOfEntry(list.links, entry);
+    if (existing !== undefined) list.select(existing.id);
+    else list.append(linkToEntry(entry));
+  };
+
+  // Über einen Verweis: das Ablegen sieht immer Liste und Gliederung von
+  // jetzt, auch wenn die Drag-&-Drop-Hooks ein älteres Objekt halten.
+  const dropRef = useRef<(payloads: string[], at: number) => void>(() => undefined);
+  dropRef.current = (payloads, at) => {
+    const ids = [...new Set(payloads.map(baseBlockId))];
+    const entries = ids.flatMap((id) => {
+      const entry = index.get(id);
+      return entry === undefined ? [] : [entry];
+    });
+    const fresh = entries.filter((entry) => linkOfEntry(list.links, entry) === undefined);
+    if (fresh.length > 0) list.insertAt(fresh.map(linkToEntry), at);
+    else if (entries.length > 0) addEntry(entries[0]);
+  };
+  const externalDrop = useMemo<ExternalDrop>(
+    () => ({ type: OUTLINE_DRAG_TYPE, onDrop: (payloads, at) => dropRef.current(payloads, at) }),
+    [],
+  );
+
+  const hidden = useMemo(
+    () => new Set(outlineReady ? list.links.filter((link) => isTargetMissing(link, index)).map((link) => link.id) : []),
+    [outlineReady, list.links, index],
+  );
 
   return (
     <div className="flex h-full min-h-0 w-full" data-testid="link-editor">
@@ -216,18 +303,40 @@ export function LinkEditor({ value, onChange, loadOutline = loadStudioOutline }:
           <LinkSidebar
             links={list.links}
             outline={index}
+            outlineReady={outlineReady}
             selectedId={list.selected?.id}
             onSelect={list.select}
-            onAdd={list.addEmpty}
+            addMenu={(close) => (
+              <AddLinkMenu
+                outline={outline}
+                isLinked={isLinked}
+                onAddEmpty={() => {
+                  close();
+                  list.addEmpty();
+                }}
+                onPick={(entry) => {
+                  close();
+                  addEntry(entry);
+                }}
+              />
+            )}
             onReorder={list.reorder}
+            externalDrop={outline === null ? undefined : externalDrop}
           />
         }
         inspector={
-          <NavigationInspector heading={value.heading ?? ""} onChange={(heading) => onChange({ ...value, heading })} />
+          <NavigationInspector
+            heading={value.heading ?? ""}
+            onChange={(heading) => onChange({ ...value, heading })}
+            outline={outline}
+            isLinked={isLinked}
+            onPick={addEntry}
+          />
         }
-        preview={<LinkPreview config={value} />}
+        inspectorTitle="Navigation"
+        preview={<LinkPreview config={value} hidden={hidden} />}
       >
-        <LinkMain list={list} outline={outline} index={index} />
+        <LinkMain list={list} index={index} outlineReady={outlineReady} />
       </ConfigWorkspace>
     </div>
   );

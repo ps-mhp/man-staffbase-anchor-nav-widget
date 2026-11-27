@@ -22,6 +22,7 @@
  */
 
 import { AnchorLink, headingText, linkKind } from "./anchor-links";
+import { baseBlockId, isBlockUuid } from "./block-id";
 import { normalizeText } from "./heading-scan";
 import { HeadingLevel, OutlineEntry } from "./page-outline";
 
@@ -56,8 +57,12 @@ export function targetBlockId(link: AnchorLink): string | null {
 
 /** Die Gliederung nach Block-ID, für schnelles Nachschlagen. */
 export function outlineIndex(outline: readonly OutlineEntry[]): ReadonlyMap<string, OutlineEntry> {
-  return new Map(outline.map((entry) => [entry.blockId, entry]));
+  return new Map(outline.map((entry) => [baseBlockId(entry.blockId), entry]));
 }
+
+/** Das Element der Seite zu einer Block-ID, auch wenn die Stufe der Typoskala gewechselt hat. */
+export const outlineEntryOf = (outline: ReadonlyMap<string, OutlineEntry>, blockId: string): OutlineEntry | undefined =>
+  outline.get(baseBlockId(blockId));
 
 /** Die Ebene der ersten Überschrift der Seite mit diesem Text. */
 function levelOfText(text: string, outline: ReadonlyMap<string, OutlineEntry>): HeadingLevel | undefined {
@@ -66,6 +71,12 @@ function levelOfText(text: string, outline: ReadonlyMap<string, OutlineEntry>): 
     if (entry.kind === "heading" && normalizeText(entry.label) === wanted) return entry.level;
   }
   return undefined;
+}
+
+/** „Widget: USP-Box „Hauptwettbewerber““ oder, ohne Merkmal, „Widget: Dateigalerie“. */
+function widgetDescription(entry: OutlineEntry): string {
+  const name = entry.widget ?? entry.label;
+  return name === entry.label ? `Widget: ${name}` : `Widget: ${name} „${entry.label}“`;
 }
 
 const withLevel = (info: LinkTargetInfo, level: HeadingLevel | undefined): LinkTargetInfo =>
@@ -78,11 +89,11 @@ export function describeTarget(link: AnchorLink, outline: ReadonlyMap<string, Ou
   }
   const blockId = targetBlockId(link);
   if (blockId !== null) {
-    const entry = outline.get(blockId);
+    const entry = outlineEntryOf(outline, blockId);
     if (entry?.kind === "heading") {
       return withLevel({ kind: "page-heading", description: `Überschrift „${entry.label}“` }, entry.level);
     }
-    if (entry?.kind === "widget") return { kind: "page-widget", description: `Widget: ${entry.label}` };
+    if (entry?.kind === "widget") return { kind: "page-widget", description: widgetDescription(entry) };
     return { kind: "block", description: target };
   }
   if (linkKind(link) === "url") return { kind: "address", description: target };
@@ -106,9 +117,31 @@ export function linkedChecker(links: readonly AnchorLink[]): (entry: OutlineEntr
   const headingTexts = new Set<string>();
   for (const link of links) {
     const blockId = targetBlockId(link);
-    if (blockId !== null) blockIds.add(blockId);
+    if (blockId !== null) blockIds.add(baseBlockId(blockId));
     else if (linkKind(link) === "heading") headingTexts.add(normalizeText(headingText(link)));
   }
   return (entry) =>
-    blockIds.has(entry.blockId) || (entry.kind === "heading" && headingTexts.has(normalizeText(entry.label)));
+    blockIds.has(baseBlockId(entry.blockId)) || (entry.kind === "heading" && headingTexts.has(normalizeText(entry.label)));
+}
+
+/** Was die Liste zu einem Link sagt, dessen Ziel es auf der Seite nicht mehr gibt. */
+export const MISSING_TARGET = "Ziel fehlt auf der Seite – in der Navigation ausgeblendet";
+
+/**
+ * Ob das Ziel eines Links auf der Seite fehlt: die Block-ID kennt die
+ * Gliederung nicht, oder keine Überschrift trägt den gesuchten Text.
+ * Adressen fehlen nie. Nur sinnvoll mit geladener Gliederung.
+ */
+export function isTargetMissing(link: AnchorLink, outline: ReadonlyMap<string, OutlineEntry>): boolean {
+  if (link.label.trim() === "" && (link.target?.trim() ?? "") === "") return false;
+  const blockId = targetBlockId(link);
+  // Nur Block-IDs des Content Designers lassen sich prüfen; ein eigener
+  // Anker wie `#kontakt` steht in keiner Gliederung.
+  if (blockId !== null) return isBlockUuid(blockId) && outlineEntryOf(outline, blockId) === undefined;
+  if (linkKind(link) === "url") return false;
+  const wanted = normalizeText(headingText(link));
+  for (const entry of outline.values()) {
+    if (entry.kind === "heading" && normalizeText(entry.label) === wanted) return false;
+  }
+  return true;
 }

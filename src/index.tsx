@@ -31,6 +31,7 @@ import {
 } from "./translation-provider";
 import { AnchorNavWidget } from "./widget-root";
 import { isStudioPage, startLinkEditorInjector } from "./link-editor-injector";
+import { startOutlineWatch } from "./outline-watch";
 import icon from "../resources/anchor-nav-widget.svg";
 import pkg from "../package.json";
 
@@ -108,9 +109,13 @@ if (typeof window.defineBlock === "function") {
       getTranslationRegistry().register(anchorNavConfigTranslationProvider);
       window.defineBlock(externalBlockDefinition);
       // Nur im Studio: der Injector beobachtet das Dokument mit einem
-      // `MutationObserver`, um den Dialog zu finden. Auf der veröffentlichten
-      // Seite darf kein Beobachter laufen.
-      if (isStudioPage()) startLinkEditorInjector();
+      // `MutationObserver`, um den Dialog zu finden, der Wächter den Editor,
+      // um bei gelöschten oder umbenannten Überschriften nachzufragen. Auf
+      // der veröffentlichten Seite darf kein Beobachter laufen.
+      if (isStudioPage()) {
+        startLinkEditorInjector();
+        startOutlineWatch((prompt) => import("./outline-watch-prompt").then((module) => module.askChange(prompt)));
+      }
     },
   });
 }

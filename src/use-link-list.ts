@@ -58,6 +58,8 @@ export interface LinkList {
   addEmpty: () => void;
   /** Hängt einen fertigen Link an (aus der Auswahl der Seite) und wählt ihn. */
   append: (link: Omit<AnchorLink, "id">) => void;
+  /** Fügt fertige Links an der Stelle `index` ein (aus dem Seitenaufbau gezogen) und wählt den ersten. */
+  insertAt: (fields: readonly Omit<AnchorLink, "id">[], index: number) => void;
   patch: (id: string, changes: Partial<Omit<AnchorLink, "id">>) => void;
   duplicate: () => void;
   remove: () => void;
@@ -95,6 +97,13 @@ export function useLinkList(links: AnchorLink[], onChange: (links: AnchorLink[])
       const link: AnchorLink = { id: newLinkId(), ...fields };
       onChange([...links, link]);
       setSelectedId(link.id);
+    },
+    insertAt: (fields, at) => {
+      if (fields.length === 0) return;
+      const added = fields.map((field): AnchorLink => ({ id: newLinkId(), ...field }));
+      const clamped = Math.max(0, Math.min(at, links.length));
+      onChange([...links.slice(0, clamped), ...added, ...links.slice(clamped)]);
+      setSelectedId(added[0].id);
     },
     patch: (id, changes) => onChange(links.map((link) => (link.id === id ? { ...link, ...changes } : link))),
     duplicate: () => {

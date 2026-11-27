@@ -19,12 +19,14 @@ import { ConfigShellProvider, type ConfigShellState } from "@man/config-ui/shell
 import { AnchorLink } from "./anchor-links";
 import { AnchorNavConfig } from "./anchor-nav-config";
 import { LinkEditor } from "./link-editor";
+import { OutlineSource } from "./outline-source";
 import { OutlineEntry } from "./page-outline";
 
 const OUTLINE: OutlineEntry[] = [
   { blockId: "b1", label: "Termine", kind: "heading", depth: 0, level: 2 },
   { blockId: "b2", label: "Anmeldung", kind: "heading", depth: 0, level: 3, parent: "Termine" },
-  { blockId: "b3", label: "Dateigalerie", kind: "widget", depth: 0 },
+  { blockId: "b3", label: "Dateigalerie", kind: "widget", depth: 0, widget: "Dateigalerie" },
+  { blockId: "sbt-display-l--4a7c0b1e-1111-4222-8333-944455556666", label: "Kontakt", kind: "heading", depth: 0, level: 2 },
 ];
 
 const shellState = (overrides: Partial<ConfigShellState> = {}): ConfigShellState => ({
@@ -42,13 +44,13 @@ interface Setup {
 
 interface Options {
   shell?: Partial<ConfigShellState>;
-  loadOutline?: (() => Promise<OutlineEntry[] | null>) | null;
+  outlineSource?: OutlineSource | null;
 }
 
 /** Rendert den Editor mit zurückgespiegeltem Wert; ohne Angabe ohne Auswahl der Seite. */
 function setup(value: AnchorNavConfig, options: Options = {}): Setup {
   const onChange = jest.fn<void, [AnchorNavConfig]>();
-  const loadOutline = options.loadOutline === undefined ? null : options.loadOutline;
+  const outlineSource = options.outlineSource === undefined ? null : options.outlineSource;
   function Harness(): React.ReactElement {
     const [config, setConfig] = React.useState(value);
     return (
@@ -59,7 +61,7 @@ function setup(value: AnchorNavConfig, options: Options = {}): Setup {
             onChange(next);
             setConfig(next);
           }}
-          loadOutline={loadOutline}
+          outlineSource={outlineSource}
         />
       </ConfigShellProvider>
     );
@@ -70,9 +72,13 @@ function setup(value: AnchorNavConfig, options: Options = {}): Setup {
 
 const links = (...labels: string[]): AnchorLink[] => labels.map((label, index) => ({ id: `l${index}`, label }));
 
-const row = (name: string | RegExp): HTMLElement => screen.getByRole("row", { name });
+const row = (name: string | RegExp): HTMLElement =>
+  within(screen.getByRole("grid", { name: "Links" })).getByRole("row", { name });
 
-const loader = (entries: OutlineEntry[] | null) => () => Promise.resolve(entries);
+const loader = (entries: OutlineEntry[] | null, kind: OutlineSource["kind"] = "saved"): OutlineSource => ({
+  kind,
+  load: () => Promise.resolve(entries),
+});
 
 describe("LinkEditor – Liste", () => {
   it("zeigt Anzahl, Linktext und Ziel jedes Links wie im Screen", async () => {
@@ -86,7 +92,7 @@ describe("LinkEditor – Liste", () => {
           { id: "e", label: "Kontakt", target: "https://man.eu" },
         ],
       },
-      { loadOutline: loader(OUTLINE) },
+      { outlineSource: loader(OUTLINE) },
     );
     expect(screen.getByRole("heading", { name: "Links" })).toBeInTheDocument();
     expect(screen.getByText("(5)")).toBeInTheDocument();
@@ -97,12 +103,13 @@ describe("LinkEditor – Liste", () => {
     expect(within(row(/Kontakt/)).getByText("https://man.eu")).toBeInTheDocument();
   });
 
-  it("erklärt die leere Liste und legt über „Neuer Link“ einen an, gewählt und mit Fokus im Linktext", async () => {
+  it("erklärt die leere Liste und legt über „Neuer Link“ → „Leerer Link“ einen an, gewählt und mit Fokus im Linktext", async () => {
     const { latest } = setup({});
-    expect(screen.getByText(/Noch kein Link\. Lege über/)).toBeInTheDocument();
+    expect(screen.getByText(/Noch kein Link\. Über/)).toBeInTheDocument();
     expect(screen.getByTestId("link-empty")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Neuer Link" }));
+    await userEvent.click(await screen.findByTestId("add-empty-link"));
 
     const [added] = latest().links ?? [];
     expect(added.label).toBe("");
@@ -215,61 +222,124 @@ describe("LinkEditor – Navigation rechts", () => {
   });
 });
 
-describe("LinkEditor – Element der Seite hinzufügen", () => {
-  it("legt aus der Auswahl einen Link auf die Block-ID an und sperrt schon Verlinktes", async () => {
-    const { latest } = setup(
-      { links: [{ id: "x", label: "Termine", target: "#b1" }] },
-      { loadOutline: loader(OUTLINE) },
-    );
-    const user = userEvent.setup();
-    const input = await screen.findByRole("combobox", { name: "Überschrift oder Widget suchen" });
-    await screen.findByPlaceholderText("Suchen …");
+describe("LinkEditor – „Neuer Link“ mit Auswahl der Seite", () => {
+  const openMenu = async (user: ReturnType<typeof userEvent.setup>): Promise<HTMLElement> => {
+    await user.click(screen.getByRole("button", { name: "Neuer Link" }));
+    return screen.findByRole("menu", { name: "Elemente der Seite" });
+  };
 
-    await user.click(input);
-    const listbox = await screen.findByRole("listbox");
-    expect(within(listbox).getByText("Überschriften")).toBeInTheDocument();
-    expect(within(listbox).getByText("Widgets")).toBeInTheDocument();
-    expect(within(listbox).getByRole("option", { name: /Termine · H2, schon verlinkt/ })).toHaveAttribute(
+  it("legt aus dem Aufklappmenü einen Link auf die Block-ID ohne Stufe an und sperrt schon Verlinktes", async () => {
+    const { latest } = setup({ links: [{ id: "x", label: "Termine", target: "#b1" }] }, { outlineSource: loader(OUTLINE) });
+    const user = userEvent.setup();
+    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
+    const menu = await openMenu(user);
+
+    expect(within(menu).getByText("Überschriften")).toBeInTheDocument();
+    expect(within(menu).getByText("Widgets")).toBeInTheDocument();
+    expect(within(menu).getByRole("menuitem", { name: /Termine · H2, schon verlinkt/ })).toHaveAttribute(
       "aria-disabled",
       "true",
     );
-    expect(within(listbox).getByRole("option", { name: /Anmeldung · H3 unter „Termine“/ })).toBeInTheDocument();
+    expect(within(menu).getByRole("menuitem", { name: /Anmeldung · H3 unter „Termine“/ })).toBeInTheDocument();
 
-    await user.click(within(listbox).getByRole("option", { name: /Dateigalerie/ }));
+    await user.click(within(menu).getByRole("menuitem", { name: /Kontakt/ }));
 
-    expect(input).toHaveValue("");
     expect(latest().links?.map(({ label, target }) => ({ label, target }))).toEqual([
       { label: "Termine", target: "#b1" },
-      { label: "Dateigalerie", target: "#b3" },
+      { label: "Kontakt", target: "#4a7c0b1e-1111-4222-8333-944455556666" },
     ]);
-    // Die Liste bleibt für den nächsten Treffer offen; der Rest liegt solange
-    // für Hilfsmittel verborgen, deshalb über den Text.
-    expect(screen.getByText("Link 2 von 2")).toBeInTheDocument();
+    expect(screen.queryByRole("menu", { name: "Elemente der Seite" })).toBeNull();
+    expect(screen.getByRole("heading", { name: "Link 2 von 2" })).toBeInTheDocument();
   });
 
-  it("filtert die Vorschläge nach dem eingegebenen Text", async () => {
-    setup({}, { loadOutline: loader(OUTLINE) });
+  it("filtert die Elemente nach dem eingegebenen Text", async () => {
+    setup({}, { outlineSource: loader(OUTLINE) });
     const user = userEvent.setup();
-    const input = await screen.findByRole("combobox");
-    await screen.findByPlaceholderText("Suchen …");
+    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
+    const menu = await openMenu(user);
 
-    await user.type(input, "Anm");
+    await user.type(screen.getByTestId("add-link-search"), "Anm");
 
-    const listbox = await screen.findByRole("listbox");
-    expect(within(listbox).getAllByRole("option").map((option) => option.textContent)).toEqual([
+    expect(within(menu).getAllByRole("menuitem").map((item) => item.textContent)).toEqual([
       "Anmeldung · H3 unter „Termine“",
     ]);
   });
 
-  it("meldet eine nicht ladbare Seite und lässt „Neuer Link“", async () => {
-    setup({}, { loadOutline: loader(null) });
-    expect(await screen.findByTestId("link-outline-failed")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Neuer Link" })).toBeInTheDocument();
+  it("sagt, ob die Elemente live aus dem Editor kommen", async () => {
+    setup({}, { outlineSource: loader(OUTLINE, "live") });
+    expect((await screen.findAllByText("Aktueller Stand im Editor, auch Ungespeichertes.")).length).toBeGreaterThan(0);
   });
 
-  it("zeigt ohne Lader keine Auswahl", () => {
+  it("meldet eine nicht ladbare Seite und lässt den leeren Link", async () => {
+    setup({}, { outlineSource: loader(null) });
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "Neuer Link" }));
+    expect(await screen.findByTestId("add-link-source")).toHaveTextContent("ließ sich nicht laden");
+    expect(screen.getByTestId("add-empty-link")).toBeInTheDocument();
+  });
+
+  it("zeigt ohne Quelle keinen Seitenaufbau", () => {
     setup({});
-    expect(screen.queryByRole("combobox")).toBeNull();
+    expect(screen.queryByTestId("page-structure")).toBeNull();
+  });
+});
+
+describe("LinkEditor – Ziel fehlt", () => {
+  it("markiert Links ohne Ziel mit „!“, warnt im Formular und blendet sie in der Vorschau aus", async () => {
+    const { latest } = setup(
+      {
+        links: [
+          { id: "a", label: "Termine", target: "#b1" },
+          { id: "b", label: "Weg", target: "#0f0f0f0f-1111-4222-8333-944455556666" },
+          { id: "c", label: "Eigener Anker", target: "#kontakt" },
+        ],
+      },
+      { outlineSource: loader(OUTLINE) },
+    );
+    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
+    expect(within(row(/Weg/)).getByTestId("item-warning")).toHaveAttribute(
+      "title",
+      "Ziel fehlt auf der Seite – in der Navigation ausgeblendet",
+    );
+    expect(within(row(/Termine/)).queryByTestId("item-warning")).toBeNull();
+    expect(within(row(/Eigener Anker/)).queryByTestId("item-warning")).toBeNull();
+
+    await userEvent.click(screen.getByText("Weg"));
+    expect(screen.getByTestId("link-missing")).toHaveTextContent("gibt es auf der Seite nicht mehr");
+    await userEvent.click(screen.getByTestId("link-missing-remove"));
+    expect(latest().links?.map((link) => link.id)).toEqual(["a", "c"]);
+  });
+
+  it("lässt den Link in der Vorschau weg", async () => {
+    setup(
+      { links: [{ id: "a", label: "Termine", target: "#b1" }, { id: "b", label: "Weg", target: "#0f0f0f0f-1111-4222-8333-944455556666" }] },
+      { outlineSource: loader(OUTLINE), shell: { view: "desktop" } },
+    );
+    const preview = screen.getByTestId("link-preview");
+    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
+    expect(within(preview).getAllByRole("link").map((link) => link.textContent)).toEqual(["Termine"]);
+  });
+});
+
+describe("LinkEditor – Seitenaufbau", () => {
+  it("zeigt die Elemente eingerückt und legt per Klick einen Link an; Verlinktes wählt den vorhandenen", async () => {
+    const { latest } = setup({ links: [{ id: "x", label: "Termine", target: "#b1" }] }, { outlineSource: loader(OUTLINE) });
+    const structure = await screen.findByTestId("page-structure");
+    const tree = within(structure).getByRole("grid", { name: "Seitenaufbau" });
+    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
+    expect(within(tree).getAllByRole("row").map((item) => item.textContent)).toEqual([
+      "Termineschon verlinkt",
+      "Anmeldung",
+      "Dateigalerie",
+      "Kontakt",
+    ]);
+
+    await userEvent.click(within(tree).getByRole("row", { name: "Anmeldung" }));
+    expect(latest().links?.map((link) => link.label)).toEqual(["Termine", "Anmeldung"]);
+
+    await userEvent.click(within(tree).getByRole("row", { name: "Termine" }));
+    expect(latest().links).toHaveLength(2);
+    expect(screen.getByRole("heading", { name: "Link 1 von 2" })).toBeInTheDocument();
   });
 });
 

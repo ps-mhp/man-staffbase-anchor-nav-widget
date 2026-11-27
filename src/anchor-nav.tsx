@@ -31,6 +31,7 @@ import {
 import { measureChromeHeight } from "@shared/staffbase-chrome";
 import { findScrollParent } from "./scroll-ancestor";
 import { containerChromeOverlap, jumpTarget } from "./scroll-target";
+import { useMissingTargets } from "./use-missing-targets";
 import { useScrollSpy } from "./use-scroll-spy";
 import anchorNavCss from "./styles/anchor-nav.scss";
 
@@ -161,11 +162,18 @@ function currentHashSlug(): string {
  * gescrollt wird.
  */
 export function AnchorNav({
-  links,
+  links: allLinks,
   heading,
   self,
   preview,
 }: AnchorNavProps): React.ReactElement | null {
+  // Ein Link, dessen Überschrift gelöscht wurde, springt nirgendwohin: er
+  // fehlt in der Liste (`use-missing-targets.ts`).
+  const missing = useMissingTargets(allLinks, self, preview === undefined);
+  const links = useMemo(
+    () => (missing.size === 0 ? allLinks : allLinks.filter((link) => !missing.has(link.id))),
+    [allLinks, missing],
+  );
   const liveCss = useHotStyle(
     anchorNavCss,
     "anchor-nav-widget",

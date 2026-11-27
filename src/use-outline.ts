@@ -12,36 +12,44 @@
  */
 
 /**
- * Die Gliederung der Seite für das Fenster: einmal beim Öffnen geladen, ein
- * Ergebnis nach dem Schließen verworfen.
+ * Die Gliederung der Seite für das Fenster: beim Öffnen geladen und, wenn
+ * die Quelle live ist, bei jeder Änderung im Editor neu; ein Ergebnis nach
+ * dem Schließen verworfen.
  */
 
 import { useEffect, useState } from "react";
 
+import { OutlineSource } from "./outline-source";
 import { OutlineEntry } from "./page-outline";
 
 export type OutlineState =
   | { status: "loading" }
   | { status: "failed" }
-  | { status: "ready"; entries: OutlineEntry[] };
+  | { status: "ready"; entries: OutlineEntry[]; live: boolean };
 
 /** Die Einträge, sobald sie da sind; sonst eine leere Liste. */
 export const outlineEntries = (outline: OutlineState | null): OutlineEntry[] =>
   outline?.status === "ready" ? outline.entries : [];
 
-/** `null` ohne Lader: dann gibt es nur die Eingabe von Hand. */
-export function useOutline(loadOutline: (() => Promise<OutlineEntry[] | null>) | undefined): OutlineState | null {
-  const [outline, setOutline] = useState<OutlineState | null>(loadOutline ? { status: "loading" } : null);
+/** `null` ohne Quelle: dann gibt es nur die Eingabe von Hand. */
+export function useOutline(source: OutlineSource | null | undefined): OutlineState | null {
+  const [outline, setOutline] = useState<OutlineState | null>(source ? { status: "loading" } : null);
   useEffect(() => {
-    if (!loadOutline) return undefined;
+    if (!source) return undefined;
     let alive = true;
-    loadOutline().then(
-      (entries) => alive && setOutline(entries === null ? { status: "failed" } : { status: "ready", entries }),
-      () => alive && setOutline({ status: "failed" }),
-    );
+    const live = source.kind === "live";
+    const load = (): void => {
+      source.load().then(
+        (entries) => alive && setOutline(entries === null ? { status: "failed" } : { status: "ready", entries, live }),
+        () => alive && setOutline({ status: "failed" }),
+      );
+    };
+    load();
+    const unsubscribe = source.subscribe?.(load);
     return () => {
       alive = false;
+      unsubscribe?.();
     };
-  }, [loadOutline]);
+  }, [source]);
   return outline;
 }

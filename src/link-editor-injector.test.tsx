@@ -180,6 +180,8 @@ describe("startLinkEditorInjector", () => {
     const { container, stop } = await open({});
 
     await clickElement(Array.from(modalRoot()!.querySelectorAll("button")).find((b) => b.textContent === "Neuer Link") ?? null);
+    // „Neuer Link“ klappt die Auswahl auf; der leere Link steht obenan.
+    await clickElement(modalRoot()!.querySelector('[data-testid="add-empty-link"]'));
     await apply();
 
     expect(fieldValue(container)).toBe("");
@@ -219,7 +221,7 @@ describe("linkEditorShell", () => {
 
   it("erklärt in der Hilfe Liste, Linktext, Ziel, Titel und Vorschau", () => {
     const { container } = render(<>{linkEditorShell.help}</>);
-    for (const text of ["Neuer Link", "Element der Seite hinzufügen", "Linktext", "Ziel", "Titel", "Mobil"]) {
+    for (const text of ["Neuer Link", "Seitenaufbau", "„!“", "Linktext", "Ziel", "Titel", "Mobil"]) {
       expect(container).toHaveTextContent(text);
     }
   });

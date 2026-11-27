@@ -14,49 +14,48 @@
 /**
  * Die Elemente der bearbeiteten Seite als Auswahl für den Link-Editor.
  *
- * Gelesen wird der gespeicherte Editor-Inhalt (`GET /api/branch/pages/{id}`),
- * nicht das DOM: ein Baum aus Blöcken mit festen IDs, die auf der
- * veröffentlichten Seite als Sprungziel `#<id>` taugen. Läuft nur im Studio,
- * einmal beim Öffnen des Dialogs.
+ * Ein Baum aus Blöcken mit festen IDs, die auf der veröffentlichten Seite als
+ * Sprungziel `#<id>` taugen – nicht das DOM. Woher der Baum kommt, steht
+ * nicht hier: live aus dem Editor (`live-outline.ts`, auch Ungespeichertes)
+ * oder, wo kein Editor offen ist, aus dem gespeicherten Inhalt
+ * (`GET /api/branch/pages/{id}`). Beide reichen `OutlineNode`s herein.
  */
 
 import { PAGE_ENDPOINT } from "@shared/staffbase/pages";
 import { isStaffbaseId } from "@shared/staffbase/ids";
 
+import { SelectedBlock, WidgetLabel, describeWidget } from "./widget-labels";
+
 export interface OutlineEntry {
-  /** Die Block-ID; das Sprungziel ist `#${blockId}`. */
+  /** Die Block-ID, wie das Dokument sie führt (auch mit Stufen-Präfix `sbt-…--`). */
   blockId: string;
+  /** Überschrift: ihr Text. Widget: sein Merkmal, sonst der Name seiner Art. */
   label: string;
   kind: "heading" | "widget";
   /** Schachtelungstiefe unterhalb der Sektionen, für die Einrückung. */
   depth: number;
   /** Nur Überschriften: die Ebene, 1 bis 4 – wie die Typoskala des Content Designers sie nennt. */
   level?: HeadingLevel;
-  /** Nur Überschriften: der Text der nächsten vorausgehenden Überschrift einer höheren Ebene. */
+  /** Der Text der nächsten vorausgehenden Überschrift einer höheren Ebene (Widgets: jeder Ebene). */
   parent?: string;
+  /** Nur Widgets: der Name der Art, etwa „USP-Box“. */
+  widget?: string;
 }
 
 export type HeadingLevel = 1 | 2 | 3 | 4;
 
-interface RawBlock {
-  type?: unknown;
-  children?: unknown;
-  config?: {
-    value?: unknown;
-    settings?: {
-      content?: {
-        selectedBlock?: { name?: unknown; customElementName?: unknown };
-      };
-    };
-  };
-}
-
-interface RawDocument {
-  content?: { blocks?: Record<string, RawBlock>; content?: unknown };
-}
-
-interface RawPage {
-  contentDocuments?: Record<string, RawDocument>;
+/**
+ * Ein Block, gleich ob aus dem gespeicherten Seiten-JSON oder live aus dem
+ * Editor: so viel braucht die Gliederung.
+ */
+export interface OutlineNode {
+  readonly id: string;
+  readonly type: string;
+  /** Der Text des Blocks samt Kindern. */
+  text(): string;
+  /** Nur `customBlock`: was er über sich speichert. */
+  readonly selectedBlock?: SelectedBlock;
+  children(): readonly OutlineNode[];
 }
 
 /**
@@ -75,6 +74,8 @@ const LAYOUT_TYPES = new Set([
   "section",
   "container",
   "column",
+  "sectionRow",
+  "sectionColumn",
   "textContainer",
   "accordionPanel",
   "accordionPanelHeader",
@@ -99,80 +100,112 @@ export function studioPageRef(
   };
 }
 
-const ids = (value: unknown): string[] =>
-  Array.isArray(value)
-    ? value.filter((id): id is string => typeof id === "string")
-    : [];
+const normalizeLabel = (text: string): string => text.replace(/\s+/g, " ").trim();
 
 /**
- * Überschriften und Widgets in Lesereihenfolge. Wirft nie; eine unbekannte
- * Form ergibt eine leere Liste.
+ * Überschriften und Widgets in Lesereihenfolge. Wirft nie; die eigene
+ * Navigation und leere Überschriften fehlen.
  */
-export function extractOutline(
-  page: unknown,
-  language: string | null,
-): OutlineEntry[] {
-  const documents = (page as RawPage | null)?.contentDocuments;
-  if (typeof documents !== "object" || documents === null) return [];
-  const document =
-    (language !== null ? documents[language] : undefined) ??
-    Object.values(documents)[0];
-  const blocks = document?.content?.blocks;
-  if (typeof blocks !== "object" || blocks === null) return [];
-
-  const text = (id: string, seen: Set<string>): string => {
-    const block = blocks[id];
-    if (block === undefined || seen.has(id)) return "";
-    seen.add(id);
-    if (block.type === "text")
-      return typeof block.config?.value === "string" ? block.config.value : "";
-    return ids(block.children)
-      .map((child) => text(child, seen))
-      .join("");
-  };
-
+export function buildOutline(roots: readonly OutlineNode[]): OutlineEntry[] {
   const entries: OutlineEntry[] = [];
   const visited = new Set<string>();
   // Die Überschriften über der aktuellen Stelle, von außen nach innen.
   const trail: { level: HeadingLevel; label: string }[] = [];
-  const visit = (id: string, depth: number): void => {
-    const block = blocks[id];
-    if (block === undefined || visited.has(id)) return;
-    visited.add(id);
-    const type = typeof block.type === "string" ? block.type : "";
+  const parentLabel = (): { parent?: string } => {
+    const parent = trail[trail.length - 1]?.label;
+    return parent === undefined ? {} : { parent };
+  };
+  const pushWidget = (node: OutlineNode, label: WidgetLabel, depth: number): void => {
+    entries.push({ blockId: node.id, label: label.detail ?? label.name, kind: "widget", depth, widget: label.name, ...parentLabel() });
+  };
 
-    const level = HEADING_LEVELS[type];
+  const visit = (node: OutlineNode, depth: number): void => {
+    if (visited.has(node.id)) return;
+    visited.add(node.id);
+
+    const level = HEADING_LEVELS[node.type];
     if (level !== undefined) {
-      const label = text(id, new Set()).replace(/\s+/g, " ").trim();
+      const label = normalizeLabel(node.text());
       if (label === "") return;
       while (trail.length > 0 && trail[trail.length - 1].level >= level) trail.pop();
-      const parent = trail[trail.length - 1]?.label;
-      entries.push({ blockId: id, label, kind: "heading", depth, level, ...(parent === undefined ? {} : { parent }) });
+      entries.push({ blockId: node.id, label, kind: "heading", depth, level, ...parentLabel() });
       trail.push({ level, label });
       return;
     }
 
-    if (type === "customBlock") {
-      const selected = block.config?.settings?.content?.selectedBlock;
-      if (selected?.customElementName === OWN_ELEMENT) return;
-      const name =
-        typeof selected?.name === "string" && selected.name.trim() !== ""
-          ? selected.name.trim()
-          : "Widget";
-      entries.push({ blockId: id, label: name, kind: "widget", depth });
+    if (node.type === "customBlock") {
+      if (node.selectedBlock?.customElementName === OWN_ELEMENT) return;
+      pushWidget(node, describeWidget(node.selectedBlock), depth);
       return;
     }
 
-    const builtin = BUILTIN_WIDGETS[type];
-    if (builtin !== undefined)
-      entries.push({ blockId: id, label: builtin, kind: "widget", depth });
+    const builtin = BUILTIN_WIDGETS[node.type];
+    if (builtin !== undefined) pushWidget(node, { name: builtin }, depth);
 
-    const nextDepth = LAYOUT_TYPES.has(type) ? depth : depth + 1;
-    for (const child of ids(block.children)) visit(child, nextDepth);
+    const nextDepth = LAYOUT_TYPES.has(node.type) ? depth : depth + 1;
+    for (const child of node.children()) visit(child, nextDepth);
   };
 
-  for (const root of ids(document?.content?.content)) visit(root, 0);
+  for (const root of roots) visit(root, 0);
   return entries;
+}
+
+interface RawBlock {
+  type?: unknown;
+  children?: unknown;
+  config?: {
+    value?: unknown;
+    settings?: { content?: { selectedBlock?: SelectedBlock } };
+  };
+}
+
+interface RawDocument {
+  content?: { blocks?: Record<string, RawBlock>; content?: unknown };
+}
+
+interface RawPage {
+  contentDocuments?: Record<string, RawDocument>;
+}
+
+const ids = (value: unknown): string[] =>
+  Array.isArray(value) ? value.filter((id): id is string => typeof id === "string") : [];
+
+/** Die Blöcke des gespeicherten Seiten-JSON als `OutlineNode`; Zyklen enden leer. */
+function savedNodes(blocks: Record<string, RawBlock>, rootIds: readonly string[]): OutlineNode[] {
+  const text = (id: string, seen: Set<string>): string => {
+    const block = blocks[id];
+    if (block === undefined || seen.has(id)) return "";
+    seen.add(id);
+    if (block.type === "text") return typeof block.config?.value === "string" ? block.config.value : "";
+    return ids(block.children)
+      .map((child) => text(child, seen))
+      .join("");
+  };
+  const node = (id: string): OutlineNode | null => {
+    const block = blocks[id];
+    if (block === undefined) return null;
+    return {
+      id,
+      type: typeof block.type === "string" ? block.type : "",
+      text: () => text(id, new Set()),
+      selectedBlock: block.config?.settings?.content?.selectedBlock,
+      children: () => ids(block.children).flatMap((child) => node(child) ?? []),
+    };
+  };
+  return rootIds.flatMap((id) => node(id) ?? []);
+}
+
+/**
+ * Überschriften und Widgets der gespeicherten Seite in Lesereihenfolge. Wirft
+ * nie; eine unbekannte Form ergibt eine leere Liste.
+ */
+export function extractOutline(page: unknown, language: string | null): OutlineEntry[] {
+  const documents = (page as RawPage | null)?.contentDocuments;
+  if (typeof documents !== "object" || documents === null) return [];
+  const document = (language !== null ? documents[language] : undefined) ?? Object.values(documents)[0];
+  const blocks = document?.content?.blocks;
+  if (typeof blocks !== "object" || blocks === null) return [];
+  return buildOutline(savedNodes(blocks, ids(document?.content?.content)));
 }
 
 /** Lädt die Seite und liefert ihre Elemente; jeder Fehler ergibt `null`. */

@@ -66,8 +66,15 @@ const HELP = (
       Pfeilen über dem Formular.
     </li>
     <li>
-      <strong>Neuer Link</strong> legt einen leeren Link an. <strong>Element der Seite hinzufügen</strong> legt einen
-      Link auf eine Überschrift oder ein Widget der zuletzt gespeicherten Seite an.
+      <strong>Neuer Link</strong> klappt die Auswahl auf: ein leerer Link oder die Suche über Überschriften und Widgets
+      der Seite – live aus dem Editor, auch Ungespeichertes.
+    </li>
+    <li>
+      Aus dem <strong>Seitenaufbau</strong> rechts ein Element in die Liste ziehen oder anklicken – das legt einen Link
+      darauf an.
+    </li>
+    <li>
+      Ein <strong>„!“</strong> in der Liste heißt: das Ziel fehlt auf der Seite. Der Link wird dort ausgeblendet.
     </li>
     <li>
       Der <strong>Linktext</strong> steht in der Navigation und ist Pflicht.
@@ -77,7 +84,7 @@ const HELP = (
       Überschrift, eine Block-ID (#…) oder eine Adresse (/…, https://…, mailto:…).
     </li>
     <li>
-      Der <strong>Titel</strong> rechts steht über den Links; leer bleibt die Zeile weg.
+      Der <strong>Titel</strong> rechts oben steht über den Links; leer bleibt die Zeile weg.
     </li>
     <li>Desktop, Tablet und Mobil zeigen die Navigation in Gerätebreite; auf dem Telefon klappt sie zu einem Knopf zusammen.</li>
   </ul>

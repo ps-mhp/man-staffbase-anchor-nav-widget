@@ -19,7 +19,11 @@
  * wohin er springt („Überschrift „Termine““, „Widget: Dateigalerie“,
  * „#kontakt“). Ein fehlender Linktext zeigt sich erst, wenn der Rahmen es sagt
  * (nach einem gescheiterten „Übernehmen“): ein frisch angelegter Link ist
- * noch kein Fehler.
+ * noch kein Fehler. Ein Link, dessen Ziel es auf der Seite nicht mehr gibt,
+ * trägt ein „!“ – er wird in der Navigation ausgeblendet.
+ *
+ * „Neuer Link“ klappt die Auswahl auf (`add-link-menu.tsx`); Elemente aus dem
+ * Seitenaufbau lassen sich auch in die Liste ziehen.
  */
 
 import * as React from "react";
@@ -29,7 +33,9 @@ import { ItemList, type ListItem } from "@man/config-ui/sidebar/item-list";
 import { SidebarPanel } from "@man/config-ui/sidebar/sidebar-panel";
 
 import { AnchorLink } from "./anchor-links";
-import { describeTarget } from "./link-describe";
+import { ExternalDrop } from "@man/config-ui/sidebar/item-list";
+
+import { MISSING_TARGET, describeTarget, isTargetMissing } from "./link-describe";
 import { MISSING_LABEL, isUnlabelled } from "./link-editor-rules";
 import { OutlineEntry } from "./page-outline";
 import { targetIcon } from "./target-icons";
@@ -40,48 +46,66 @@ export const UNLABELLED = "Ohne Linktext";
 function listItems(
   links: readonly AnchorLink[],
   outline: ReadonlyMap<string, OutlineEntry>,
+  outlineReady: boolean,
   issuesVisible: boolean,
 ): ListItem[] {
   return links.map((link) => {
     const info = describeTarget(link, outline);
     const Icon = targetIcon(info);
     const invalid = issuesVisible && isUnlabelled(link);
+    const missing = outlineReady && isTargetMissing(link, outline);
     return {
       id: link.id,
       label: isUnlabelled(link) ? UNLABELLED : link.label,
       description: invalid ? `${MISSING_LABEL} · ${info.description}` : info.description,
       icon: <Icon className="size-[18px]" aria-hidden />,
       invalid,
+      ...(missing ? { warning: MISSING_TARGET } : {}),
     };
   });
 }
 
 const EMPTY_STATE = (
   <>
-    Noch kein Link. Lege über <strong>Neuer Link</strong> einen an oder füge unter „Element der Seite hinzufügen“ eine
-    Überschrift oder ein Widget hinzu.
+    Noch kein Link. Über <strong>Neuer Link</strong> eine Überschrift oder ein Widget der Seite wählen – oder ein
+    Element aus dem Seitenaufbau hierher ziehen.
   </>
 );
 
 export interface LinkSidebarProps {
   links: readonly AnchorLink[];
   outline: ReadonlyMap<string, OutlineEntry>;
+  /** Erst mit geladener Gliederung lässt sich sagen, ob ein Ziel fehlt. */
+  outlineReady: boolean;
   selectedId: string | undefined;
   onSelect: (id: string) => void;
-  onAdd: () => void;
+  /** Der Inhalt hinter „Neuer Link“; bekommt das Schließen. */
+  addMenu: (close: () => void) => React.ReactNode;
   onReorder: (ids: string[]) => void;
+  /** Aus dem Seitenaufbau abgelegte Elemente. */
+  externalDrop?: ExternalDrop;
 }
 
-export function LinkSidebar({ links, outline, selectedId, onSelect, onAdd, onReorder }: LinkSidebarProps): ReactElement {
+export function LinkSidebar({
+  links,
+  outline,
+  outlineReady,
+  selectedId,
+  onSelect,
+  addMenu,
+  onReorder,
+  externalDrop,
+}: LinkSidebarProps): ReactElement {
   const { issuesVisible } = useConfigShell();
   return (
-    <SidebarPanel title="Links" count={links.length} addLabel="Neuer Link" onAdd={onAdd}>
+    <SidebarPanel title="Links" count={links.length} addLabel="Neuer Link" addPopover={addMenu}>
       <ItemList
         aria-label="Links"
-        items={listItems(links, outline, issuesVisible)}
+        items={listItems(links, outline, outlineReady, issuesVisible)}
         selectedId={selectedId}
         onSelect={onSelect}
         onReorder={onReorder}
+        externalDrop={externalDrop}
         emptyState={EMPTY_STATE}
       />
     </SidebarPanel>
