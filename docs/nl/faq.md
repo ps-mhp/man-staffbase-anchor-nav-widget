@@ -11,7 +11,7 @@ lege widget geeft niets weer — ook geen leeg vak en geen titel.
 De linktekst ontbreekt. Een link zonder linktekst kan nu niet meer
 worden overgenomen: het venster geeft de melding „Link 2: linktekst ontbreekt“ weer en markeert deze in de
 lijst. Oudere blokken kunnen nog dergelijke vermeldingen bevatten; ze staan in het venster
-in de lijst vermeld als „Zonder linktekst“.
+in de lijst vermeld als „Zonder linktekst”.
 
 ## Verandert het openen van het venster een ouder blok?
 
@@ -35,7 +35,7 @@ titel van een tweede widget op dezelfde pagina.
 ## Er ontbreekt een link op de pagina.
 
 De bestemming is niet meer aanwezig op de pagina: de kop of de widget
-is verwijderd, of – bij links over de tekst – de kop heeft een andere naam gekregen.
+is verwijderd, of – bij links boven de tekst – de kop heeft een andere naam gekregen.
 In het venster **Links bewerken** staat er een „!“ achter de link. Kies een nieuwe bestemming
 of verwijder de link.
 
@@ -43,10 +43,10 @@ of verwijder de link.
 
 De koppen van de pagina worden vertaald, de linktekst en de bestemming niet. Een
 link via de tekst vindt zijn kop in de andere taal niet meer
-en wordt daar verborgen. Links naar een blok-ID (uit de selectie of de
-paginastructuur) zijn niet gekoppeld aan de tekst van de kop.
+en wordt daar verborgen. Links naar een blok-ID (uit het
+paginaplan) zijn niet gekoppeld aan de tekst van de kop.
 
-## Wanneer verandert de rode markering van plaats?
+## Wanneer verandert de rode markering?
 
 Tijdens het scrollen: deze staat bij de paragraaf waarvan de kop als laatste het bovenste
 kwart van het scherm heeft bereikt. Helemaal onderaan de pagina, waar de laatste

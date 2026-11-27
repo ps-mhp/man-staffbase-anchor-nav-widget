@@ -1,24 +1,36 @@
 # Instellingen
 
 Alles wordt beheerd in het venster **Links bewerken**. Dit venster wordt automatisch geopend in Studio
-zodra je het instellingenvenster van het blok opent; je kunt het sluiten
+zodra je het instellingenvenster van het blok opent; je kunt het weer sluiten
 door op de knop **Links bewerken** te klikken. Bovenaan staan **Toepassen**,
 **Annuleren**, Ongedaan maken/Opnieuw, de Help en de schakelaar **Editor ·
-Desktop · Tablet · Mobiel**. **Toepassen** voert de titel en links in het
-dialoogvenster in, waarna je zoals gewoonlijk opslaat.
+Desktop · Tablet · Mobiel**. **Toepassen** voert titels en links in het
+dialoogvenster in, daarna opslaan zoals gewoonlijk.
 
 Het venster heeft drie kolommen: links de **Links**, in het midden de geselecteerde
-link, rechts de **Navigatie** met de titel en de **Paginastructuur**.
+link – of na **Nieuwe link** het **paginaplan** –, rechts de **navigatie**
+met wat voor de hele navigatie geldt: titel en navigatie aan de
+rand van het scherm.
 
-De elementen van de pagina komen live uit de editor – ook kopteksten die
+De elementen van de pagina komen live uit de editor – ook koppen die
 nog niet zijn opgeslagen – en volgen elke wijziging.
 
 ## Titel
 
-Rechts onder **Navigatie** bovenaan: de koptekst boven de lijst, bijvoorbeeld „Op
-deze pagina“. Als je het leeg laat, wordt het verborgen; de lijst blijft staan.
+Rechts onder **Navigatie**: de kop boven de lijst, bijvoorbeeld „Op
+deze pagina“. Als je dit veld leeg laat, wordt de titel verborgen; de lijst blijft staan.
 
 De titel wordt samen met de pagina vertaald.
+
+## Navigatie aan de rand van het scherm
+
+Rechts onder **Navigatie**, standaard ingeschakeld. Op desktop en tablet verschijnt
+bij het eerste scrollen rechts aan de rand van het scherm een kleine navigatie: een
+streepje per sectie, waarbij de huidige in het rood is. Als je met de muis over een streepje gaat, verschijnt
+links ervan de linktekst; met een klik ga je ernaartoe, de pijltjes erboven en
+eronder springen naar de vorige respectievelijk volgende sectie. Op de telefoon, in de
+Studio en in het voorbeeldvenster verschijnt deze navigatie niet. Als er meerdere
+ankernavigaties op een pagina staan, wordt deze alleen bij de eerste weergegeven.
 
 ## Links
 
@@ -27,16 +39,15 @@ vermeldt de linktekst en daaronder waar de link naartoe leidt – bijvoorbeeld �
 „Afspraken““, „Widget: Bestandsgalerij“, „#contact“ of „Leeg – gelijknamige
 koptekst“. Met een klik selecteer je een link om deze te bewerken.
 
-- **Nieuwe link** opent een keuzemenu: bovenaan **Lege link** (maakt een
-  lege link aan en plaatst de cursor in de linktekst), daaronder de zoekfunctie
-  via de kopteksten en widgets van de pagina (zie hieronder).
+- **Nieuwe link** opent in het midden het **paginaplan** (zie hieronder). Zonder
+  links begint het venster direct daarmee.
 - Een **„!“** aan het einde van de regel betekent: de bestemming bestaat niet
   meer op de pagina (kop verwijderd of hernoemd). Op de pagina wordt de link
   verborgen totdat je een nieuwe bestemming kiest of de link verwijdert – het formulier
-  biedt hiervoor de optie **Link verwijderen** aan.
-- Je kunt de volgorde wijzigen met het handvat aan de linkerkant: slepen, of het handvat selecteren,
-  met Enter vastpakken, met de pijltjestoetsen naar de nieuwe positie verplaatsen en met
-  Enter neerzetten. Of met de pijltjes **Link naar boven** / **Link naar beneden**
+  biedt hiervoor de optie **Link verwijderen**.
+- Je kunt de volgorde wijzigen met het handvat aan de linkerkant: versleep het, of selecteer het handvat,
+  pak het vast met Enter, verplaats het met de pijltjestoetsen naar de nieuwe positie en
+  plaats het met Enter. Of gebruik de pijltjes **Link omhoog** / **Link omlaag**
   boven het formulier.
 - **Link dupliceren** en **Link verwijderen** staan daar ook.
 
@@ -54,45 +65,46 @@ In het midden staat boven het formulier „Link 2 van 5“ en het type bestemmin
     korter zijn dan de paragraaf, bijvoorbeeld „Uitrusting“ voor „Uitrusting in
     detail“.
   - **Een blok-ID** zoals `#a447d858-1bba-4a49-b620-b49c60dd67a7`: naar dit
-    blok van de pagina. Dit wordt bepaald door de selectie en de paginastructuur. De link
-    blijft ook geldig nadat de koptekst is hernoemd.
+    blok van de pagina. Zo wordt het in de paginastructuur ingesteld. De link
+    blijft ook geldig nadat de kop is hernoemd.
   - **Een adres** dat begint met `/`, `http://`, `https://` of `mailto:`
     : een gewone verwijzing die de browser volgt.
 
 Bij de vergelijking met de kop telt de tekst, niet het niveau – H1 tot en met H6
 zijn allemaal evenzeer het doel. Meerdere spaties spelen geen rol,
 hoofdletters en kleine letters wel. Als er meerdere koppen met dezelfde tekst zijn,
-gaat de link naar de eerste.
+gaat de vermelding naar de eerste.
 
-### Een koppeling maken naar een kop of widget op de pagina
+### Paginaoverzicht
 
-Twee manieren, beide maken een koppeling aan met de naam van het element; de bestemming is
-de blok-ID ervan (`#…`); de koppelingstekst kun je daarna wijzigen:
+Het paginaoverzicht toont de koppen en widgets van de pagina als vakjes –
+gerangschikt zoals in het ontwerp: secties onder elkaar, kolommen naast elkaar op
+hun breedte. Elk vakje vermeldt het type (bijvoorbeeld „H2“ of „Widget · USP-box“)
+en de tekst of het widget. Vakjes met een link zijn blauw.
 
-- **Nieuwe link** → **Kop of widget zoeken**: de lijst toont de
-  koppen (met niveau, bijvoorbeeld „H3 onder „Afspraken””) en de widgets van de
-  pagina met hun naam en kenmerk (bijvoorbeeld „Belangrijkste concurrenten · USP-box”) en
-  kan door erop te tikken worden gefilterd – ook op het type widget.
-- **Pagina-indeling** rechts: de structuur van de pagina als een ingesprongen boomstructuur.
-  Sleep een element naar de lijst links – het komt terecht waar je het loslaat –
-  of klik erop, dan komt het aan het einde te staan.
-
-Wat al gelinkt is, is gemarkeerd met een vinkje of „al gelinkt“; een tweede
-poging selecteert de bestaande link, in plaats van deze te dupliceren.
+- **Als je op een vakje klikt**, wordt er een link aangemaakt met de tekst ervan (bestemming is de
+  blok-ID `#…`) en opent de linktekst in het vakje om deze te wijzigen; Enter
+  bevestigt. Een klik op een vakje waar al een link op staat, opent de
+  linktekst.
+- Het teken rechtsboven in het blauwe vakje verwijdert de link.
+- Vakjes kunnen ook naar de lijst aan de linkerkant worden gesleept – de link komt terecht
+  waar je loslaat.
+- **Lege link** maakt een link aan voor een adres of een eigen bestemming,
+  **Klaar** keert terug naar de geselecteerde link.
 
 ## Als de pagina verandert
 
 Zelfs als het venster gesloten is, houdt de widget in Studio zijn doelen in de gaten:
 
 - **Gekoppelde kop verwijderd:** Er wordt gevraagd of de link ook uit de
-  navigatie moet worden verwijderd. Als je de link behoudt, krijgt deze in het venster een
+  navigatie moet worden verwijderd. Als je hem behoudt, krijgt hij in het venster een
   „!“ en ontbreekt hij op de pagina.
 - **Gekoppelde kop hernoemd:** Zodra de cursor de kop
   verlaat, wordt gevraagd of de link moet worden bijgewerkt. De nieuwe linktekst
-  is standaard ingevuld met de tekst van de kop en kan direct worden gewijzigd.
+  is vooraf ingevuld met de tekst van de kop en kan direct worden gewijzigd.
 
 Het antwoord wijzigt het blok zoals bij elke bewerking: ongedaan maken is mogelijk, de wijziging
-wordt van kracht bij het opslaan van de pagina.
+wordt van kracht zodra de pagina wordt opgeslagen.
 
 ## Voorbeeld
 

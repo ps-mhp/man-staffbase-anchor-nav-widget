@@ -35,23 +35,23 @@ titre d’un deuxième widget sur la même page.
 ## Un lien manque sur la page.
 
 Sa destination n’existe plus sur la page : le titre ou le widget
-a été supprimé, ou – dans le cas des liens sur le texte – le titre a changé.
+a été supprimé, ou — dans le cas des liens sur le texte — le titre a changé.
 Dans la fenêtre **Modifier les liens**, le lien est signalé par un « ! ». Choisissez une nouvelle destination
 ou supprimez le lien.
 
-## Des liens manquent sur les pages traduites.
+## Il manque des liens sur les pages traduites.
 
 Les titres de la page sont traduits, mais pas le texte du lien ni sa destination. Un
 lien sur le texte ne retrouve plus son titre dans l’autre langue
-et y est masqué. Les liens vers un identifiant de bloc (issu de la sélection ou de la
-structure de la page) ne sont pas liés au texte du titre.
+et y est masqué. Les liens vers un identifiant de bloc (issu du
+plan du site) ne sont pas liés au texte du titre.
 
 ## Quand le marqueur rouge change-t-il de position ?
 
 Lors du défilement : il se trouve au niveau de la section dont le titre a atteint en dernier le
-quart supérieur de l’écran. Tout en bas de la page, là où les dernières
+quart supérieur de l'écran. Tout en bas de la page, là où les dernières
 sections ne remontent plus aussi haut, elle se place sur la dernière section visible.
-Après un clic, elle reste sur l’entrée sélectionnée jusqu’à ce que tu fasses à nouveau défiler la page.
+Après un clic, elle reste sur l’entrée sélectionnée jusqu’à ce que vous défiliez à nouveau.
 Avant la première section, elle se place sur la première entrée. Si quelqu’un ouvre la
 page via un lien avec un repère, par exemple `…#équipement`, elle se place sur
 cette entrée.

@@ -43,8 +43,8 @@ o elimina el enlace.
 
 Los encabezados de la página se traducen, pero el texto del enlace y el destino no. Un
 enlace sobre el texto ya no encuentra su encabezado en el otro idioma
-y, por lo tanto, se oculta allí. Los enlaces a un ID de bloque (de la selección o de la
-estructura de la página) no dependen del texto del título.
+y, por lo tanto, se oculta allí. Los enlaces a un ID de bloque (del
+mapa de la página) no dependen del texto del título.
 
 ## ¿Cuándo cambia la marca roja?
 

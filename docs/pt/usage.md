@@ -3,20 +3,20 @@
 1. **Estruturar a página.** Colocar títulos no início de cada secção.
    O widget só salta para os títulos que existem na página.
 2. **Inserir o bloco.** No editor, selecionar «Navegação por âncoras» — de preferência numa
-   coluna estreita ao lado do texto ou acima do primeiro parágrafo.
+   coluna estreita ao lado do texto ou acima da primeira secção.
 3. **Criar os links.** Abrir a caixa de diálogo de configurações — a janela
-   **Editar links** surge automaticamente. Para cada secção, arraste o título
-   ou o widget da **Estrutura da página** à direita para a lista, ou
-   procure e selecione através de **Novo link**. Mesmo os títulos ainda não guardados
-   já estão disponíveis para seleção. Em alternativa, manualmente: **Novo link** →
-   **Link vazio**, introduzir o texto do link, deixar o destino em branco ou introduzir o texto do
-   título.
+   **Editar links** surge automaticamente e mostra o **mapa da página**. Para cada
+   secção, clique na caixa do título ou do widget e ajuste o
+   texto do link nessa caixa. Mesmo os títulos que ainda não foram guardados
+   já estão disponíveis para seleção. Em alternativa, manualmente: **Link vazio**, introduzir o texto do link
+  , deixar o destino em branco ou introduzir o texto do título.
 4. **Introduzir o título** — à direita, em **Navegação**, ou deixar em branco.
-   Em branco significa: apenas a lista, sem título acima.
+   Em branco significa: apenas a lista, sem título acima. Aí também é possível
+   desativar a **navegação na margem do ecrã** para esta página.
 5. **Verificar na janela.** **Desktop**, **Tablet** e **Móvel**, na parte superior, mostram a
-   navegação adaptada à largura do dispositivo. Em seguida, clicar em **Aplicar** e guardar a página.
-6. **Verifique na pré-visualização da página.** Clique uma vez em cada entrada:
-   se não for direcionado para a página, significa que o texto do link ou o destino não corresponde exatamente ao
+   navegação ajustada à largura do dispositivo. Em seguida, **Aplicar** e guardar a página.
+6. **Verificar na pré-visualização da página.** Clique uma vez em cada entrada:
+   se não saltar, significa que o texto do link ou o destino não corresponde exatamente ao
    título.
 
 ## Ao alterar a página

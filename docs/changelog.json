@@ -1,6 +1,16 @@
 {
   "versions": [
     {
+      "version": "0.1.0-rc.22",
+      "date": "2026-11-27",
+      "entries": [
+        {
+          "type": "feat",
+          "text": "Seitenplan nach „Neuer Link“ und Navigation am Bildschirmrand"
+        }
+      ]
+    },
+    {
       "version": "0.1.0-rc.21",
       "date": "2026-11-27",
       "entries": [
@@ -99,16 +109,6 @@
         {
           "type": "feat",
           "text": "Links von Hand pflegen statt Seite durchsuchen"
-        }
-      ]
-    },
-    {
-      "version": "0.1.0-rc.6",
-      "date": "2026-11-05",
-      "entries": [
-        {
-          "type": "fix",
-          "text": "Ebene und Herkunft am Element der Seite bestimmen"
         }
       ]
     }

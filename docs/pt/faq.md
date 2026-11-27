@@ -43,12 +43,12 @@ ou remova a ligação.
 
 Os títulos da página são traduzidos, mas o texto do link e o destino não. Um
 link sobre o texto já não encontra o seu título na outra língua
-e é ocultado nessa versão. Os links para um ID de bloco (da seleção ou da
-estrutura da página) não estão associados ao texto do título.
+e é ocultado nessa página. Os links para um ID de bloco (do
+mapa da página) não estão associados ao texto do título.
 
 ## Quando é que o marcador vermelho muda de posição?
 
-Ao percorrer a página: fica na secção cujo título atingiu por último o
+Ao percorrer a página: fica na secção cujo título foi o último a atingir o
 quarto superior do ecrã. Na parte inferior da página, onde as últimas
 secções já não aparecem tão acima, fica na última secção visível.
 Após um clique, permanece na entrada selecionada até voltares a percorrer a página.

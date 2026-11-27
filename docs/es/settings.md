@@ -7,43 +7,54 @@ haz clic en el botón **Editar enlaces**. En la parte superior aparecen **Aplica
 Ordenador · Tableta · Móvil**. **Aplicar** introduce el título y los enlaces en el
 cuadro de diálogo; a continuación, guarda como de costumbre.
 
-La ventana tiene tres columnas: a la izquierda, los **enlaces**; en el centro, el
-enlace seleccionado; y a la derecha, la **navegación** con el título y la **estructura de la página**.
+La ventana tiene tres columnas: a la izquierda, los **enlaces**; en el centro, el enlace seleccionado
+—o, tras hacer clic en **Nuevo enlace**, el **mapa del sitio**—; y a la derecha, la **navegación**
+con lo que se aplica a toda la navegación: título y navegación en
+el borde de la pantalla.
 
-Los elementos de la página se actualizan en tiempo real desde el editor —incluidos los encabezados que
-aún no se han guardado— y se adaptan a cada cambio.
+Los elementos de la página se muestran en tiempo real desde el editor —incluidos los encabezados que
+aún no se han guardado— y se actualizan con cada cambio.
 
 ## Título
 
-A la derecha, debajo de **Navegación**, en la parte superior: el encabezado que aparece sobre la lista, por ejemplo, «En
+A la derecha, en **Navegación**: el encabezado situado encima de la lista, por ejemplo, «En
 esta página». Si se deja en blanco, se oculta; la lista permanece.
 
 El título se traduce junto con la página.
+
+## Navegación en el borde de la pantalla
+
+A la derecha, debajo de **Navegación**, está activada por defecto. En ordenadores de sobremesa y tabletas,
+al desplazarse por primera vez, aparece una pequeña barra de navegación a la derecha del borde de la pantalla: una
+línea por sección, la actual en rojo. Al pasar el cursor por una línea, aparece
+a la izquierda el texto del enlace; al hacer clic, se salta a esa sección, y las flechas de arriba y
+de abajo permiten saltar a la sección anterior o siguiente, respectivamente. En el teléfono, en el
+estudio y en la vista previa de la ventana no aparece. Si hay varias
+navegaciones por anclajes en una página, solo la primera las muestra.
 
 ## Enlaces
 
 La columna de la izquierda muestra todos los enlaces en el orden de la navegación. Cada línea
 indica el texto del enlace y, debajo, a dónde lleva: por ejemplo, «Título
-«Fechas»», «Widget: Galería de archivos», «#contacto» o «Vacío — título del mismo nombre
+«Citas»», «Widget: Galería de archivos», «#contacto» o «Vacío — título del mismo nombre
 ». Al hacer clic se selecciona un enlace para editarlo.
 
-- **Nuevo enlace** abre un menú desplegable: en la parte superior, **Enlace vacío** (crea un
-  enlace vacío y coloca el cursor en el texto del enlace); debajo, la búsqueda
-  entre los títulos y widgets de la página (véase más abajo).
+- **Nuevo enlace** abre en el centro el **mapa del sitio** (véase más abajo). Si no hay
+  enlaces, la ventana se abre directamente en él.
 - Un **«!»** al final de la línea significa que el destino ya no existe
-  en la página (encabezado eliminado o renombrado). En la página, el enlace
-  queda oculto hasta que selecciones un nuevo destino o lo elimines; el formulario
-  ofrece la opción **Eliminar enlace** para ello.
-- Para cambiar el orden, utiliza el controlador de la izquierda: arrastra, o selecciona el controlador,
+  en la página (el título se ha eliminado o renombrado). En la página, el enlace
+  queda oculto hasta que selecciones un nuevo destino o lo elimines; para ello, el formulario
+  ofrece la opción **Eliminar enlace**.
+- Para cambiar el orden, utiliza el controlador de la izquierda: arrástralo o selecciónalo,
   fíjalo con Intro, muévelo a la nueva posición con las teclas de flecha y
-  suéltalo con Intro. O bien utiliza las flechas **Enlace hacia arriba** / **Enlace hacia abajo**
+  suéltalo con Intro. O bien utiliza las flechas **Enlace arriba** / **Enlace abajo**
   situadas encima del formulario.
-- Las opciones **Duplicar enlace** y **Eliminar enlace** también se encuentran allí.
+- Las opciones **Duplicar enlace** y **Eliminar enlace** también se encuentran ahí.
 
 ### Texto del enlace y destino
 
 En el centro, encima del formulario, aparece «Enlace 2 de 5» y el tipo de destino
-(«Destino de salto en esta página» o «Referencia a una dirección»).
+(«Destino de salto en esta página» o «Enlace a una dirección»).
 
 - **Texto del enlace**: lo que aparece en la lista. Obligatorio: sin texto de enlace,
   no se puede guardar la ventana; el estado que aparece arriba indicará entonces el enlace en cuestión.
@@ -54,8 +65,8 @@ En el centro, encima del formulario, aparece «Enlace 2 de 5» y el tipo de dest
     puede tener un nombre más breve que el apartado, por ejemplo, «Equipamiento» en lugar de «Equipamiento en
     detalle».
   - **Un ID de bloque** como `#a447d858-1bba-4a49-b620-b49c60dd67a7`: a este
-    bloque de la página. Así lo determinan la selección y la estructura de la página. El enlace
-    sigue siendo válido incluso después de cambiar el nombre del encabezado.
+    bloque de la página. Así lo establece el mapa del sitio. El enlace
+    sigue siendo válido incluso después de renombrar el encabezado.
   - **Una dirección** que comience por `/`, `http://`, `https://` o `mailto:`
     : un enlace habitual que sigue el navegador.
 
@@ -64,34 +75,35 @@ son destinos equivalentes. Los espacios múltiples no influyen,
 pero sí se distingue entre mayúsculas y minúsculas. Si hay varios títulos con el mismo texto,
 la entrada salta al primero.
 
-### Crear un enlace a un título o a un widget de la página
+### Mapa de la página
 
-Hay dos formas de hacerlo; ambas crean un enlace con el nombre del elemento, cuyo destino es
-su ID de bloque (`#…`); después puedes modificar el texto del enlace:
+El mapa de la página muestra los encabezados y los widgets de la página como recuadros,
+ordenados tal y como aparecen en el borrador: secciones una debajo de otra, columnas una al lado de otra según
+su anchura. Cada recuadro indica el tipo (por ejemplo, «H2» o «Widget · Cuadro USP»)
+y el texto o el widget. Los recuadros con enlaces aparecen en azul.
 
-- **Nuevo enlace** → **Buscar encabezado o widget**: la lista muestra los
-  encabezados (con su nivel, por ejemplo, «H3 en “Fechas”») y los widgets de la
-  página con su nombre y característica (por ejemplo, «Principales competidores · Cuadro USP») y
-  se puede filtrar al escribir, incluso por el tipo de widget.
-- **Estructura de la página** a la derecha: el esquema de la página como un árbol sangrado.
-  Arrastra un elemento a la lista de la izquierda —se colocará donde lo sueltes—
-  o haz clic en él, y se añadirá al final.
-
-Lo que ya está enlazado lleva una marca de verificación o la indicación «ya enlazado»; un segundo
-intento selecciona el enlace existente, en lugar de duplicarlo.
+- **Al hacer clic en un recuadro** se crea un enlace con su texto (el destino es el
+  ID del bloque `#…`) y abre el texto del enlace en el recuadro para que puedas modificarlo; pulsa Intro
+  para confirmar. Al hacer clic en un recuadro que ya tiene un enlace, se abre su
+  texto de enlace.
+- El símbolo situado en la esquina superior derecha del recuadro azul elimina el enlace.
+- Los recuadros también se pueden arrastrar a la lista de la izquierda; el enlace se coloca allí
+  donde sueltes el ratón.
+- **Enlace vacío** crea un enlace para una dirección o un destino propio;
+  **Listo** vuelve al enlace seleccionado.
 
 ## Cuando cambia la página
 
-Incluso con la ventana cerrada, el widget del Studio supervisa sus destinos:
+Incluso con la ventana cerrada, el widget de Studio supervisa sus destinos:
 
 - **Título enlazado eliminado:** te pregunta si también quieres eliminar el enlace de la
   navegación. Si lo mantienes, aparecerá un
-  «!» en la ventana y no aparecerá en la página.
-- **Título enlazado renombrado:** En cuanto el cursor
+  «!» en la ventana y desaparecerá de la página.
+- **Título enlazado renombrado:** en cuanto el cursor
   sale del título, te pregunta si quieres actualizar el enlace. El nuevo texto del enlace
-  aparece prellenado con el texto del título y se puede modificar directamente.
+  aparece predeterminado con el texto del título y se puede modificar directamente.
 
-La respuesta modifica el bloque como cualquier otra edición: se puede deshacer y
+La respuesta modifica el bloque como cualquier otra edición: se puede deshacer, y
 se aplica al guardar la página.
 
 ## Vista previa
@@ -100,7 +112,7 @@ se aplica al guardar la página.
 navegación adaptada al ancho del dispositivo, tal y como aparece en la página; los enlaces sin texto
 o sin destino en la página no aparecen allí, al igual que en la página. En **móvil**, se pliega en un botón.
 La lista y el título siguen siendo accesibles junto a él. En la vista previa
-no se produce ningún salto y la página del Studio permanece inalterada.
+no se produce ningún salto y la página del estudio permanece inalterada.
 
 ## Formato guardado
 
@@ -110,7 +122,7 @@ el nuevo campo si hay datos, y en caso contrario el antiguo, por lo que parecen 
 Al abrirla por primera vez, la ventana toma los valores antiguos; solo al hacer clic en **Aplicar**
 se guardan en el nuevo campo. Los campos antiguos están ocultos en el cuadro de diálogo.
 
-Si la ventana no aparece, aparecerá un campo de texto con el contenido sin formato,
+Si la ventana no aparece, aparecerá un campo de texto con el contenido sin formatear,
 por ejemplo:
 
 ```json

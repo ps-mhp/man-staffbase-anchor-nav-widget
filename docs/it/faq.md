@@ -29,7 +29,7 @@ modificare le maiuscole e le minuscole o un titolo che nel frattempo è stato ri
 . Basta copiare il testo del titolo e incollarlo nella destinazione
 .
 
-I titoli in una navigazione con ancore non contano mai come destinazione — nemmeno il
+I titoli in una navigazione con anchor non contano mai come destinazione — nemmeno il
 titolo di un secondo widget sulla stessa pagina.
 
 ## Manca un link sulla pagina.
@@ -43,14 +43,14 @@ o rimuovere il link.
 
 I titoli della pagina vengono tradotti, mentre il testo del link e la destinazione no. Un
 link sul testo non trova più il proprio titolo nell’altra lingua
-e lì viene nascosto. I link a un ID blocco (dalla selezione o dalla
-struttura della pagina) non sono collegati al testo del titolo.
+e lì viene nascosto. I link a un ID blocco (dalla
+mappa del sito) non sono collegati al testo del titolo.
 
 ## Quando cambia il segnalino rosso?
 
 Durante lo scorrimento: si trova nella sezione il cui titolo ha raggiunto per ultimo il
 quarto superiore dello schermo. In fondo alla pagina, dove le ultime
-sezioni non scorrono più così in alto, si posiziona sull’ultima visibile.
+sezioni non scorrono più così in alto, si posiziona sull’ultima sezione visibile.
 Dopo un clic, rimane sulla voce selezionata finché non scorri di nuovo.
 Prima della prima sezione, si posiziona sulla prima voce. Se qualcuno apre la
 pagina tramite un link con un'ancora, ad esempio `…#attrezzatura`, si posiziona su

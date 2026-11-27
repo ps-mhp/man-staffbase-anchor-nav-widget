@@ -11,7 +11,7 @@ empty widget doesn't display anything—not even an empty box or a title.
 It is missing the link text. A link without link text can no longer be
 applied: the window displays the message “Link 2: Link text missing” and highlights it in the
 list. Older blocks may still contain such entries; they appear in the window
-in the list as “No link text.”
+as “No link text” in the list.
 
 ## Does opening the window change an older block?
 
@@ -42,17 +42,17 @@ or remove the link.
 ## Links are missing on translated pages.
 
 The page’s headings are translated, but the link text and destination are not. A
-link within the text can no longer find its corresponding heading in the other language
-and is hidden there. Links to a block ID (from the selection or the
-page layout) are not tied to the heading text.
+text-based link can no longer find its corresponding heading in the other language
+and is hidden there. Links to a block ID (from the
+site map) are not tied to the heading text.
 
 ## When does the red marker move?
 
-When scrolling: It stays at the section whose heading most recently reached the top
+When scrolling: It stays on the section whose heading most recently reached the top
 quarter of the screen. At the very bottom of the page, where the last
-sections no longer scroll up that far, it remains at the last visible section.
-After a click, it stays at the selected entry until you scroll again.
-Before the first section, it remains at the first entry. If someone opens the
+sections no longer scroll up that far, it stays on the last visible section.
+After a click, it stays on the selected entry until you scroll again.
+Before the first section, it stays on the first entry. If someone opens the
 page via a link with an anchor, such as `…#equipment`, it is positioned at
 that entry.
 

@@ -17,15 +17,15 @@ są one wyświetlane na liście jako „Bez tekstu linku”.
 
 Nie. Starsze bloki nadal zawierają tytuły i linki w polach `heading` i
 `links`. Okno pobiera je po otwarciu; dopóki niczego nie zmienisz,
-nic nie zostanie zapisane, a blok pozostanie bez zmian. Dopiero
+nic nie zostanie zapisane, a blok pozostaje bez zmian. Dopiero
 **Zapisz** zapisuje tytuły i linki w nowym polu `anchor-nav-config` – z
 tym samym efektem na stronie.
 
 ## Kliknięcie nie powoduje przejścia.
 
 Na stronie nie ma nagłówka o dokładnie takim samym tekście. Porównanie
-odbywa się z docelowym elementem lub — jeśli docelowy element jest pusty — z tekstem linku. Wystarczy literówka,
-inna wielkość liter lub zmieniona w międzyczasie nazwa
+odbywa się z docelowym elementem lub — jeśli jest on pusty — z tekstem linku. Wystarczy
+jedna literówka, inna wielkość liter lub zmieniona w międzyczasie nazwa
 nagłówek. Skopiuj tekst z nagłówka i wklej go w polu docelowym
 .
 
@@ -43,16 +43,16 @@ lub usuń link.
 
 Nagłówki strony są tłumaczone, ale tekst linku i miejsce docelowe nie. Link
 umieszczony w tekście nie znajduje już swojego nagłówka w innym języku
-i jest tam ukrywany. Linki do identyfikatora bloku (z listy wyboru lub
-struktury strony) nie są powiązane z tekstem nagłówka.
+i jest tam ukrywany. Linki do identyfikatora bloku (z
+mapy strony) nie są powiązane z tekstem nagłówka.
 
 ## Kiedy zmienia się czerwony znacznik?
 
 Podczas przewijania: znajduje się on przy sekcji, której nagłówek jako ostatni
-osiągnął górną ćwiartkę ekranu. Na samym dole strony, gdzie ostatnie
-sekcje nie przewijają się już tak wysoko, znajduje się przy ostatniej widocznej sekcji.
-Po kliknięciu pozostaje przy wybranym wpisie, dopóki nie zaczniesz ponownie przewijać.
-Przed pierwszą sekcją znajduje się przy pierwszym wpisie. Jeśli ktoś otworzy
+dotarł do górnej ćwiartki ekranu. Na samym dole strony, gdzie ostatnie
+sekcje nie przewijają się już tak wysoko, znajduje się ona przy ostatniej widocznej sekcji.
+Po kliknięciu pozostaje przy wybranej pozycji, dopóki nie zaczniesz ponownie przewijać.
+Przed pierwszą sekcją znajduje się przy pierwszej pozycji. Jeśli ktoś otworzy
 stronę poprzez link z znacznikiem, na przykład `…#wyposażenie`, znacznik znajduje się przy
 tym wpisie.
 

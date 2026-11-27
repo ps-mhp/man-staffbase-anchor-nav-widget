@@ -5,15 +5,15 @@
 2. **Het blok invoegen.** Selecteer in de editor „Ankernavigatie“ — bij voorkeur in een
    smalle kolom naast de tekst of boven de eerste paragraaf.
 3. **De links aanmaken.** Open het instellingenvenster – het venster
-   **Links bewerken** verschijnt vanzelf. Sleep per paragraaf de koptekst
-   of de widget uit de **paginastructuur** naar rechts in de lijst, of
-   zoek en selecteer via **Nieuwe link**. Ook nog niet opgeslagen
-   kopteksten staan al ter beschikking. Als alternatief handmatig: **Nieuwe link** →
-   **Lege link**, voer de linktekst in, laat het doelveld leeg of voer de tekst van de
-   kop in.
+   **Links bewerken** verschijnt vanzelf en toont het **paginaplan**. Klik per
+   paragraaf op het vakje van de kop of de widget en pas de
+   linktekst in het vakje aan. Ook nog niet opgeslagen koppen
+   staan al ter keuze. Als alternatief handmatig: **Lege link**, linktekst
+   invoeren, bestemming leeg laten of de tekst van de kop invoeren.
 4. **De titel invoeren** – rechts onder **Navigatie**, of leeg laten.
-   Leeg betekent: alleen de lijst, geen koptekst erboven.
-5. **Controleer in het venster.** **Desktop**, **Tablet** en **Mobiel** bovenaan tonen de
+   Leeg betekent: alleen de lijst, geen koptekst erboven. Daar kun je ook
+   de **navigatie aan de zijkant van het scherm** voor deze pagina uitschakelen.
+5. **Controleer in het venster.** **Desktop**, **tablet** en **mobiel** bovenaan tonen de
    navigatie op apparaatbreedte. Klik vervolgens op **Toepassen** en sla de pagina op.
 6. **Controleer in het voorbeeld van de pagina.** Klik één keer op elk item:
    Als het niet springt, komt de tekst in de linktekst of de bestemming niet precies overeen met de
@@ -28,5 +28,5 @@ verschijnt niet op de pagina.
 
 ## Op de telefoon
 
-Daar is de lijst ingeklapt en toont alleen de titel met een pijltje. Met een tik
-wordt deze uitgeklapt. Op schermen met een breedte vanaf 768 pixels staat de lijst altijd open.
+Daar is de lijst ingeklapt en toont alleen de titel met een pijltje. Een tik
+klapt de lijst open. Op schermen met een breedte vanaf 768 pixels staat de lijst altijd open.
