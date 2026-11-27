@@ -8,17 +8,29 @@ Desktop · Tablet · Mobil**. **Übernehmen** schreibt Titel und Links in den
 Dialog, danach wie gewohnt speichern.
 
 Das Fenster hat drei Spalten: links die **Links**, in der Mitte der gewählte
-Link, rechts die **Navigation** mit dem Titel und dem **Seitenaufbau**.
+Link – oder nach **Neuer Link** der **Seitenplan** –, rechts die **Navigation**
+mit dem, was für die ganze Navigation gilt: Titel und Navigation am
+Bildschirmrand.
 
 Die Elemente der Seite kommen live aus dem Editor – auch Überschriften, die
 noch nicht gespeichert sind – und folgen jeder Änderung.
 
 ## Titel
 
-Rechts unter **Navigation** oben: die Überschrift über der Liste, zum Beispiel „Auf
+Rechts unter **Navigation**: die Überschrift über der Liste, zum Beispiel „Auf
 dieser Seite“. Leer lassen blendet sie aus; die Liste bleibt.
 
 Der Titel wird mit der Seite übersetzt.
+
+## Navigation am Bildschirmrand
+
+Rechts unter **Navigation**, Vorgabe an. Auf Desktop und Tablet erscheint
+beim ersten Scrollen rechts am Bildschirmrand eine kleine Navigation: ein
+Strich je Abschnitt, der aktuelle in Rot. Zeigt man auf einen Strich, steht
+links daneben der Linktext; ein Klick springt hin, die Pfeile darüber und
+darunter springen zum vorigen bzw. nächsten Abschnitt. Auf dem Telefon, im
+Studio und in der Vorschau des Fensters erscheint sie nicht. Stehen mehrere
+Ankernavigationen auf einer Seite, zeigt nur die erste sie.
 
 ## Links
 
@@ -27,9 +39,8 @@ nennt den Linktext und darunter, wohin er springt – etwa „Überschrift
 „Termine““, „Widget: Dateigalerie“, „#kontakt“ oder „Leer – gleichnamige
 Überschrift“. Ein Klick wählt einen Link zum Bearbeiten.
 
-- **Neuer Link** klappt eine Auswahl auf: obenan **Leerer Link** (legt einen
-  leeren Link an und setzt den Cursor in den Linktext), darunter die Suche
-  über die Überschriften und Widgets der Seite (siehe unten).
+- **Neuer Link** öffnet in der Mitte den **Seitenplan** (siehe unten). Ohne
+  Links beginnt das Fenster gleich damit.
 - Ein **„!“** am Ende der Zeile heißt: das Ziel gibt es auf der Seite nicht
   mehr (Überschrift gelöscht oder umbenannt). Auf der Seite wird der Link
   ausgeblendet, bis du ein neues Ziel wählst oder ihn entfernst – das Formular
@@ -54,7 +65,7 @@ In der Mitte steht über dem Formular „Link 2 von 5“ und die Art des Ziels
     kürzer heißen als der Abschnitt, etwa „Ausstattung“ für „Ausstattung im
     Detail“.
   - **Eine Block-ID** wie `#a447d858-1bba-4a49-b620-b49c60dd67a7`: zu diesem
-    Block der Seite. So setzen es die Auswahl und der Seitenaufbau. Der Link
+    Block der Seite. So setzt es der Seitenplan. Der Link
     bleibt auch nach dem Umbenennen der Überschrift gültig.
   - **Eine Adresse**, die mit `/`, `http://`, `https://` oder `mailto:`
     beginnt: ein gewöhnlicher Verweis, dem der Browser folgt.
@@ -64,21 +75,22 @@ sind gleichermaßen Ziel. Mehrfache Leerzeichen spielen keine Rolle,
 Groß- und Kleinschreibung schon. Gibt es mehrere gleichlautende Überschriften,
 springt der Eintrag zur ersten.
 
-### Überschrift oder Widget der Seite verlinken
+### Seitenplan
 
-Zwei Wege, beide legen einen Link mit dem Namen des Elements an, das Ziel ist
-seine Block-ID (`#…`); den Linktext kannst du danach ändern:
+Der Seitenplan zeigt die Überschriften und Widgets der Seite als Kästen –
+angeordnet wie im Entwurf: Abschnitte untereinander, Spalten nebeneinander in
+ihrer Breite. Jeder Kasten nennt die Art (etwa „H2“ oder „Widget · USP-Box“)
+und den Text bzw. das Widget. Verlinkte Kästen sind blau.
 
-- **Neuer Link** → **Überschrift oder Widget suchen**: Die Liste zeigt die
-  Überschriften (mit Ebene, etwa „H3 unter „Termine““) und die Widgets der
-  Seite mit ihrem Namen und Merkmal (etwa „Hauptwettbewerber · USP-Box“) und
-  lässt sich durch Tippen filtern – auch nach der Art des Widgets.
-- **Seitenaufbau** rechts: die Gliederung der Seite als eingerückter Baum.
-  Ein Element in die Liste links ziehen – es landet dort, wo du es loslässt –
-  oder anklicken, dann kommt es ans Ende.
-
-Was schon verlinkt ist, trägt ein Häkchen bzw. „schon verlinkt“; ein zweiter
-Versuch wählt den vorhandenen Link, statt ihn zu verdoppeln.
+- **Klick auf einen Kasten** legt einen Link mit dessen Text an (Ziel ist die
+  Block-ID `#…`) und öffnet im Kasten den Linktext zum Ändern; Enter
+  bestätigt. Ein Klick auf einen schon verlinkten Kasten öffnet seinen
+  Linktext.
+- Das Zeichen oben rechts im blauen Kasten entfernt den Link.
+- Kästen lassen sich auch in die Liste links ziehen – der Link landet dort,
+  wo du loslässt.
+- **Leerer Link** legt einen Link für eine Adresse oder ein eigenes Ziel an,
+  **Fertig** kehrt zum gewählten Link zurück.
 
 ## Wenn sich die Seite ändert
 

@@ -43,8 +43,8 @@ oder den Link entfernen.
 
 Die Überschriften der Seite werden übersetzt, Linktext und Ziel nicht. Ein
 Link über den Text findet seine Überschrift in der anderen Sprache nicht mehr
-und wird dort ausgeblendet. Links auf eine Block-ID (aus der Auswahl oder dem
-Seitenaufbau) hängen nicht am Text der Überschrift.
+und wird dort ausgeblendet. Links auf eine Block-ID (aus dem
+Seitenplan) hängen nicht am Text der Überschrift.
 
 ## Wann wechselt die rote Marke?
 
