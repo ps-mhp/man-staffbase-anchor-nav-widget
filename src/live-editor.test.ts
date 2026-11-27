@@ -83,7 +83,7 @@ describe("outline-source", () => {
     const editor = fakeEditor(page());
     const source = liveOutlineSource(editor);
     expect(source.kind).toBe("live");
-    expect((await source.load())?.map((entry) => entry.label)).toEqual(["Termine", "Vorteile", "Anmeldung"]);
+    expect((await source.load())?.entries.map((entry) => entry.label)).toEqual(["Termine", "Vorteile", "Anmeldung"]);
 
     const onChange = jest.fn();
     const stop = source.subscribe?.(onChange);

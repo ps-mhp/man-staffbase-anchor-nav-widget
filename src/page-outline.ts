@@ -55,7 +55,15 @@ export interface OutlineNode {
   text(): string;
   /** Nur `customBlock`: was er über sich speichert. */
   readonly selectedBlock?: SelectedBlock;
+  /** Nur Spalten: ihr Anteil an der Zeile (`width` im Content Designer). */
+  readonly width?: number;
   children(): readonly OutlineNode[];
+}
+
+/** Die Breite einer Spalte als Zahl; alles andere zählt als 1. */
+export function columnWidth(raw: unknown): number {
+  const value = typeof raw === "number" ? raw : typeof raw === "string" ? Number.parseFloat(raw) : Number.NaN;
+  return Number.isFinite(value) && value > 0 ? value : 1;
 }
 
 /**
@@ -155,6 +163,7 @@ interface RawBlock {
   children?: unknown;
   config?: {
     value?: unknown;
+    width?: unknown;
     settings?: { content?: { selectedBlock?: SelectedBlock } };
   };
 }
@@ -189,6 +198,7 @@ function savedNodes(blocks: Record<string, RawBlock>, rootIds: readonly string[]
       type: typeof block.type === "string" ? block.type : "",
       text: () => text(id, new Set()),
       selectedBlock: block.config?.settings?.content?.selectedBlock,
+      ...(block.config?.width === undefined ? {} : { width: columnWidth(block.config.width) }),
       children: () => ids(block.children).flatMap((child) => node(child) ?? []),
     };
   };
@@ -200,19 +210,24 @@ function savedNodes(blocks: Record<string, RawBlock>, rootIds: readonly string[]
  * nie; eine unbekannte Form ergibt eine leere Liste.
  */
 export function extractOutline(page: unknown, language: string | null): OutlineEntry[] {
+  return buildOutline(savedRoots(page, language));
+}
+
+/** Die obersten Blöcke der gespeicherten Seite in dieser Sprache (sonst der ersten). */
+export function savedRoots(page: unknown, language: string | null): OutlineNode[] {
   const documents = (page as RawPage | null)?.contentDocuments;
   if (typeof documents !== "object" || documents === null) return [];
   const document = (language !== null ? documents[language] : undefined) ?? Object.values(documents)[0];
   const blocks = document?.content?.blocks;
   if (typeof blocks !== "object" || blocks === null) return [];
-  return buildOutline(savedNodes(blocks, ids(document?.content?.content)));
+  return savedNodes(blocks, ids(document?.content?.content));
 }
 
-/** Lädt die Seite und liefert ihre Elemente; jeder Fehler ergibt `null`. */
-export async function fetchPageOutline(
+/** Lädt die Seite und liefert ihre obersten Blöcke; jeder Fehler ergibt `null`. */
+export async function fetchPageRoots(
   id: string,
   language: string | null,
-): Promise<OutlineEntry[] | null> {
+): Promise<OutlineNode[] | null> {
   if (!isStaffbaseId(id)) return null;
   try {
     const response = await fetch(`${PAGE_ENDPOINT}/${id}`, {
@@ -220,16 +235,14 @@ export async function fetchPageOutline(
       headers: { Accept: "application/json" },
     });
     if (!response.ok) return null;
-    return extractOutline(await response.json(), language);
+    return savedRoots(await response.json(), language);
   } catch {
     return null;
   }
 }
 
-/** Die Elemente der Seite, die das Studio gerade bearbeitet. */
-export function loadStudioOutline(): Promise<OutlineEntry[] | null> {
+/** Die obersten Blöcke der Seite, die das Studio gerade bearbeitet (gespeicherte Fassung). */
+export function loadStudioRoots(): Promise<OutlineNode[] | null> {
   const ref = studioPageRef();
-  return ref === null
-    ? Promise.resolve(null)
-    : fetchPageOutline(ref.id, ref.language);
+  return ref === null ? Promise.resolve(null) : fetchPageRoots(ref.id, ref.language);
 }

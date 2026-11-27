@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-import { extractOutline, fetchPageOutline, studioPageRef } from "./page-outline";
+import { extractOutline, fetchPageRoots, studioPageRef } from "./page-outline";
 
 const PAGE_ID = "6aa12fb54e0ac62265cf06f5";
 
@@ -103,7 +103,7 @@ describe("studioPageRef", () => {
   });
 });
 
-describe("fetchPageOutline", () => {
+describe("fetchPageRoots", () => {
   afterEach(() => {
     delete (global as { fetch?: unknown }).fetch;
   });
@@ -111,12 +111,12 @@ describe("fetchPageOutline", () => {
   it("lädt die Seite mit Anmeldung und gibt bei Fehlern null", async () => {
     const fetchMock = jest.fn().mockResolvedValue({ ok: true, json: async () => page });
     (global as { fetch?: unknown }).fetch = fetchMock;
-    expect(await fetchPageOutline(PAGE_ID, "en_US")).toHaveLength(1);
+    expect(await fetchPageRoots(PAGE_ID, "en_US")).toHaveLength(1);
     expect(fetchMock).toHaveBeenCalledWith(`/api/branch/pages/${PAGE_ID}`, expect.objectContaining({ credentials: "same-origin" }));
 
     fetchMock.mockResolvedValue({ ok: false });
-    expect(await fetchPageOutline(PAGE_ID, null)).toBeNull();
+    expect(await fetchPageRoots(PAGE_ID, null)).toBeNull();
     fetchMock.mockRejectedValue(new Error("offline"));
-    expect(await fetchPageOutline(PAGE_ID, null)).toBeNull();
+    expect(await fetchPageRoots(PAGE_ID, null)).toBeNull();
   });
 });

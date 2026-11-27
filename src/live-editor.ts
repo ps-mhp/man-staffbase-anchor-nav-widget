@@ -23,7 +23,7 @@
  * dann gilt die gespeicherte Fassung.
  */
 
-import { OutlineNode } from "./page-outline";
+import { OutlineNode, columnWidth } from "./page-outline";
 import { SelectedBlock } from "./widget-labels";
 
 export interface PmNode {
@@ -123,6 +123,7 @@ function toOutlineNode(node: PmNode): OutlineNode {
     type: node.type.name,
     text: () => node.textContent,
     selectedBlock: node.type.name === "customBlock" ? selectedBlockOf(node) : undefined,
+    ...(node.attrs.width === undefined ? {} : { width: columnWidth(node.attrs.width) }),
     children: () => {
       const children: OutlineNode[] = [];
       node.forEach((child) => {

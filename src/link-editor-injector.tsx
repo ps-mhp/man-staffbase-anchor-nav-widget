@@ -66,12 +66,9 @@ const HELP = (
       Pfeilen über dem Formular.
     </li>
     <li>
-      <strong>Neuer Link</strong> klappt die Auswahl auf: ein leerer Link oder die Suche über Überschriften und Widgets
-      der Seite – live aus dem Editor, auch Ungespeichertes.
-    </li>
-    <li>
-      Aus dem <strong>Seitenaufbau</strong> rechts ein Element in die Liste ziehen oder anklicken – das legt einen Link
-      darauf an.
+      <strong>Neuer Link</strong> zeigt den <strong>Seitenplan</strong>: Überschriften und Widgets als Kästen, wie im
+      Entwurf angeordnet – live aus dem Editor, auch Ungespeichertes. Klick verlinkt und öffnet den Linktext im Kasten;
+      verlinkte Kästen sind blau. Kästen lassen sich auch in die Liste ziehen.
     </li>
     <li>
       Ein <strong>„!“</strong> in der Liste heißt: das Ziel fehlt auf der Seite. Der Link wird dort ausgeblendet.
@@ -84,7 +81,8 @@ const HELP = (
       Überschrift, eine Block-ID (#…) oder eine Adresse (/…, https://…, mailto:…).
     </li>
     <li>
-      Der <strong>Titel</strong> rechts oben steht über den Links; leer bleibt die Zeile weg.
+      Rechts gilt alles für die ganze Navigation: der <strong>Titel</strong> über den Links (leer bleibt die Zeile weg)
+      und die <strong>Navigation am Bildschirmrand</strong> beim Scrollen.
     </li>
     <li>Desktop, Tablet und Mobil zeigen die Navigation in Gerätebreite; auf dem Telefon klappt sie zu einem Knopf zusammen.</li>
   </ul>

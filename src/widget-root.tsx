@@ -22,6 +22,8 @@ export interface AnchorNavWidgetProps {
   readonly links: unknown;
   /** Der eigene Container. Überschriften darin sind kein Sprungziel. */
   readonly self: HTMLElement | null;
+  /** Die Navigation am rechten Bildschirmrand; Vorgabe an. */
+  readonly rail?: boolean;
 }
 
 /**
@@ -31,7 +33,7 @@ export interface AnchorNavWidgetProps {
  * Anmeldung beim Host und dem Lesen der Attribute, und ein Test müsste das
  * ganze Modul samt `defineBlock` laden, um eine Liste zu prüfen.
  */
-export function AnchorNavWidget({ heading, links: raw, self }: AnchorNavWidgetProps): React.ReactElement | null {
+export function AnchorNavWidget({ heading, links: raw, self, rail = true }: AnchorNavWidgetProps): React.ReactElement | null {
   const links = useMemo(() => parseAnchorLinks(raw), [raw]);
-  return <AnchorNav links={links} heading={heading} self={self} />;
+  return <AnchorNav links={links} heading={heading} self={self} rail={rail} />;
 }

@@ -221,7 +221,7 @@ describe("linkEditorShell", () => {
 
   it("erklärt in der Hilfe Liste, Linktext, Ziel, Titel und Vorschau", () => {
     const { container } = render(<>{linkEditorShell.help}</>);
-    for (const text of ["Neuer Link", "Seitenaufbau", "„!“", "Linktext", "Ziel", "Titel", "Mobil"]) {
+    for (const text of ["Neuer Link", "Seitenplan", "Bildschirmrand", "„!“", "Linktext", "Ziel", "Titel", "Mobil"]) {
       expect(container).toHaveTextContent(text);
     }
   });

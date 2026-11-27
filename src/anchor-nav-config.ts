@@ -40,12 +40,18 @@ import { readHeading } from "./heading-text";
 export interface AnchorNavConfig {
   heading?: string;
   links?: AnchorLink[];
+  /**
+   * Die kleine Navigation am rechten Bildschirmrand (`anchor-rail.tsx`).
+   * Fehlt der Schlüssel, ist sie an; gespeichert wird nur `false`.
+   */
+  rail?: boolean;
 }
 
 /** `anchor-nav-config`, wie es gespeichert ist; die Einträge noch roh. */
 export interface StoredAnchorNavConfig {
   heading?: string;
   links?: readonly unknown[];
+  rail?: boolean;
 }
 
 /** Die alten Felder, roh – vom Element oder aus dem Dialog gelesen. */
@@ -58,6 +64,8 @@ export interface LegacyAnchorNavValues {
 export interface ResolvedAnchorNav {
   heading: string | null;
   links: unknown;
+  /** Ob die Navigation am rechten Rand erscheint; Vorgabe an. */
+  rail: boolean;
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -85,16 +93,18 @@ export function readStoredConfig(raw: unknown): StoredAnchorNavConfig | null {
   return {
     ...(typeof value.heading === "string" ? { heading: value.heading } : {}),
     ...(Array.isArray(value.links) ? { links: value.links as unknown[] } : {}),
+    ...(value.rail === false ? { rail: false } : {}),
   };
 }
 
 /** Schreibt die gespeicherte Form, kodiert wie die übrigen JSON-Attribute (`@shared/payload`). */
 export function encodeStoredConfig(config: StoredAnchorNavConfig): string {
-  const { heading, links } = config;
+  const { heading, links, rail } = config;
   return encodePayload(
     JSON.stringify({
       ...(heading === undefined ? {} : { heading }),
       ...(links === undefined ? {} : { links }),
+      ...(rail === false ? { rail: false } : {}),
     }),
   );
 }
@@ -104,6 +114,7 @@ export function serializeAnchorNavConfig(config: AnchorNavConfig): string {
   return encodeStoredConfig({
     heading: config.heading,
     links: config.links === undefined ? undefined : toStoredLinks(config.links),
+    rail: config.rail,
   });
 }
 
@@ -118,6 +129,7 @@ export function resolveAnchorNav(attrs: Record<string, unknown>): ResolvedAnchor
   return {
     heading: readHeading(stored?.heading ?? attrs[HEADING_ATTRIBUTE]),
     links: stored?.links === undefined ? attrs[LINKS_ATTRIBUTE] : JSON.stringify(stored.links),
+    rail: stored?.rail !== false,
   };
 }
 
@@ -142,5 +154,6 @@ export function parseAnchorNavDraft(raw: string, legacy: LegacyAnchorNavValues):
   return {
     ...(heading === undefined ? {} : { heading }),
     ...(linksSource === undefined ? {} : { links: parseAnchorLinks(linksSource, { keepUnlabelled: true }) }),
+    ...(stored?.rail === false ? { rail: false } : {}),
   };
 }

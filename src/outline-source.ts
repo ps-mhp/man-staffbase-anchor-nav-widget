@@ -20,12 +20,14 @@
  */
 
 import { LiveEditor, findLiveEditor, liveRoots } from "./live-editor";
-import { OutlineEntry, buildOutline, loadStudioOutline } from "./page-outline";
+import { PageOutline, pageOutlineOf } from "./page-map";
+import { loadStudioRoots } from "./page-outline";
 
 export interface OutlineSource {
   /** `live`: aktueller Stand im Editor; `saved`: zuletzt gespeicherte Fassung. */
   readonly kind: "live" | "saved";
-  load(): Promise<OutlineEntry[] | null>;
+  /** Gliederung und Seitenplan; `null`, wenn die Seite sich nicht lesen lässt. */
+  load(): Promise<PageOutline | null>;
   /** Meldet Änderungen; gibt das Abmelden zurück. Nur `live`. */
   subscribe?(onChange: () => void): () => void;
 }
@@ -39,7 +41,7 @@ export function liveOutlineSource(editor: LiveEditor): OutlineSource {
     kind: "live",
     load: () => {
       try {
-        return Promise.resolve(buildOutline(liveRoots(editor)));
+        return Promise.resolve(pageOutlineOf(liveRoots(editor)));
       } catch {
         return Promise.resolve(null);
       }
@@ -63,7 +65,10 @@ export function liveOutlineSource(editor: LiveEditor): OutlineSource {
   };
 }
 
-export const savedOutlineSource: OutlineSource = { kind: "saved", load: loadStudioOutline };
+export const savedOutlineSource: OutlineSource = {
+  kind: "saved",
+  load: () => loadStudioRoots().then((roots) => (roots === null ? null : pageOutlineOf(roots))),
+};
 
 /** Live, wenn ein Editor offen ist, sonst die gespeicherte Fassung. */
 export function studioOutlineSource(root: ParentNode = document): OutlineSource {

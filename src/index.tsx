@@ -53,10 +53,10 @@ const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
     private _root: ReactDOM.Root | null = null;
 
     public renderBlock(container: HTMLElement): void {
-      const { heading, links } = resolveAnchorNav(this.parseAttributes<Record<string, unknown>>());
+      const { heading, links, rail } = resolveAnchorNav(this.parseAttributes<Record<string, unknown>>());
 
       this._root ??= ReactDOM.createRoot(container);
-      this._root.render(<AnchorNavWidget heading={heading} links={links} self={container} />);
+      this._root.render(<AnchorNavWidget heading={heading} links={links} self={container} rail={rail} />);
     }
 
     public unmountBlock(_container: HTMLElement): void {

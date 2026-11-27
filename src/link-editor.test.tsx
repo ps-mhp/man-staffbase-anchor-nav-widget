@@ -20,6 +20,7 @@ import { AnchorLink } from "./anchor-links";
 import { AnchorNavConfig } from "./anchor-nav-config";
 import { LinkEditor } from "./link-editor";
 import { OutlineSource } from "./outline-source";
+import { flatPageOutline } from "./page-map";
 import { OutlineEntry } from "./page-outline";
 
 const OUTLINE: OutlineEntry[] = [
@@ -72,12 +73,18 @@ function setup(value: AnchorNavConfig, options: Options = {}): Setup {
 
 const links = (...labels: string[]): AnchorLink[] => labels.map((label, index) => ({ id: `l${index}`, label }));
 
+/** Wartet, bis die Quelle geantwortet hat. */
+const outlineLoaded = (): Promise<void> =>
+  act(async () => {
+    await Promise.resolve();
+  });
+
 const row = (name: string | RegExp): HTMLElement =>
   within(screen.getByRole("grid", { name: "Links" })).getByRole("row", { name });
 
 const loader = (entries: OutlineEntry[] | null, kind: OutlineSource["kind"] = "saved"): OutlineSource => ({
   kind,
-  load: () => Promise.resolve(entries),
+  load: () => Promise.resolve(entries === null ? null : flatPageOutline(entries)),
 });
 
 describe("LinkEditor – Liste", () => {
@@ -103,13 +110,12 @@ describe("LinkEditor – Liste", () => {
     expect(within(row(/Kontakt/)).getByText("https://man.eu")).toBeInTheDocument();
   });
 
-  it("erklärt die leere Liste und legt über „Neuer Link“ → „Leerer Link“ einen an, gewählt und mit Fokus im Linktext", async () => {
+  it("legt ohne Seite über „Neuer Link“ direkt einen leeren Link an, gewählt und mit Fokus im Linktext", async () => {
     const { latest } = setup({});
-    expect(screen.getByText(/Noch kein Link\. Über/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Noch kein Link\. Über/).length).toBeGreaterThan(0);
     expect(screen.getByTestId("link-empty")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Neuer Link" }));
-    await userEvent.click(await screen.findByTestId("add-empty-link"));
 
     const [added] = latest().links ?? [];
     expect(added.label).toBe("");
@@ -222,65 +228,67 @@ describe("LinkEditor – Navigation rechts", () => {
   });
 });
 
-describe("LinkEditor – „Neuer Link“ mit Auswahl der Seite", () => {
-  const openMenu = async (user: ReturnType<typeof userEvent.setup>): Promise<HTMLElement> => {
-    await user.click(screen.getByRole("button", { name: "Neuer Link" }));
-    return screen.findByRole("menu", { name: "Elemente der Seite" });
-  };
+describe("LinkEditor – Seitenplan nach „Neuer Link“", () => {
 
-  it("legt aus dem Aufklappmenü einen Link auf die Block-ID ohne Stufe an und sperrt schon Verlinktes", async () => {
+  it("beginnt ohne Links mit dem Seitenplan und verlinkt per Klick, Linktext im Kasten", async () => {
+    const { latest } = setup({}, { outlineSource: loader(OUTLINE) });
+    await outlineLoaded();
+    expect(screen.getByTestId("link-map-panel")).toBeInTheDocument();
+    expect(screen.getByTestId("map-entry-b3")).toHaveTextContent("WidgetDateigalerie");
+    expect(screen.getByTestId("map-entry-b2")).toHaveTextContent("H3Anmeldung");
+
+    await userEvent.click(screen.getByTestId("map-entry-b2"));
+    expect(latest().links?.map(({ label, target }) => ({ label, target }))).toEqual([{ label: "Anmeldung", target: "#b2" }]);
+    expect(screen.getByTestId("map-entry-b2")).toHaveAttribute("data-linked", "true");
+
+    const [link] = latest().links ?? [];
+    const input = screen.getByTestId(`map-label-${link.id}`);
+    expect(input).toHaveFocus();
+    fireEvent.change(input, { target: { value: "Zur Anmeldung" } });
+    expect(latest().links?.[0].label).toBe("Zur Anmeldung");
+    fireEvent.keyDown(input, { key: "Enter" });
+    expect(screen.getByTestId("map-link-b2")).toHaveTextContent("Link: Zur Anmeldung");
+  });
+
+  it("öffnet den Plan über „Neuer Link“, verlinkt ohne Stufe und verdoppelt nichts", async () => {
     const { latest } = setup({ links: [{ id: "x", label: "Termine", target: "#b1" }] }, { outlineSource: loader(OUTLINE) });
-    const user = userEvent.setup();
-    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
-    const menu = await openMenu(user);
+    await outlineLoaded();
+    expect(screen.queryByTestId("link-map-panel")).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "Neuer Link" }));
+    expect(screen.getByTestId("map-entry-b1")).toHaveAttribute("data-linked", "true");
 
-    expect(within(menu).getByText("Überschriften")).toBeInTheDocument();
-    expect(within(menu).getByText("Widgets")).toBeInTheDocument();
-    expect(within(menu).getByRole("menuitem", { name: /Termine · H2, schon verlinkt/ })).toHaveAttribute(
-      "aria-disabled",
-      "true",
-    );
-    expect(within(menu).getByRole("menuitem", { name: /Anmeldung · H3 unter „Termine“/ })).toBeInTheDocument();
-
-    await user.click(within(menu).getByRole("menuitem", { name: /Kontakt/ }));
-
+    await userEvent.click(screen.getByTestId("map-entry-sbt-display-l--4a7c0b1e-1111-4222-8333-944455556666"));
+    await userEvent.click(screen.getByTestId("map-entry-b1"));
     expect(latest().links?.map(({ label, target }) => ({ label, target }))).toEqual([
       { label: "Termine", target: "#b1" },
       { label: "Kontakt", target: "#4a7c0b1e-1111-4222-8333-944455556666" },
     ]);
-    expect(screen.queryByRole("menu", { name: "Elemente der Seite" })).toBeNull();
-    expect(screen.getByRole("heading", { name: "Link 2 von 2" })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId("link-map-done"));
+    expect(screen.getByRole("heading", { name: "Link 1 von 2" })).toBeInTheDocument();
   });
 
-  it("filtert die Elemente nach dem eingegebenen Text", async () => {
-    setup({}, { outlineSource: loader(OUTLINE) });
-    const user = userEvent.setup();
-    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
-    const menu = await openMenu(user);
+  it("entfernt einen Link aus dem Kasten und legt über „Leerer Link“ einen eigenen an", async () => {
+    const { latest } = setup({ links: [{ id: "x", label: "Termine", target: "#b1" }] }, { outlineSource: loader(OUTLINE) });
+    await outlineLoaded();
+    await userEvent.click(screen.getByRole("button", { name: "Neuer Link" }));
+    await userEvent.click(screen.getByRole("button", { name: "Link auf „Termine“ entfernen" }));
+    expect(latest().links).toEqual([]);
 
-    await user.type(screen.getByTestId("add-link-search"), "Anm");
-
-    expect(within(menu).getAllByRole("menuitem").map((item) => item.textContent)).toEqual([
-      "Anmeldung · H3 unter „Termine“",
-    ]);
+    await userEvent.click(screen.getByTestId("add-empty-link"));
+    expect(latest().links?.[0].label).toBe("");
+    expect(screen.getByRole("heading", { name: "Link 1 von 1" })).toBeInTheDocument();
   });
 
-  it("sagt, ob die Elemente live aus dem Editor kommen", async () => {
+  it("sagt, ob der Plan live aus dem Editor kommt, und meldet eine nicht ladbare Seite", async () => {
     setup({}, { outlineSource: loader(OUTLINE, "live") });
-    expect((await screen.findAllByText("Aktueller Stand im Editor, auch Ungespeichertes.")).length).toBeGreaterThan(0);
+    expect(await screen.findByTestId("page-map-source")).toHaveTextContent("Aktueller Stand im Editor");
   });
 
-  it("meldet eine nicht ladbare Seite und lässt den leeren Link", async () => {
+  it("meldet eine nicht ladbare Seite und bietet den leeren Link", async () => {
     setup({}, { outlineSource: loader(null) });
-    const user = userEvent.setup();
-    await user.click(screen.getByRole("button", { name: "Neuer Link" }));
-    expect(await screen.findByTestId("add-link-source")).toHaveTextContent("ließ sich nicht laden");
+    expect(await screen.findByText(/ließ sich nicht laden/)).toBeInTheDocument();
     expect(screen.getByTestId("add-empty-link")).toBeInTheDocument();
-  });
-
-  it("zeigt ohne Quelle keinen Seitenaufbau", () => {
-    setup({});
-    expect(screen.queryByTestId("page-structure")).toBeNull();
   });
 });
 
@@ -296,7 +304,7 @@ describe("LinkEditor – Ziel fehlt", () => {
       },
       { outlineSource: loader(OUTLINE) },
     );
-    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
+    await outlineLoaded();
     expect(within(row(/Weg/)).getByTestId("item-warning")).toHaveAttribute(
       "title",
       "Ziel fehlt auf der Seite – in der Navigation ausgeblendet",
@@ -316,30 +324,20 @@ describe("LinkEditor – Ziel fehlt", () => {
       { outlineSource: loader(OUTLINE), shell: { view: "desktop" } },
     );
     const preview = screen.getByTestId("link-preview");
-    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
+    await outlineLoaded();
     expect(within(preview).getAllByRole("link").map((link) => link.textContent)).toEqual(["Termine"]);
   });
 });
 
-describe("LinkEditor – Seitenaufbau", () => {
-  it("zeigt die Elemente eingerückt und legt per Klick einen Link an; Verlinktes wählt den vorhandenen", async () => {
-    const { latest } = setup({ links: [{ id: "x", label: "Termine", target: "#b1" }] }, { outlineSource: loader(OUTLINE) });
-    const structure = await screen.findByTestId("page-structure");
-    const tree = within(structure).getByRole("grid", { name: "Seitenaufbau" });
-    await screen.findAllByText("Aus der zuletzt gespeicherten Fassung der Seite.");
-    expect(within(tree).getAllByRole("row").map((item) => item.textContent)).toEqual([
-      "Termineschon verlinkt",
-      "Anmeldung",
-      "Dateigalerie",
-      "Kontakt",
-    ]);
-
-    await userEvent.click(within(tree).getByRole("row", { name: "Anmeldung" }));
-    expect(latest().links?.map((link) => link.label)).toEqual(["Termine", "Anmeldung"]);
-
-    await userEvent.click(within(tree).getByRole("row", { name: "Termine" }));
-    expect(latest().links).toHaveLength(2);
-    expect(screen.getByRole("heading", { name: "Link 1 von 2" })).toBeInTheDocument();
+describe("LinkEditor – Navigation am Rand", () => {
+  it("ist an und schaltet sich aus und wieder an, ohne fremde Schlüssel", async () => {
+    const { latest } = setup({ heading: "T", links: links("A") });
+    const toggle = screen.getByTestId("link-rail");
+    expect(toggle).toHaveAttribute("aria-checked", "true");
+    await userEvent.click(toggle);
+    expect(latest()).toEqual({ heading: "T", links: links("A"), rail: false });
+    await userEvent.click(screen.getByTestId("link-rail"));
+    expect(latest()).toEqual({ heading: "T", links: links("A") });
   });
 });
 

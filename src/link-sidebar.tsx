@@ -22,8 +22,8 @@
  * noch kein Fehler. Ein Link, dessen Ziel es auf der Seite nicht mehr gibt,
  * trägt ein „!“ – er wird in der Navigation ausgeblendet.
  *
- * „Neuer Link“ klappt die Auswahl auf (`add-link-menu.tsx`); Elemente aus dem
- * Seitenaufbau lassen sich auch in die Liste ziehen.
+ * „Neuer Link“ öffnet in der Mitte den Seitenplan (`page-map-view.tsx`);
+ * Kästen daraus lassen sich auch in die Liste ziehen.
  */
 
 import * as React from "react";
@@ -67,8 +67,8 @@ function listItems(
 
 const EMPTY_STATE = (
   <>
-    Noch kein Link. Über <strong>Neuer Link</strong> eine Überschrift oder ein Widget der Seite wählen – oder ein
-    Element aus dem Seitenaufbau hierher ziehen.
+    Noch kein Link. Über <strong>Neuer Link</strong> eine Überschrift oder ein Widget der Seite wählen – oder einen
+    Kasten aus dem Seitenplan hierher ziehen.
   </>
 );
 
@@ -79,10 +79,10 @@ export interface LinkSidebarProps {
   outlineReady: boolean;
   selectedId: string | undefined;
   onSelect: (id: string) => void;
-  /** Der Inhalt hinter „Neuer Link“; bekommt das Schließen. */
-  addMenu: (close: () => void) => React.ReactNode;
+  /** „Neuer Link“: öffnet den Seitenplan (oder legt ohne Seite einen leeren Link an). */
+  onAdd: () => void;
   onReorder: (ids: string[]) => void;
-  /** Aus dem Seitenaufbau abgelegte Elemente. */
+  /** Aus dem Seitenplan abgelegte Elemente. */
   externalDrop?: ExternalDrop;
 }
 
@@ -92,13 +92,13 @@ export function LinkSidebar({
   outlineReady,
   selectedId,
   onSelect,
-  addMenu,
+  onAdd,
   onReorder,
   externalDrop,
 }: LinkSidebarProps): ReactElement {
   const { issuesVisible } = useConfigShell();
   return (
-    <SidebarPanel title="Links" count={links.length} addLabel="Neuer Link" addPopover={addMenu}>
+    <SidebarPanel title="Links" count={links.length} addLabel="Neuer Link" onAdd={onAdd}>
       <ItemList
         aria-label="Links"
         items={listItems(links, outline, outlineReady, issuesVisible)}

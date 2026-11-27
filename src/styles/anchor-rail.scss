@@ -1,0 +1,177 @@
+/*!
+ * Copyright 2026, MHP Management und IT-Beratung GmbH and contributors.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use "@shared/stylings/man-tokens" as *;
+@use "@shared/stylings/man-craft" as *;
+
+/* Die Navigation am rechten Bildschirmrand (`anchor-rail.tsx`). Sie steht in
+ * einem eigenen Shadow Root am `body`: weder das man-theme noch die
+ * Container des Content Designers (Transformationen brechen `position:
+ * fixed`) reden hinein. `all: initial` am Wirt kappt auch die vererbten
+ * Schriftangaben der Seite. */
+
+:host {
+  all: initial;
+}
+
+.man-anchor-rail {
+  position: fixed;
+  top: 50%;
+  right: man("space-3");
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: man("space-1");
+  transform: translateY(-50%);
+  color: man("text");
+  @include man-type("body-s");
+  animation: man-anchor-rail-in man("duration") man("ease") both;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+}
+
+@keyframes man-anchor-rail-in {
+  from {
+    opacity: 0;
+    transform: translate(6px, -50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .man-anchor-rail {
+    animation: none;
+  }
+}
+
+/* Nur Desktop und Tablet; auf dem Telefon klappt die Navigation selbst zum Knopf. */
+@media (max-width: 767px) {
+  .man-anchor-rail {
+    display: none;
+  }
+}
+
+.man-anchor-rail__step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: man("radius");
+  background: transparent;
+  color: man("text-muted");
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: man("red");
+  }
+
+  &:focus-visible {
+    @include man-focus-ring;
+  }
+
+  &:disabled {
+    color: man("text-disabled");
+    cursor: default;
+  }
+}
+
+.man-anchor-rail__list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.man-anchor-rail__item {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+/* Eine Position: ein waagrechter Strich, das Ziel 24 × 10 px groß. */
+.man-anchor-rail__tick {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 24px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  &::before {
+    content: "";
+    display: block;
+    width: 14px;
+    height: 2px;
+    border-radius: 1px;
+    background: man("grey-400");
+    transition:
+      width man("duration") man("ease"),
+      background-color man("duration") man("ease");
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    width: 20px;
+    background: man("text");
+  }
+
+  &[aria-current="true"]::before {
+    width: 22px;
+    height: 3px;
+    background: man("red");
+  }
+
+  &:focus-visible {
+    @include man-focus-ring;
+  }
+}
+
+/* Der Titel des Abschnitts links neben der Position, nur bei Zeiger oder Fokus. */
+.man-anchor-rail__label {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + #{man("space-2")});
+  max-width: 280px;
+  padding: man("space-1") man("space-2");
+  overflow: hidden;
+  border-radius: man("radius");
+  background: man("surface");
+  box-shadow: man("elevation-overlay");
+  color: man("text");
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(4px, -50%);
+  transition:
+    opacity man("duration") man("ease"),
+    transform man("duration") man("ease");
+}
+
+.man-anchor-rail__tick:hover + .man-anchor-rail__label,
+.man-anchor-rail__tick:focus-visible + .man-anchor-rail__label {
+  opacity: 1;
+  transform: translate(0, -50%);
+}

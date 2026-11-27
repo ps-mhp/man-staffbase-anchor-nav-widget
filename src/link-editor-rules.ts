@@ -69,6 +69,7 @@ export function anchorNavChangesStatus(draft: AnchorNavConfig, saved: AnchorNavC
     count > 0 && `${count} ${count === 1 ? "Link" : "Links"} geändert`,
     (draft.heading ?? "") !== (saved.heading ?? "") && "Titel geändert",
     reordered(links, before) && "Reihenfolge geändert",
+    (draft.rail !== false) !== (saved.rail !== false) && "Navigation am Rand geändert",
   ].filter((part): part is string => part !== false);
   return parts.length === 0 ? undefined : parts.join(", ");
 }

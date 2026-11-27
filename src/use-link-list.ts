@@ -63,6 +63,8 @@ export interface LinkList {
   patch: (id: string, changes: Partial<Omit<AnchorLink, "id">>) => void;
   duplicate: () => void;
   remove: () => void;
+  /** Entfernt den Link mit dieser Kennung (aus dem Seitenplan). */
+  removeId: (id: string) => void;
   move: (step: -1 | 1) => void;
   reorder: (ids: string[]) => void;
 }
@@ -114,6 +116,13 @@ export function useLinkList(links: AnchorLink[], onChange: (links: AnchorLink[])
       const next = links.filter((link) => link.id !== selected.id);
       onChange(next);
       setSelectedId(next[Math.min(index, next.length - 1)]?.id ?? null);
+    },
+    removeId: (id) => {
+      const at = links.findIndex((link) => link.id === id);
+      if (at === -1) return;
+      const next = links.filter((link) => link.id !== id);
+      onChange(next);
+      if (id === selected?.id) setSelectedId(next[Math.min(at, next.length - 1)]?.id ?? null);
     },
     move: (step) => onChange(moveLink(links, index, step)),
     reorder: (ids) => onChange(reorderLinks(links, ids)),

@@ -13,11 +13,12 @@
 
 /**
  * Das Fenster „Links bearbeiten“ im Rahmen von `@man/config-ui`: links die
- * Liste der Links mit „Neuer Link“ (leerer Link oder Suche über die Seite),
- * in der Mitte der gewählte Link (Kopf mit „Link 2 von 5“, Zielart und
- * Aktionen, darunter Linktext und Ziel), rechts der Seitenaufbau zum
- * Hineinziehen und der Titel der Navigation. In den Geräteansichten steht
- * statt der Mitte die echte Navigation in Gerätebreite.
+ * Liste der Links, in der Mitte entweder der gewählte Link (Kopf mit „Link 2
+ * von 5“, Zielart und Aktionen, darunter Linktext und Ziel) oder – nach
+ * „+ Neuer Link“ – der Seitenplan (`page-map-view.tsx`): die Überschriften
+ * und Widgets als Kästen, angeordnet wie im Entwurf. Rechts nur, was für die
+ * ganze Navigation gilt: Titel und die Navigation am Bildschirmrand. In den
+ * Geräteansichten steht statt der Mitte die echte Navigation in Gerätebreite.
  *
  * Die Seite kommt im Studio live aus dem Editor (auch Ungespeichertes) und
  * folgt jeder Änderung dort; ein Link, dessen Ziel fehlt, trägt in der Liste
@@ -31,10 +32,11 @@
  */
 
 import * as React from "react";
-import { ReactElement, useEffect, useMemo, useRef } from "react";
+import { ReactElement, useEffect, useMemo, useRef, useState } from "react";
 import { Field } from "@man/config-ui/form/field";
 import { FormSection } from "@man/config-ui/form/form-section";
 import { Note } from "@man/config-ui/form/note";
+import { SwitchRow } from "@man/config-ui/form/switch-row";
 import { InspectorPanel } from "@man/config-ui/inspector/inspector-panel";
 import { ConfigWorkspace } from "@man/config-ui/layout/config-workspace";
 import { Button } from "@man/config-ui/primitives/button";
@@ -43,14 +45,12 @@ import { useConfigShell } from "@man/config-ui/shell/shell-context";
 import { ItemActions } from "@man/config-ui/sidebar/item-actions";
 import { ExternalDrop } from "@man/config-ui/sidebar/item-list";
 
-import { AddLinkMenu } from "./add-link-menu";
 import { AnchorLink } from "./anchor-links";
 import { AnchorNavConfig } from "./anchor-nav-config";
 import { baseBlockId } from "./block-id";
 import {
   describeTarget,
   isTargetMissing,
-  linkedChecker,
   outlineIndex,
   targetBlockId,
   targetKindText,
@@ -61,7 +61,7 @@ import { LinkPreview } from "./link-preview";
 import { LinkSidebar } from "./link-sidebar";
 import { OutlineSource, studioOutlineSource } from "./outline-source";
 import { OutlineEntry } from "./page-outline";
-import { OUTLINE_DRAG_TYPE, PageStructure } from "./page-structure";
+import { OUTLINE_DRAG_TYPE, PageMapView } from "./page-map-view";
 import { OutlineState, outlineEntries, useOutline } from "./use-outline";
 import { LinkList, useLinkList } from "./use-link-list";
 import { normalizeText } from "./heading-scan";
@@ -188,47 +188,110 @@ function LinkForm({ list, link, outline, missing }: LinkFormProps): ReactElement
   );
 }
 
+type MainMode = "link" | "map";
+
+/** Der Entwurf mit Navigation am Rand an (Schlüssel fehlt) oder aus (`rail: false`). */
+function withRail(value: AnchorNavConfig, rail: boolean): AnchorNavConfig {
+  const next: AnchorNavConfig = { ...value, rail: false };
+  if (rail) delete next.rail;
+  return next;
+}
+
+interface PageMapPanelProps {
+  outline: OutlineState | null;
+  list: LinkList;
+  linkOf: (entry: OutlineEntry) => AnchorLink | undefined;
+  onActivate: (entry: OutlineEntry) => void;
+  editingId: string | null;
+  setEditingId: (id: string | null) => void;
+  onAddEmpty: () => void;
+  onDone: (() => void) | undefined;
+}
+
+/** „+ Neuer Link“: der Seitenplan zum Anklicken. */
+function PageMapPanel({
+  outline,
+  list,
+  linkOf,
+  onActivate,
+  editingId,
+  setEditingId,
+  onAddEmpty,
+  onDone,
+}: PageMapPanelProps): ReactElement {
+  return (
+    <div className="flex flex-col gap-5" data-testid="link-map-panel">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <h2 className="text-xl font-semibold text-foreground">Element der Seite verlinken</h2>
+        <div className="ml-auto flex gap-2">
+          <Button variant="outline" size="sm" onClick={onAddEmpty} data-testid="add-empty-link">
+            Leerer Link
+          </Button>
+          {onDone !== undefined && (
+            <Button size="sm" onClick={onDone} data-testid="link-map-done">
+              Fertig
+            </Button>
+          )}
+        </div>
+      </div>
+      <p className="text-sm text-muted-foreground">
+        Klick auf eine Überschrift oder ein Widget legt einen Link an – den Linktext änderst du direkt im Kasten.
+        Verlinktes steht in Blau. Kästen lassen sich auch in die Liste links ziehen; <strong>Leerer Link</strong> ist
+        für Adressen oder eigene Ziele.
+      </p>
+      <PageMapView
+        outline={outline}
+        linkOf={linkOf}
+        editingId={editingId}
+        onActivate={onActivate}
+        onLabelChange={(link, label) => list.patch(link.id, { label })}
+        onUnlink={(link) => {
+          list.removeId(link.id);
+          setEditingId(null);
+        }}
+        onEditEnd={() => setEditingId(null)}
+      />
+    </div>
+  );
+}
+
 interface LinkMainProps {
   list: LinkList;
   index: ReadonlyMap<string, OutlineEntry>;
   outlineReady: boolean;
 }
 
-/** Die Mitte: der gewählte Link auf Lesebreite (720 px). */
+/** Die Mitte im Modus „Link“: der gewählte Link auf Lesebreite (720 px). */
 function LinkMain({ list, index, outlineReady }: LinkMainProps): ReactElement {
   const { selected } = list;
-  return (
-    <div className="px-10 pt-6 pb-12 max-lg:px-6">
-      <div className="flex max-w-[720px] flex-col gap-8">
-        {selected === undefined ? (
-          <p className="text-sm text-muted-foreground" data-testid="link-empty">
-            Noch kein Link. Lege links über <strong>Neuer Link</strong> einen an – leer oder als Überschrift bzw.
-            Widget der Seite – oder ziehe ein Element aus dem <strong>Seitenaufbau</strong> rechts in die Liste.
-          </p>
-        ) : (
-          <LinkForm
-            key={selected.id}
-            list={list}
-            link={selected}
-            outline={index}
-            missing={outlineReady && isTargetMissing(selected, index)}
-          />
-        )}
-      </div>
-    </div>
+  return selected === undefined ? (
+    <p className="text-sm text-muted-foreground" data-testid="link-empty">
+      Noch kein Link. Über <strong>Neuer Link</strong> eine Überschrift oder ein Widget der Seite wählen.
+    </p>
+  ) : (
+    <LinkForm
+      key={selected.id}
+      list={list}
+      link={selected}
+      outline={index}
+      missing={outlineReady && isTargetMissing(selected, index)}
+    />
   );
 }
 
+const RAIL_HINT =
+  "Auf Desktop und Tablet erscheint beim Scrollen rechts am Bildschirmrand eine kleine Navigation: " +
+  "sie zeigt, wo man auf der Seite steht, und springt mit den Pfeilen von Abschnitt zu Abschnitt.";
+
 interface NavigationInspectorProps {
   heading: string;
-  onChange: (heading: string) => void;
-  outline: OutlineState | null;
-  isLinked: (entry: OutlineEntry) => boolean;
-  onPick: (entry: OutlineEntry) => void;
+  rail: boolean;
+  onHeadingChange: (heading: string) => void;
+  onRailChange: (rail: boolean) => void;
 }
 
-/** Rechts: der Titel der Navigation und darunter der Seitenaufbau zum Hineinziehen. */
-function NavigationInspector({ heading, onChange, outline, isLinked, onPick }: NavigationInspectorProps): ReactElement {
+/** Rechts: nur, was für die ganze Navigation gilt. */
+function NavigationInspector({ heading, rail, onHeadingChange, onRailChange }: NavigationInspectorProps): ReactElement {
   return (
     <InspectorPanel title="Navigation">
       <div className="flex flex-col gap-6">
@@ -237,19 +300,19 @@ function NavigationInspector({ heading, onChange, outline, isLinked, onPick }: N
             className="h-10"
             data-testid="link-heading"
             value={heading}
-            onChange={(event) => onChange(event.target.value)}
+            onChange={(event) => onHeadingChange(event.target.value)}
           />
         </Field>
-        {outline === null ? (
-          <Note>
-            Die Links springen zu Überschriften und Widgets dieser Seite. Die Vorschau oben rechts zeigt die Navigation
-            in Gerätebreite.
-          </Note>
-        ) : (
-          <FormSection title="Seitenaufbau">
-            <PageStructure outline={outline} isLinked={isLinked} onPick={onPick} />
-          </FormSection>
-        )}
+        <SwitchRow
+          label="Navigation am Bildschirmrand"
+          hint={RAIL_HINT}
+          checked={rail}
+          onCheckedChange={onRailChange}
+          data-testid="link-rail"
+        />
+        <Note>
+          Die Vorschau oben rechts zeigt die Navigation in Gerätebreite.
+        </Note>
       </div>
     </InspectorPanel>
   );
@@ -262,12 +325,16 @@ export function LinkEditor({ value, onChange, outlineSource }: LinkEditorProps):
   const source = useMemo(() => (outlineSource === undefined ? studioOutlineSource() : outlineSource), [outlineSource]);
   const outline = useOutline(source);
   const index = useMemo(() => outlineIndex(outlineEntries(outline)), [outline]);
-  const isLinked = useMemo(() => linkedChecker(list.links), [list.links]);
   const outlineReady = outline?.status === "ready";
+  // Ohne Links beginnt das Fenster mit dem Seitenplan – sofern es eine Seite gibt.
+  const [mode, setMode] = useState<MainMode>(() => (list.links.length === 0 && source !== null ? "map" : "link"));
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const linkOf = (entry: OutlineEntry): AnchorLink | undefined => linkOfEntry(list.links, entry);
 
   // Schon verlinkt: den vorhandenen Link wählen statt ihn zu verdoppeln.
   const addEntry = (entry: OutlineEntry): void => {
-    const existing = linkOfEntry(list.links, entry);
+    const existing = linkOf(entry);
     if (existing !== undefined) list.select(existing.id);
     else list.append(linkToEntry(entry));
   };
@@ -281,7 +348,7 @@ export function LinkEditor({ value, onChange, outlineSource }: LinkEditorProps):
       const entry = index.get(id);
       return entry === undefined ? [] : [entry];
     });
-    const fresh = entries.filter((entry) => linkOfEntry(list.links, entry) === undefined);
+    const fresh = entries.filter((entry) => linkOf(entry) === undefined);
     if (fresh.length > 0) list.insertAt(fresh.map(linkToEntry), at);
     else if (entries.length > 0) addEntry(entries[0]);
   };
@@ -295,6 +362,8 @@ export function LinkEditor({ value, onChange, outlineSource }: LinkEditorProps):
     [outlineReady, list.links, index],
   );
 
+  const showMap = mode === "map" && outline !== null;
+
   return (
     <div className="flex h-full min-h-0 w-full" data-testid="link-editor">
       <ConfigWorkspace
@@ -304,22 +373,15 @@ export function LinkEditor({ value, onChange, outlineSource }: LinkEditorProps):
             links={list.links}
             outline={index}
             outlineReady={outlineReady}
-            selectedId={list.selected?.id}
-            onSelect={list.select}
-            addMenu={(close) => (
-              <AddLinkMenu
-                outline={outline}
-                isLinked={isLinked}
-                onAddEmpty={() => {
-                  close();
-                  list.addEmpty();
-                }}
-                onPick={(entry) => {
-                  close();
-                  addEntry(entry);
-                }}
-              />
-            )}
+            selectedId={showMap ? undefined : list.selected?.id}
+            onSelect={(id) => {
+              list.select(id);
+              setMode("link");
+            }}
+            onAdd={() => {
+              if (outline === null) list.addEmpty();
+              else setMode("map");
+            }}
             onReorder={list.reorder}
             externalDrop={outline === null ? undefined : externalDrop}
           />
@@ -327,16 +389,38 @@ export function LinkEditor({ value, onChange, outlineSource }: LinkEditorProps):
         inspector={
           <NavigationInspector
             heading={value.heading ?? ""}
-            onChange={(heading) => onChange({ ...value, heading })}
-            outline={outline}
-            isLinked={isLinked}
-            onPick={addEntry}
+            rail={value.rail !== false}
+            onHeadingChange={(heading) => onChange({ ...value, heading })}
+            onRailChange={(rail) => onChange(withRail(value, rail))}
           />
         }
         inspectorTitle="Navigation"
         preview={<LinkPreview config={value} hidden={hidden} />}
       >
-        <LinkMain list={list} index={index} outlineReady={outlineReady} />
+        <div className="px-10 pt-6 pb-12 max-lg:px-6">
+          <div className={showMap ? "flex max-w-[1100px] flex-col gap-8" : "flex max-w-[720px] flex-col gap-8"}>
+            {showMap ? (
+              <PageMapPanel
+                outline={outline}
+                list={list}
+                linkOf={linkOf}
+                editingId={editingId}
+                setEditingId={setEditingId}
+                onActivate={(entry) => {
+                  addEntry(entry);
+                  setEditingId(entry.blockId);
+                }}
+                onAddEmpty={() => {
+                  list.addEmpty();
+                  setMode("link");
+                }}
+                onDone={list.links.length > 0 ? () => setMode("link") : undefined}
+              />
+            ) : (
+              <LinkMain list={list} index={index} outlineReady={outlineReady} />
+            )}
+          </div>
+        </div>
       </ConfigWorkspace>
     </div>
   );

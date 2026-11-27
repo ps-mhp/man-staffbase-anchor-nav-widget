@@ -20,12 +20,13 @@
 import { useEffect, useState } from "react";
 
 import { OutlineSource } from "./outline-source";
+import { MapItem } from "./page-map";
 import { OutlineEntry } from "./page-outline";
 
 export type OutlineState =
   | { status: "loading" }
   | { status: "failed" }
-  | { status: "ready"; entries: OutlineEntry[]; live: boolean };
+  | { status: "ready"; entries: OutlineEntry[]; map: MapItem[]; live: boolean };
 
 /** Die Einträge, sobald sie da sind; sonst eine leere Liste. */
 export const outlineEntries = (outline: OutlineState | null): OutlineEntry[] =>
@@ -40,7 +41,8 @@ export function useOutline(source: OutlineSource | null | undefined): OutlineSta
     const live = source.kind === "live";
     const load = (): void => {
       source.load().then(
-        (entries) => alive && setOutline(entries === null ? { status: "failed" } : { status: "ready", entries, live }),
+        (page) =>
+          alive && setOutline(page === null ? { status: "failed" } : { status: "ready", entries: page.entries, map: page.map, live }),
         () => alive && setOutline({ status: "failed" }),
       );
     };

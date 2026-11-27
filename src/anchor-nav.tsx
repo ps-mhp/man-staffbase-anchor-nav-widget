@@ -31,6 +31,7 @@ import {
 import { measureChromeHeight } from "@shared/staffbase-chrome";
 import { findScrollParent } from "./scroll-ancestor";
 import { containerChromeOverlap, jumpTarget } from "./scroll-target";
+import { AnchorRail, RailEntry, useHasScrolled, useRailClaim } from "./anchor-rail";
 import { useMissingTargets } from "./use-missing-targets";
 import { useScrollSpy } from "./use-scroll-spy";
 import anchorNavCss from "./styles/anchor-nav.scss";
@@ -59,6 +60,8 @@ export interface AnchorNavProps {
   readonly self: HTMLElement | null;
   /** Gesetzt nur in der Vorschau des Fensters „Links bearbeiten“. */
   readonly preview?: AnchorNavPreview;
+  /** Die Navigation am rechten Bildschirmrand (`anchor-rail.tsx`); Vorgabe an. */
+  readonly rail?: boolean;
 }
 
 /** Ein Eintrag, wie die Liste ihn zeigt. */
@@ -166,6 +169,7 @@ export function AnchorNav({
   heading,
   self,
   preview,
+  rail = true,
 }: AnchorNavProps): React.ReactElement | null {
   // Ein Link, dessen Überschrift gelöscht wurde, springt nirgendwohin: er
   // fehlt in der Liste (`use-missing-targets.ts`).
@@ -355,6 +359,38 @@ export function AnchorNav({
     return () => window.removeEventListener("resize", measureMarker);
   }, [measureMarker]);
 
+  // Sprung aus der Leiste am Rand: wie ein Klick in der Liste, ohne Fokus-
+  // wechsel – die Tastatur bleibt in der Leiste, damit „Nächster“ weitergeht.
+  const jumpTo = (index: number): void => {
+    const entry = entries[index];
+    if (entry === undefined) return;
+    const id = blockId(entry.link);
+    const element =
+      id !== null ? findById(id) : entry.slug !== null ? findHeading(headingText(entry.link), self) : null;
+    setActiveIndex(index);
+    if (element === null) return;
+    holdSpy();
+    scrollTo(element, !reducedMotion);
+    window.history.replaceState(null, "", `#${id ?? entry.slug}`);
+  };
+
+  // Die Leiste: nur Sprungziele auf der Seite, nicht im Studio, nicht in der
+  // Vorschau, nicht auf dem Telefon – und erst, wenn gescrollt wurde.
+  const railWanted =
+    rail &&
+    preview === undefined &&
+    !compact &&
+    !window.location.pathname.startsWith("/studio/");
+  const railEntries = useMemo<RailEntry[]>(
+    () =>
+      entries.flatMap((entry, index) =>
+        blockId(entry.link) !== null || entry.slug !== null ? [{ index, label: entry.link.label }] : [],
+      ),
+    [entries],
+  );
+  const railClaimed = useRailClaim(railWanted && railEntries.length > 1);
+  const scrolled = useHasScrolled(railClaimed);
+
   const onLinkClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
     index: number,
@@ -429,6 +465,8 @@ export function AnchorNav({
   const toggleLabel = heading ?? COMPACT_TOGGLE_LABEL;
 
   return (
+    <>
+    {railClaimed && scrolled && <AnchorRail entries={railEntries} active={active} onJump={jumpTo} />}
     <nav className="man-anchor-nav" aria-label={heading ?? FALLBACK_NAV_LABEL}>
       <style>{liveCss}</style>
 
@@ -496,5 +534,6 @@ export function AnchorNav({
         </div>
       )}
     </nav>
+    </>
   );
 }
